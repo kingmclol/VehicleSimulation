@@ -33,7 +33,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, and Greenfoot)
  * @version 1.30.jc -- Modified by Jordan Cohen
  * 
  */
-public abstract class SuperSmoothMover extends Actor
+public abstract class SuperSmoothMover extends ActorObject
 {
     private double exactX;
     private double exactY;

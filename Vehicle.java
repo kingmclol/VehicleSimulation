@@ -68,8 +68,8 @@ public abstract class Vehicle extends SuperSmoothMover
      */
     public void act () {
         
-        //if (moving) drive(); 
-        drive();
+        if (moving) drive(); 
+        //drive();
         if (!checkHitPedestrian()){
             repelPedestrians();
         }

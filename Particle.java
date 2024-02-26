@@ -35,7 +35,7 @@ public abstract class Particle extends Actor
     }
     protected void decayTransparency() {
         currentImage.setTransparency(Math.max(0,currentImage.getTransparency()-step));
-        System.out.println(currentImage.getTransparency());
+        //System.out.println(currentImage.getTransparency());
     }
     protected void decaySize(double scaleFactor) {
         // As it seems, scaling a scaled image leads to weird behaviours (circle becomes a square)

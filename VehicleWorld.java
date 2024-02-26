@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * --> TODO -- Improve flow to avoid Removed From World errors when a Vehicle calls super.act() and is removed there.
  * 
  */
-public class VehicleWorld extends World
+public class VehicleWorld extends Stage
 {
     private GreenfootImage background;
 
@@ -94,6 +94,7 @@ public class VehicleWorld extends World
     }
 
     public void act () {
+        super.act();
         spawn();
         zSort ((ArrayList<Actor>)(getObjects(Actor.class)), this);
         if("t".equals(Greenfoot.getKey())) for(int i = 0; i < 20; i++) spawn(); // TEMPOARY

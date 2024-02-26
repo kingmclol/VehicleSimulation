@@ -29,15 +29,23 @@ public class Bus extends Vehicle
 
     public boolean checkHitPedestrian () {
         Pedestrian p = (Pedestrian)getOneIntersectingObject(Pedestrian.class);
-        if (p!=null && p.isAwake() && passengers < maxPassengers) {
+        // if (p!=null && p.isAwake() && passengers < maxPassengers) {
+            // addPassenger();
+            // getWorld().removeObject(p);
+            // moving = false;
+            // sleepFor(60);
+            // return true;
+            // // moving = false;
+            // // p.getOnBus(this);
+            // // return true;
+        // }
+        if (p!= null && p.isAwake() && passengers < maxPassengers) {
             addPassenger();
             getWorld().removeObject(p);
             moving = false;
-            sleepFor(60);
+            //sleepFor(60);
+            createEvent(new DelayedEvent(() -> moving=true, 60));
             return true;
-            // moving = false;
-            // p.getOnBus(this);
-            // return true;
         }
         return false;
     }
