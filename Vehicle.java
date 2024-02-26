@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * This is the superclass for Vehicles.
  * 
  */
-public abstract class Vehicle extends SuperSmoothMover
+public abstract class Vehicle extends SuperActor
 {
     protected double maxSpeed;
     protected double speed;

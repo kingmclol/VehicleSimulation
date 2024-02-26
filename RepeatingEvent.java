@@ -22,7 +22,7 @@ public class RepeatingEvent extends DelayedEvent
             event.run();
             iterations++;
         }
-        if (iterations >= count) executed = true;
+        if (iterations >= count) getWorld().removeObject(this);
     }
     public RepeatingEvent copy() {
         return new RepeatingEvent(event, delay, count);

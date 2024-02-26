@@ -9,13 +9,13 @@ public class InstantEvent extends Event
     /**
      * Constructor for objects of class InstantEvent
      */
+    // not useful.
     public InstantEvent(Runnable action)
     {
         super(action);
     }
-    public void update() {
+    public void act() {
         event.run();
-        executed = true;
     }
     public InstantEvent copy() {
         return new InstantEvent(event);

@@ -3,12 +3,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 /**
  * A Pedestrian that tries to walk across the street
  */
-public class Pedestrian extends SuperSmoothMover
+public abstract class Pedestrian extends SuperActor
 {
-    private double speed;
-    private double maxSpeed;
-    private int direction; // direction is always -1 or 1, for moving down or up, respectively
-    private boolean awake, entering;
+    protected double speed;
+    protected double maxSpeed;
+    protected int direction; // direction is always -1 or 1, for moving down or up, respectively
+    protected  boolean awake, entering;
     public Pedestrian(int direction) {
         // choose a random speed
         maxSpeed = Math.random() * 2 + 1;
@@ -28,18 +28,31 @@ public class Pedestrian extends SuperSmoothMover
         // Awake is false if the Pedestrian is "knocked down"
         if (awake){
             // Check in the direction I'm moving vertically for a Vehicle -- and only move if there is no Vehicle in front of me.
-            if (getOneObjectAtOffset(0, (int)(direction * getImage().getHeight()/2 + (int)(direction * speed)), Vehicle.class) == null){
+            if (!obstructedPath()){
                 setLocation (getX(), getY() + (speed*direction));
             }
-            if (direction == -1 && getY() < 100){
-                getWorld().removeObject(this);
-            } else if (direction == 1 && getY() > getWorld().getHeight() - 30){
-                getWorld().removeObject(this);
-            }
+            // if (direction == -1 && getY() < 100){
+                // getWorld().removeObject(this);
+            // } else if (direction == 1 && getY() > getWorld().getHeight() - 30){
+                // getWorld().removeObject(this);
+            // }
 
         }
     }
-
+    public boolean obstructedPath() {
+        return !(getOneObjectAtOffset(0, (int)(direction * getImage().getHeight()/2 + (int)(direction * speed)), Vehicle.class) == null);
+    }
+    public boolean obstructedAt(Vector displacement) {
+        return !(getOneObjectAtOffset(Utility.round(displacement.getX()), Utility.round(displacement.getY()), Vehicle.class) == null);
+    }
+    public boolean atEdge() {
+        if (direction == -1 && getY() < 100){
+            return true;
+        } else if (direction == 1 && getY() > getWorld().getHeight() - 30){
+            return true;
+        }
+        return false;
+    }
     /**
      * Method to cause this Pedestrian to become knocked down - stop moving, turn onto side
      */
@@ -61,10 +74,7 @@ public class Pedestrian extends SuperSmoothMover
     public boolean isAwake () {
         return awake;
     }
-    // unused.
-    public void getOnBus(Bus b) {
-        sleepFor(60);
-        getWorld().removeObject(this);
-        //b.setMoving(true);
+    public double getSpeed() {
+        return speed;
     }
 }

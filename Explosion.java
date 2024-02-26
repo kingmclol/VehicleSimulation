@@ -9,7 +9,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Explosion extends Particle
 {
     public Explosion(int radius) {
-        super(new GreenfootImage(1,1), 60*1);
+        super(new GreenfootImage(1,1), 60*2);
         GreenfootImage image = new GreenfootImage(radius, radius);
         // for (int i = 0; i < 3; i++) {
             // if (i%2==0) image.setColor(Color.RED);

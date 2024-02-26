@@ -10,7 +10,7 @@ public class Bus extends Vehicle
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         passengers = 0;
-        maxPassengers = 8;
+        maxPassengers = 7;
         //Set up values for Bus
         maxSpeed = 1.5 + ((Math.random() * 10)/5);
         speed = maxSpeed;
@@ -28,7 +28,7 @@ public class Bus extends Vehicle
     }
 
     public boolean checkHitPedestrian () {
-        Pedestrian p = (Pedestrian)getOneIntersectingObject(Pedestrian.class);
+        Civilian c = (Civilian)getOneIntersectingObject(Civilian.class);
         // if (p!=null && p.isAwake() && passengers < maxPassengers) {
             // addPassenger();
             // getWorld().removeObject(p);
@@ -39,11 +39,11 @@ public class Bus extends Vehicle
             // // p.getOnBus(this);
             // // return true;
         // }
-        if (p!= null && p.isAwake() && passengers < maxPassengers) {
+        if (c!= null && c.isAwake() && passengers < maxPassengers) {
             addPassenger();
-            getWorld().removeObject(p);
+            getWorld().removeObject(c);
             moving = false;
-            //sleepFor(60);
+            sleepFor(60);
             createEvent(new DelayedEvent(() -> moving=true, 60));
             return true;
         }

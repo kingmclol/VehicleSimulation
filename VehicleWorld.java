@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * --> TODO -- Improve flow to avoid Removed From World errors when a Vehicle calls super.act() and is removed there.
  * 
  */
-public class VehicleWorld extends Stage
+public class VehicleWorld extends World
 {
     private GreenfootImage background;
 
@@ -123,14 +123,30 @@ public class VehicleWorld extends Stage
             int xSpawnLocation = Greenfoot.getRandomNumber (600) + 100; // random between 99 and 699, so not near edges
             boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
             if (spawnAtTop){
-                addObject (new Pedestrian (1), xSpawnLocation, TOP_SPAWN);
+                spawnPedestrian(xSpawnLocation, TOP_SPAWN);
             } else {
-                addObject (new Pedestrian (-1), xSpawnLocation, BOTTOM_SPAWN);
+                spawnPedestrian(xSpawnLocation, BOTTOM_SPAWN);
             }
         }
 
     }
-
+    
+    public void spawnPedestrian(int x, int y) {
+        int direction = 1;
+        if (y==TOP_SPAWN) direction = 1;
+        else direction = -1;
+        switch (Greenfoot.getRandomNumber(3)) {
+            case 0:
+                addObject(new Civilian(direction), x, y);
+                break;
+            case 1:
+                addObject(new Zombie(direction), x, y);
+                break;
+            case 2:
+                addObject(new Medic(direction),x,y);
+                break;
+        }
+    }
     /**
      *  Given a lane number (zero-indexed), return the y position
      *  in the centre of the lane. (doesn't factor offset, so 

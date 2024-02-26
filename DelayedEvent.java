@@ -12,10 +12,10 @@ public class DelayedEvent extends Event
         super(action);
         this.delay = delay;
     }
-    public void update() {
+    public void act() {
         if (act++ >= delay) {
             event.run();
-            executed = true;
+            getWorld().removeObject(this);
         }
     }
     public DelayedEvent copy() {
