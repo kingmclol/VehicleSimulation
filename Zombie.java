@@ -7,9 +7,6 @@ public class Zombie extends Pedestrian
     // Instance variables - Class variables
     private Human target;
     private ArrayList<Human> humans;
-    //private SuperStatBar energyBar;
-    private int hp = 111;
-    private int maxHp;
     private double speed = 2.0;
 
     /**
@@ -29,25 +26,24 @@ public class Zombie extends Pedestrian
     public void act() 
     {
         if (getWorld() != null) {
-            if (target != null && target.getWorld() == null){ // target does not exist anymore
+            if (target != null && target.getWorld() == null){ // target does not exist in world anymore
                 target = null; // no more target
             }
-    
-            if (target == null || !target.isAwake() || Utility.getDistance (getPosition(), target.getPosition()) > 40){ // too far or no target
+            if (target == null || !target.isAwake() || distanceFrom(target) > 40){ // too far, no target, or target is not awake
                 findTarget(); // find new target
             }
     
-            // If my current target Human exists, move toward it
+            // If my current target Human exists, move toward or attack it
             if (target != null)
             {
                 moveTowardOrKillTarget();
             }
-            else if (!obstructedPath()) setLocation (getX(), getY() + (speed*direction)); // if it does not, move normally
+            else moveToOtherSide(); // if it does not, move normally
         }
+        
         if (atEdge()) getWorld().removeObject(this);
-        else if (!isAwake()) { // run over.
-            getWorld().addObject(new DeathParticle(), getX(), getY()); 
-            getWorld().removeObject(this);
+        else if (!isAwake()) { // run over, in this case.
+            killMe();
         }
     }
     /**
@@ -63,12 +59,10 @@ public class Zombie extends Pedestrian
         humans = (ArrayList<Human>)getObjectsInRange(40, Human.class);
         humans.removeIf(p -> !p.isAwake());
         if (humans.size() == 0){
-
             humans = (ArrayList<Human>)getObjectsInRange(140, Human.class);
             humans.removeIf(p -> !p.isAwake());
         } 
         if (humans.size() == 0){
-
             humans = (ArrayList<Human>)getObjectsInRange(350, Human.class);
             humans.removeIf(p -> !p.isAwake());
         } 
@@ -82,53 +76,37 @@ public class Zombie extends Pedestrian
             target = humans.get(0);
             // Use method to get distance to target. This will be used
             // to check if any other targets are closer
-            closestTargetDistance = Utility.getDistance (this, target);
+            closestTargetDistance = distanceFrom(target);
 
             // Loop through the objects in the ArrayList to find the closest target
-            for (Human c : humans)
+            for (Human h : humans)
             {
-                distanceToActor = Utility.getDistance(this, c);
+                distanceToActor = distanceFrom(h);
                 // If I find a Human closer than my current target, I will change
                 // targets
                 if (distanceToActor < closestTargetDistance)
                 {
-                    target = c;
+                    target = h;
                     closestTargetDistance = distanceToActor;
                 }
             }
-            //turnTowards(target.getX(), target.getY());
         }
     }
 
     /**
      * Private method, called by act(), that moves toward the target,
-     * or eats it if within range.
+     * or knocks it down if within range.
      */
     private void moveTowardOrKillTarget ()
     {
-        if (Utility.getDistance(getPosition(), target.getPosition()) < 18)
+        if (distanceFrom(target) < 18)
         {
-            target.knockDown();
+            target.knockDownAndInfect();
             target=null;
         }
         else
         {
             if (!obstructedAt(getDisplacement(target, speed))) moveTowards(target, speed);
         }
-    }
-
-    /**
-     * A method to be used for moving randomly if no target is found. Will mostly
-     * just move in its current direction, occasionally turning to face a new, random
-     * direction.
-     */
-    private void moveRandomly ()
-    {
-        if (Greenfoot.getRandomNumber (100) == 50)
-        {
-            turn (Greenfoot.getRandomNumber(360));
-        }
-        else
-            move (speed);
     }
 }

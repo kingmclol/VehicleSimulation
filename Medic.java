@@ -9,8 +9,8 @@ import java.util.List;
  */
 public class Medic extends Human
 {
-    private Civilian target;
-    private ArrayList<Civilian> civilians;
+    private Human target;
+    private ArrayList<Human> humans;
     //private SuperStatBar energyBar;
     private int hp = 111;
     private int maxHp;
@@ -32,25 +32,19 @@ public class Medic extends Human
      */
     public void act() 
     {
-        if (getWorld() != null) {
+        if (getWorld() != null && isAwake()) {
             if (target != null && target.getWorld() == null){ // target does not exist anymore
                 target = null; // no more target
             }
-    
             if (target == null || target.isAwake() || Utility.getDistance (getPosition(), target.getPosition()) > 40){ // too far or no target
                 findTarget(); // find new target
             }
-            if (target != null)
-            {
-                moveTowardOrHelpTarget();
-            }
-            else if (!obstructedPath()) setLocation (getX(), getY() + (speed*direction)); // if it does not, move normally
+            
+            if (target != null) moveTowardOrHelpTarget(); // Go towards the target, if one exists.
+            else moveToOtherSide(); // if it does not, move normally
         }
+        
         if (atEdge()) getWorld().removeObject(this);
-        else if (!isAwake()) { // killed.
-            getWorld().addObject(new DeathParticle(), getX(), getY()); 
-            getWorld().removeObject(this);
-        }
     }    
 
     /**
@@ -60,38 +54,33 @@ public class Medic extends Human
     {
         double closestTargetDistance = 0;
         double distanceToActor;
-        // Get a list of all Civilians in the World, cast it to ArrayList
+        // Get a list of all Humans in the World, cast it to ArrayList
         // for easy management
 
-        civilians = (ArrayList<Civilian>)getObjectsInRange(40, Civilian.class);
-        civilians.removeIf(p -> p.isAwake());
-        if (civilians.size() == 0){
-
-            civilians = (ArrayList<Civilian>)getObjectsInRange(140, Civilian.class);
-            civilians.removeIf(p -> p.isAwake());
+        humans = (ArrayList<Human>)getObjectsInRange(40, Human.class); // Get nearby humans
+        humans.removeIf(p -> p.isAwake()); // Remove any that are alive (they don't need to be healed)
+        if (humans.size() == 0){ // None found, expand search to 140 radius.
+            humans = (ArrayList<Human>)getObjectsInRange(140, Human.class);
+            humans.removeIf(p -> p.isAwake());
         } 
-        if (civilians.size() == 0){
-
-            civilians = (ArrayList<Civilian>)getObjectsInRange(350, Civilian.class);
-            civilians.removeIf(p -> p.isAwake());
+        if (humans.size() == 0){ // Still none found? Expand search again to 350 radius.
+            humans = (ArrayList<Human>)getObjectsInRange(350, Human.class);
+            humans.removeIf(p -> p.isAwake());
         } 
-        // if (Civilians.size() == 0){
-            // //Civilians = (ArrayList<Civilian>)getWorld().getObjects(Civilian.class);
-        // } 
 
-        if (civilians.size() > 0)
+        if (humans.size() > 0) // One or more downed humans found.
         {
             // set the first one as my target
-            target = civilians.get(0);
+            target = humans.get(0);
             // Use method to get distance to target. This will be used
             // to check if any other targets are closer
-            closestTargetDistance = Utility.getDistance (this, target);
+            closestTargetDistance = distanceFrom(target);
 
             // Loop through the objects in the ArrayList to find the closest target
-            for (Civilian c : civilians)
+            for (Human c : humans)
             {
-                distanceToActor = Utility.getDistance(this, c);
-                // If I find a Civilian closer than my current target, I will change
+                distanceToActor = distanceFrom(c);
+                // If I find a Human closer than my current target, I will change
                 // targets
                 if (distanceToActor < closestTargetDistance)
                 {
@@ -99,47 +88,35 @@ public class Medic extends Human
                     closestTargetDistance = distanceToActor;
                 }
             }
-            //turnTowards(target.getX(), target.getY());
         }
     }
 
     /**
      * Private method, called by act(), that moves toward the target,
-     * or eats it if within range.
+     * or tries to revive it if within range.
      */
     private void moveTowardOrHelpTarget ()
     {
-        if (Utility.getDistance(getPosition(), target.getPosition()) < 18)
+        if (distanceFrom(target) < 18)
         {
-            healCivilian(target);
+            healHuman(target);
             target=null;
         }
         else
         {
+            // If the next position I will move two is not obstructed by a vehicle, move there.
             if (!obstructedAt(getDisplacement(target, speed))) moveTowards(target, speed);
         }
     }
-    private void healCivilian(Civilian c) {
-        speed = 0;
+    private void healHuman(Human c) {
+        speed = 0; // the medic cannot move while healing.
+        
+        // Creates a delayed event that would happen 30 acts later which heals the target, and lets the medic move again.
         createEvent(new DelayedEvent(() -> {
-                                        if (getWorld()!=null && c.getWorld()!=null) {
-                                            c.healMe();
-                                            target=null;
-                                            speed = maxSpeed;
+                                        if (isAwake()) {
+                                            c.healMe(); // heal the dead citizen
+                                            target=null; // no more target
+                                            speed = maxSpeed; // can move again
                                         }}, 30));
-    }
-    /**
-     * A method to be used for moving randomly if no target is found. Will mostly
-     * just move in its current direction, occasionally turning to face a new, random
-     * direction.
-     */
-    private void moveRandomly ()
-    {
-        if (Greenfoot.getRandomNumber (100) == 50)
-        {
-            turn (Greenfoot.getRandomNumber(360));
-        }
-        else
-            move (speed);
     }
 }

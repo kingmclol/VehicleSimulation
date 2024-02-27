@@ -6,14 +6,13 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Bus extends Vehicle
 {
     private int passengers;
-    private final int maxPassengers;
+    private final int maxPassengers = 7;
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
-        passengers = 0;
-        maxPassengers = 7;
         //Set up values for Bus
         maxSpeed = 1.5 + ((Math.random() * 10)/5);
         speed = maxSpeed;
+        passengers = 0;
         // because the Bus graphic is tall, offset it a up (this may result in some collision check issues)
         yOffset = 15;
     }
@@ -29,31 +28,21 @@ public class Bus extends Vehicle
 
     public boolean checkHitPedestrian () {
         Civilian c = (Civilian)getOneIntersectingObject(Civilian.class);
-        // if (p!=null && p.isAwake() && passengers < maxPassengers) {
-            // addPassenger();
-            // getWorld().removeObject(p);
-            // moving = false;
-            // sleepFor(60);
-            // return true;
-            // // moving = false;
-            // // p.getOnBus(this);
-            // // return true;
-        // }
         if (c!= null && c.isAwake() && passengers < maxPassengers) {
-            addPassenger();
-            getWorld().removeObject(c);
+            addPassenger(c);
             moving = false;
             sleepFor(60);
-            createEvent(new DelayedEvent(() -> moving=true, 60));
+            createEvent(new DelayedEvent(() -> moving = true, 60));
             return true;
         }
         return false;
     }
-    private void addPassenger() {
-        int offset = 17;
+    private void addPassenger(Civilian c) {
+        //int offset = 17;
+        c.getWorld().removeObject(c);        
         GreenfootImage image = getImage();
         image.setColor(Color.BLACK);
-        image.fillOval(image.getWidth()-48-(offset*passengers),image.getHeight()/2-8,12,12);
+        image.fillOval(image.getWidth()-48-(17*passengers),image.getHeight()/2-8,12,12);
         setImage(image);
         passengers++;
     }

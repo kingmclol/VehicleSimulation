@@ -1,41 +1,37 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Bullet here.
+ * A Bullet is a projectile that would move towards a target zombie. If it hits a zombie, kill it.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Freeman Wang
+ * @version 2024-02-27
  */
 public class Bullet extends SuperActor
 {
+    private double speed; // The speed of the bullet.
+    private Vector targetPos; // The position of the target.
+    private Vector velocity; // The velocity of the bullet (has direction)
+    int count; // Okay, so for some reason addedToWorld() is running infinitely. This count variable is to counter that.
     /**
-     * Act - do whatever the Bullet wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
+     * Creates a Bullet.
+     * @param target The SuperActor to target.
      */
-    private double speed;
-    private Vector targetPos;
-    private Vector velocity;
-    int count;
     public Bullet(SuperActor target) {
-        speed = 4.0;
-        targetPos = target.getPosition();
-    }
-    public Bullet(Vector target){
-        speed = 4.0;
-        targetPos = target;
+        speed = 6.0;
+        targetPos = target.getPosition(); // get the position of the target.
     }
     public void addedToWorld(World w) {
-        if (count > 0) return;
-        velocity = getPosition().distanceFrom(targetPos).scaleTo(speed);
-        turnTowards(targetPos);
-        System.out.println(this + " | " + count++);
+        if (count++ > 0) return; // Stop this method from running infinitely...
+        velocity = getDisplacement(targetPos, speed); // get the distance travelled per act to move towards the target
+        turnTowards(targetPos); // turn the image in the direction of the target.
     }
     public void act() {
-        displace(velocity);
-        if(isTouching(Zombie.class) || isAtEdge()) {
+        displace(velocity); // move
+        if(isTouching(Zombie.class)) { // If hit a zombie, kill it.
             Zombie z = (Zombie)getOneIntersectingObject(Zombie.class);
-            getWorld().removeObject(z);
-            getWorld().removeObject(this);
+            z.killMe();
+            getWorld().removeObject(this); // remove the bullet.
         }
+        else if(isAtEdge()) getWorld().removeObject(this); // If at the edge of world, remove this.
     }
 }

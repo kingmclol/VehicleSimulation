@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
+import java.util.ArrayList;
 /**
  * Write a description of class ExplosiveTruck here.
  * 
@@ -33,9 +34,11 @@ public class ExplosiveTruck extends Vehicle
         return false;
     }
     private void explode() { // CLEAN UO LATER
-        List<Actor> actors = (List<Actor>)getObjectsInRange(explosionRadius, Actor.class);
-        for (Actor a : actors) {
-            if (!(a instanceof VehicleSpawner || a instanceof Particle)) getWorld().removeObject(a);
+        // Check for superActors within the explosion radius.
+        // by checking for SuperActors, I will not accidetnally remove the VehicleSpawner, any events, or particles.
+        ArrayList<SuperActor> actors = (ArrayList<SuperActor>)getObjectsInRange(explosionRadius, SuperActor.class);
+        for (SuperActor a : actors) {
+            getWorld().removeObject(a);
         }
         getWorld().addObject(new Explosion(explosionRadius), getX(), getY());
         getWorld().removeObject(this);

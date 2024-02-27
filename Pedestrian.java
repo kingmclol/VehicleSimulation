@@ -18,26 +18,32 @@ public abstract class Pedestrian extends SuperActor
         entering = true;
         this.direction = direction;
     }
+    protected void moveToOtherSide() {
+        if (!obstructedPath()) setLocation(getX(), getY() + (speed*direction));
+    }
+    // /**
+     // * Act - do whatever the Pedestrian wants to do. This method is called whenever
+     // * the 'Act' or 'Run' button gets pressed in the environment.
+     // */
+    // public void act()
+    // {
+        // // // Awake is false if the Pedestrian is "knocked down"
+        // // if (awake){
+            // // // Check in the direction I'm moving vertically for a Vehicle -- and only move if there is no Vehicle in front of me.
+            // // if (!obstructedPath()){
+                // // setLocation (getX(), getY() + (speed*direction));
+            // // }
+            // // // if (direction == -1 && getY() < 100){
+                // // // getWorld().removeObject(this);
+            // // // } else if (direction == 1 && getY() > getWorld().getHeight() - 30){
+                // // // getWorld().removeObject(this);
+            // // // }
 
-    /**
-     * Act - do whatever the Pedestrian wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
-    public void act()
-    {
-        // Awake is false if the Pedestrian is "knocked down"
-        if (awake){
-            // Check in the direction I'm moving vertically for a Vehicle -- and only move if there is no Vehicle in front of me.
-            if (!obstructedPath()){
-                setLocation (getX(), getY() + (speed*direction));
-            }
-            // if (direction == -1 && getY() < 100){
-                // getWorld().removeObject(this);
-            // } else if (direction == 1 && getY() > getWorld().getHeight() - 30){
-                // getWorld().removeObject(this);
-            // }
-
-        }
+        // // }
+    // }
+    public void killMe() {
+        getWorld().addObject(new DeathParticle(), getX(), getY()); 
+        getWorld().removeObject(this);
     }
     public boolean obstructedPath() {
         return !(getOneObjectAtOffset(0, (int)(direction * getImage().getHeight()/2 + (int)(direction * speed)), Vehicle.class) == null);

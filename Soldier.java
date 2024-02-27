@@ -18,67 +18,67 @@ public class Soldier extends Human
     private Zombie target;
     public Soldier(int direction) {
         super(direction);
-        maxBullets = 5;
-        currentBullets = 5;
+        maxBullets = 1;
+        currentBullets = 1;
         onCooldown = false;
     }
     public void act()
     {
-        // if (target == null || target.getWorld() == null || distanceFrom(target) > 50) {
-            // scanForTargets();
-        // }
-        if (getWorld()!=null){
+        if (getWorld() != null && isAwake()) {
             if (target != null && target.getWorld() == null){ // target does not exist anymore
                     target = null; // no more target
                 }
-            if (target == null || distanceFrom(target) > 40){ // too far or no target
+            if (target == null || distanceFrom(target) > 50){ // too far or no target
                 scanForTargets(); // find new target
             }
-            if (target != null) {
-                if (!obstructedAt(getDisplacement(target, speed))) moveTowards(target, speed);
-                if (canShoot()) shoot();
+            if (target != null) { // target exists, move towards or shoot
+                moveTowardsOrShootTarget();
             }
-            else if (!obstructedPath()) setLocation (getX(), getY() + (speed*direction)); // if it does not, move normally
+            else moveToOtherSide(); // if it does not, move normally
         }
+
         if (atEdge()) getWorld().removeObject(this);
-        else if (!isAwake()) { // killed.
-            getWorld().addObject(new DeathParticle(), getX(), getY()); 
-            getWorld().removeObject(this);
-        }
+    }
+    private void moveTowardsOrShootTarget() {
+        if (!obstructedAt(getDisplacement(target, speed))) moveTowards(target, speed);
+        if (canShoot()) shoot();
     }
     private void scanForTargets() {
-        double closestTargetDistance = 0;
-        double distanceToActor;
-        ArrayList<Zombie> zombies = (ArrayList<Zombie>) getObjectsInRange(300, Zombie.class);
-        if (zombies.size() > 0)
-        {
-            target = zombies.get(0);
-            closestTargetDistance = distanceFrom(target);
-            for (Zombie z : zombies)
-            {
-                distanceToActor = distanceFrom(z);
-                // If I find a Civilian closer than my current target, I will change
-                // targets
-                if (distanceToActor < closestTargetDistance)
-                {
-                    target = z;
-                    closestTargetDistance = distanceToActor;
-                }
-            }
-            //turnTowards(target.getX(), target.getY());
-        }
+        target = (Zombie)getClosest(Zombie.class, 140);
+        if (target == null) target = (Zombie) getClosest(Zombie.class, 300);
+        // double closestTargetDistance = 0;
+        // double distanceToActor;
+        // ArrayList<Zombie> zombies = (ArrayList<Zombie>) getObjectsInRange(140, Zombie.class); // Search for a zombie around me
+        // if (zombies.size() == 0){ // If none found within 140 radius,
+            // zombies = (ArrayList<Zombie>)getObjectsInRange(300, Zombie.class); // Expand search to 300 radius
+        // } 
+        // if (zombies.size() > 0) // If a zombie (or more) is found
+        // {
+            // target = zombies.get(0);
+            // closestTargetDistance = distanceFrom(target);
+            // for (Zombie z : zombies)
+            // {
+                // distanceToActor = distanceFrom(z);
+                // // If I find a zombie closer than my current target, I will change
+                // // targets
+                // if (distanceToActor < closestTargetDistance)
+                // {
+                    // target = z;
+                    // closestTargetDistance = distanceToActor;
+                // }
+            // }
+        // }
     }
     private boolean canShoot() {
         return currentBullets > 0 && !onCooldown;
     }
     private void shoot() {
-        currentBullets--;
-        onCooldown = true;
-        getWorld().addObject(new Bullet(target.getPosition()), getX(), getY());
-        System.out.println("aaa");
-        createEvent(new DelayedEvent(() -> onCooldown = false, 60));
-        if (currentBullets == 0) {
-            createEvent(new DelayedEvent(() -> currentBullets = maxBullets, 300));
+        currentBullets--; // decrease bullets by 1
+        onCooldown = true; // now on cooldown between shots
+        getWorld().addObject(new Bullet(target), getX(), getY());
+        createEvent(new DelayedEvent(() -> onCooldown = false, 10)); // cooldown will finish after 10 acts
+        if (currentBullets == 0) { // if no bullets left
+            createEvent(new DelayedEvent(() -> currentBullets = maxBullets, 180)); // reload after 180 acts
         }
     }
 }

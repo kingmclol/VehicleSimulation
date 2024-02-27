@@ -16,7 +16,11 @@ public class Civilian extends Human
         super(direction);
     }
     public void act() {
-        super.act();
-        if (atEdge()) getWorld().removeObject(this);
+        // Awake is false if the Pedestrian is "knocked down"
+        if (awake){
+            // Check in the direction I'm moving vertically for a Vehicle -- and only move if there is no Vehicle in front of me.
+            moveToOtherSide();
+            if (atEdge()) getWorld().removeObject(this);
+        }
     }
 }
