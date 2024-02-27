@@ -97,7 +97,6 @@ public class VehicleWorld extends World
         super.act();
         spawn();
         zSort ((ArrayList<Actor>)(getObjects(Actor.class)), this);
-        if("t".equals(Greenfoot.getKey())) for(int i = 0; i < 20; i++) spawn(); // TEMPOARY
     }
 
     private void spawn () {
@@ -130,7 +129,11 @@ public class VehicleWorld extends World
         }
 
     }
-    
+    /**
+     * Spawns a Pedestrian. Moved the code to a distinct method.
+     * @param x The x coordinate to spawn the pedestrian.
+     * @param y The Top or Bottom spawn y coordinate.
+     */
     public void spawnPedestrian(int x, int y) {
         int direction = 1;
         if (y==TOP_SPAWN) direction = 1;

@@ -1,32 +1,29 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
-
+/**
+ * Zombies are Pedestrians that attempt to chase and infect any Humans roaming around.
+ * If no Humans are found, it moves normally to get to the other side.
+ * 
+ * @author Freeman Wang
+ * @version 2024-02=27
+ */
 public class Zombie extends Pedestrian
 {
-
-    // Instance variables - Class variables
     private Human target;
     private ArrayList<Human> humans;
     private double speed = 2.0;
-
-    /**
-     * Primary constructor for Bug - creates a new Bug with full HP.
-     * This is called by the Spawn button, and used for creating the 
-     * first bug at the beginning of the simulation.
-     */
     public Zombie (int direction)
     {
         super(direction);
     }
-
     /**
-     * Act - do whatever the Bug wants to do. This method is called whenever
+     * Act - do whatever the Zombie wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() 
     {
-        if (getWorld() != null) {
-            if (target != null && target.getWorld() == null){ // target does not exist in world anymore
+        if (getWorld()!= null) {
+            if (target != null && !target.exists()){ // target does not exist in world anymore
                 target = null; // no more target
             }
             if (target == null || !target.isAwake() || distanceFrom(target) > 40){ // too far, no target, or target is not awake
@@ -42,12 +39,12 @@ public class Zombie extends Pedestrian
         }
         
         if (atEdge()) getWorld().removeObject(this);
-        else if (!isAwake()) { // run over, in this case.
+        else if (!isAwake()) { // run over, in this case, as only the car can knock me down.
             killMe();
         }
     }
     /**
-     * Private method, called by act(), that constantly checks for closer targets
+     * Tries to find the closest Human that is still awake.
      */
     private void findTarget ()
     {
@@ -57,7 +54,7 @@ public class Zombie extends Pedestrian
         // for easy management
 
         humans = (ArrayList<Human>)getObjectsInRange(40, Human.class);
-        humans.removeIf(p -> !p.isAwake());
+        humans.removeIf(p -> !p.isAwake()); // Remove any not awake humans, as they're not important to me.
         if (humans.size() == 0){
             humans = (ArrayList<Human>)getObjectsInRange(140, Human.class);
             humans.removeIf(p -> !p.isAwake());
@@ -66,11 +63,7 @@ public class Zombie extends Pedestrian
             humans = (ArrayList<Human>)getObjectsInRange(350, Human.class);
             humans.removeIf(p -> !p.isAwake());
         } 
-        // if (Humans.size() == 0){
-            // //Humans = (ArrayList<Human>)getWorld().getObjects(Human.class);
-        // } 
-
-        if (humans.size() > 0)
+        if (humans.size() > 0) // Found one or more awake humans
         {
             // set the first one as my target
             target = humans.get(0);
@@ -94,17 +87,16 @@ public class Zombie extends Pedestrian
     }
 
     /**
-     * Private method, called by act(), that moves toward the target,
-     * or knocks it down if within range.
+     * Move toward, or infect the target Human.
      */
     private void moveTowardOrKillTarget ()
     {
-        if (distanceFrom(target) < 18)
+        if (distanceFrom(target) < 18) // Close enough in distance--attack.
         {
             target.knockDownAndInfect();
-            target=null;
+            target = null;
         }
-        else
+        else // To far. Move closer.
         {
             if (!obstructedAt(getDisplacement(target, speed))) moveTowards(target, speed);
         }

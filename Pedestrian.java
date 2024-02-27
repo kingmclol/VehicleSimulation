@@ -18,6 +18,9 @@ public abstract class Pedestrian extends SuperActor
         entering = true;
         this.direction = direction;
     }
+    /**
+     * Moves the pedestrian where it tries to get to the other side it spawned from.
+     */
     protected void moveToOtherSide() {
         if (!obstructedPath()) setLocation(getX(), getY() + (speed*direction));
     }
@@ -41,16 +44,32 @@ public abstract class Pedestrian extends SuperActor
 
         // // }
     // }
+    /**
+     * Kills the Pedestrian.
+     */
     public void killMe() {
         getWorld().addObject(new DeathParticle(), getX(), getY()); 
         getWorld().removeObject(this);
     }
-    public boolean obstructedPath() {
+    /**
+     * Returns whether the Pedestrian's movement would be obstructed by a Vehicle.
+     * @return If the movement would be obstructed.
+     */
+    protected boolean obstructedPath() {
         return !(getOneObjectAtOffset(0, (int)(direction * getImage().getHeight()/2 + (int)(direction * speed)), Vehicle.class) == null);
     }
-    public boolean obstructedAt(Vector displacement) {
+    /**
+     * Returns whether the target position would be obstructed by a Vehicle.
+     * @return If the target position is obstructed.
+     */
+    protected boolean obstructedAt(Vector displacement) {
         return !(getOneObjectAtOffset(Utility.round(displacement.getX() + getImage().getHeight()/2 * direction), Utility.round(displacement.getY() + getImage().getHeight()/2 * direction), Vehicle.class) == null);
     }
+    /**
+     * Returns whether the Pedestrian is at the edge of the main area. Not to be confused with
+     * the World's edge.
+     * @return Whether the pedestrian is at the edge of the main zone.
+     */
     public boolean atEdge() {
         if (direction == -1 && getY() < 100){
             return true;
@@ -60,7 +79,7 @@ public abstract class Pedestrian extends SuperActor
         return false;
     }
     /**
-     * Method to cause this Pedestrian to become knocked down - stop moving, turn onto side
+     * Method to cause this Pedestrian to become knocked down - stop moving, turn onto side.
      */
     public void knockDown () {
         speed = 0;
@@ -75,9 +94,17 @@ public abstract class Pedestrian extends SuperActor
         setRotation (0);
         awake = true;
     }
+    /**
+     * Returns whether the Pedestrian is awake.
+     * @return true if awake.
+     */
     public boolean isAwake () {
         return awake;
     }
+    /**
+     * Returns the speed of the Pedestrian.
+     * @return The speed of the Pedestrian.
+     */
     public double getSpeed() {
         return speed;
     }

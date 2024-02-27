@@ -9,13 +9,13 @@ import java.util.ArrayList;
  */
 public class ExplosiveTruck extends Vehicle
 {
-    private int explosionRadius;
+    private int explosionRadius; // The radius of the explosion.
     public ExplosiveTruck(VehicleSpawner o) {
         super(o);
         maxSpeed = 1.5 + ((Math.random() * 10)/5);
         speed = maxSpeed;
         yOffset = 12;
-        explosionRadius = 200;
+        explosionRadius = 150;
     }
     /**
      * Act - do whatever the ExplosiveTruck wants to do. This method is called whenever
@@ -25,22 +25,30 @@ public class ExplosiveTruck extends Vehicle
     {
         super.act();
     }
+    /**
+     * Checks for a hit pedestrian. Returns true if one was hit, false if none were.
+     * Explodes a pedestrian is hit.
+     * @return Whether the ExplosiveTruck hit a pedestrian.
+     */
     public boolean checkHitPedestrian() {
         Pedestrian p = (Pedestrian)getOneIntersectingObject(Pedestrian.class);
-        if (p!=null) {
-            explode();
+        if (p!=null) { // Someone was hit!
+            explode(); // Time to blow up.
             return true;
         }
         return false;
     }
-    private void explode() { // CLEAN UO LATER
-        // Check for superActors within the explosion radius.
-        // by checking for SuperActors, I will not accidetnally remove the VehicleSpawner, any events, or particles.
+    /**
+     * Explodes the ExplosiveTruck, removing all unlucky vehicles or pedestrians from the world.
+     */
+    private void explode() { 
+        // By checking for SuperActors, I will not accidetnally remove the VehicleSpawner,
+        // any Events, or Particles.
         ArrayList<SuperActor> actors = (ArrayList<SuperActor>)getObjectsInRange(explosionRadius, SuperActor.class);
-        for (SuperActor a : actors) {
-            getWorld().removeObject(a);
+        for (SuperActor a : actors){ 
+            getWorld().removeObject(a); // Remove all nearby SuperActors.
         }
-        getWorld().addObject(new Explosion(explosionRadius), getX(), getY());
+        getWorld().addObject(new Explosion(explosionRadius+50), getX(), getY()); // Add an explosion effect.
         getWorld().removeObject(this);
     }
     public double getSpeed() {

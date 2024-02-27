@@ -2,41 +2,35 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Write a description of class Medic here.
+ * The Medic is very helpful, moving towards and healing any Humans that are knocked down.
+ * However, it is defenseless, and it takes time to heal a knocked down person,
+ * making it very vulnerable out there on the street.
  * 
- * @author (your name) 
+ * @author Freeman Wang
  * @version (a version number or a date)
  */
 public class Medic extends Human
 {
     private Human target;
     private ArrayList<Human> humans;
-    //private SuperStatBar energyBar;
-    private int hp = 111;
-    private int maxHp;
     private double speed = 3.0;
 
-    /**
-     * Primary constructor for Bug - creates a new Bug with full HP.
-     * This is called by the Spawn button, and used for creating the 
-     * first bug at the beginning of the simulation.
-     */
     public Medic (int direction)
     {
         super(direction);
     }
 
     /**
-     * Act - do whatever the Bug wants to do. This method is called whenever
+     * Act - do whatever the Medic wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() 
     {
         if (getWorld() != null && isAwake()) {
-            if (target != null && target.getWorld() == null){ // target does not exist anymore
+            if (target != null && !target.exists()){ // target does not exist anymore
                 target = null; // no more target
             }
-            if (target == null || target.isAwake() || Utility.getDistance (getPosition(), target.getPosition()) > 40){ // too far or no target
+            if (target == null || target.isAwake() || distanceFrom(target) > 40){ // too far or no target, or target is now awake
                 findTarget(); // find new target
             }
             
@@ -48,7 +42,7 @@ public class Medic extends Human
     }    
 
     /**
-     * Private method, called by act(), that constantly checks for closer targets
+     * Checks for any nearby downed humans.
      */
     private void findTarget ()
     {
@@ -67,7 +61,8 @@ public class Medic extends Human
             humans = (ArrayList<Human>)getObjectsInRange(350, Human.class);
             humans.removeIf(p -> p.isAwake());
         } 
-
+        
+        
         if (humans.size() > 0) // One or more downed humans found.
         {
             // set the first one as my target
@@ -92,31 +87,37 @@ public class Medic extends Human
     }
 
     /**
-     * Private method, called by act(), that moves toward the target,
-     * or tries to revive it if within range.
+     * Moves toward, or helps the target Human.
      */
     private void moveTowardOrHelpTarget ()
     {
-        if (distanceFrom(target) < 18)
+        if (distanceFrom(target) < 18) // Close enough. Heal them!
         {
             healHuman(target);
-            target=null;
         }
-        else
+        else // Too far, go closer.
         {
-            // If the next position I will move two is not obstructed by a vehicle, move there.
             if (!obstructedAt(getDisplacement(target, speed))) moveTowards(target, speed);
         }
     }
-    private void healHuman(Human c) {
+    /**
+     * Makes the medic begin healing the downed human, making it unable to move for a moment.
+     */
+    private void healHuman(Human target) {
         speed = 0; // the medic cannot move while healing.
-        
-        // Creates a delayed event that would happen 30 acts later which heals the target, and lets the medic move again.
-        createEvent(new DelayedEvent(() -> {
-                                        if (isAwake()) {
-                                            c.healMe(); // heal the dead citizen
-                                            target=null; // no more target
-                                            speed = maxSpeed; // can move again
-                                        }}, 30));
+        // Create a delayed event that would happen 30 acts later which finishes the healing.
+        createEvent(new DelayedEvent(() -> finishHealing(target), 30));
+    }
+    /**
+     * The medic has finished healing the human and can move again.
+     * Used in the DelayedEvent, but made seperate for readability.
+     */
+    private void finishHealing(Human target) {
+        if (isAwake()) { // if I didn't die while I was healing...
+            target.healMe(); // heal the dead human
+            System.out.println("healed");
+            target = null;
+            speed = maxSpeed; // can move again
+        }
     }
 }

@@ -18,14 +18,14 @@ public class Soldier extends Human
     private Zombie target;
     public Soldier(int direction) {
         super(direction);
-        maxBullets = 1;
-        currentBullets = 1;
+        maxBullets = 5;
+        currentBullets = maxBullets;
         onCooldown = false;
     }
     public void act()
     {
         if (getWorld() != null && isAwake()) {
-            if (target != null && target.getWorld() == null){ // target does not exist anymore
+            if (target != null && !target.exists()){ // target does not exist anymore
                     target = null; // no more target
                 }
             if (target == null || distanceFrom(target) > 50){ // too far or no target
@@ -44,8 +44,8 @@ public class Soldier extends Human
         if (canShoot()) shoot();
     }
     private void scanForTargets() {
-        target = (Zombie)getClosest(Zombie.class, 140);
-        if (target == null) target = (Zombie) getClosest(Zombie.class, 300);
+        target = (Zombie)getClosestInRange(Zombie.class, 140);
+        if (target == null) target = (Zombie) getClosestInRange(Zombie.class, 300);
         // double closestTargetDistance = 0;
         // double distanceToActor;
         // ArrayList<Zombie> zombies = (ArrayList<Zombie>) getObjectsInRange(140, Zombie.class); // Search for a zombie around me

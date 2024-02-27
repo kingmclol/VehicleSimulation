@@ -25,21 +25,30 @@ public class Bus extends Vehicle
     {
        super.act();
     }
-
+    /**
+     * Checks if it has hit a civilian. Returns true if it did.
+     * If the civilian can board the bus, then add it to the Bus as a passenger.
+     * @return true if the Bus hit a civilian.
+     */
     public boolean checkHitPedestrian () {
-        Civilian c = (Civilian)getOneIntersectingObject(Civilian.class);
+        Civilian c = (Civilian)getOneIntersectingObject(Civilian.class); // Check if a civilian is in contact w/ the bus
+        // If the civilian exists, is awake, and the Bus still can take on more passengers,
         if (c!= null && c.isAwake() && passengers < maxPassengers) {
-            addPassenger(c);
-            moving = false;
+            addPassenger(c); // pick up the passenger.
+            moving = false; // Stop the bus.
             sleepFor(60);
-            createEvent(new DelayedEvent(() -> moving = true, 60));
+            createEvent(new DelayedEvent(() -> moving = true, 60)); // Allow the bus to move after 1 second.
             return true;
         }
         return false;
     }
+    /**
+     * Removes the civilian from the world, and draws it on the Bus' image.
+     * @param c The civilian to pick up.
+     */
     private void addPassenger(Civilian c) {
         //int offset = 17;
-        c.getWorld().removeObject(c);        
+        c.getWorld().removeObject(c); // Remove the civilian (it is on the bus now)     
         GreenfootImage image = getImage();
         image.setColor(Color.BLACK);
         image.fillOval(image.getWidth()-48-(17*passengers),image.getHeight()/2-8,12,12);

@@ -88,11 +88,20 @@ public class SuperActor extends SuperSmoothMover
      * @param range The radius around to search in.
      * @return The closest SuperActor found. Returns null if none found.
      */
-    protected SuperActor getClosest(Class c, int range) {
+    protected SuperActor getClosestInRange(Class c, int range) {
+        ArrayList<SuperActor> targets = (ArrayList<SuperActor>)getObjectsInRange(range, c);
+        return getClosest(targets);
+    }
+    /** 
+     * Get the closest SuperActor in a given ArrayList of SuperActors. Inspired
+     * by Mr.Cohen's implementation.
+     * @param targets The ArrayList to find the closest SuperActor from.
+     * @return The closest SuperActor found. Returns null if none found.
+     */
+    protected SuperActor getClosest(ArrayList<SuperActor> targets) {
         double closestTargetDistance = 0;
         double distanceToActor;
         SuperActor target = null;
-        ArrayList<SuperActor> targets = (ArrayList<SuperActor>)getObjectsInRange(range, c);
         if (targets.size() > 0) {
             target = targets.get(0);
             closestTargetDistance = distanceFrom(target);
