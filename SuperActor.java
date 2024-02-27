@@ -36,4 +36,7 @@ public class SuperActor extends SuperSmoothMover
     protected void turnTowards(Vector position) {
         turnTowards(Utility.round(position.getX()), Utility.round(position.getY()));
     }
+    protected double distanceFrom(SuperActor other) {
+        return getPosition().distanceFrom(other.getPosition()).getMagnitude();
+    }
 }

@@ -67,7 +67,6 @@ public abstract class Vehicle extends SuperActor
      * - subclass' act() method can invoke super.act() to call this, as is demonstrated here.
      */
     public void act () {
-        
         if (moving) drive(); 
         //drive();
         if (!checkHitPedestrian()){

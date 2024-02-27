@@ -43,7 +43,7 @@ public abstract class Pedestrian extends SuperActor
         return !(getOneObjectAtOffset(0, (int)(direction * getImage().getHeight()/2 + (int)(direction * speed)), Vehicle.class) == null);
     }
     public boolean obstructedAt(Vector displacement) {
-        return !(getOneObjectAtOffset(Utility.round(displacement.getX()), Utility.round(displacement.getY()), Vehicle.class) == null);
+        return !(getOneObjectAtOffset(Utility.round(displacement.getX() + getImage().getHeight()/2 * direction), Utility.round(displacement.getY() + getImage().getHeight()/2 * direction), Vehicle.class) == null);
     }
     public boolean atEdge() {
         if (direction == -1 && getY() < 100){
@@ -61,7 +61,6 @@ public abstract class Pedestrian extends SuperActor
         setRotation (direction * 90);
         awake = false;
     }
-
     /**
      * Method to allow a downed Pedestrian to be healed
      */
@@ -70,7 +69,6 @@ public abstract class Pedestrian extends SuperActor
         setRotation (0);
         awake = true;
     }
-
     public boolean isAwake () {
         return awake;
     }

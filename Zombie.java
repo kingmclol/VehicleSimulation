@@ -49,8 +49,7 @@ public class Zombie extends Pedestrian
             getWorld().addObject(new DeathParticle(), getX(), getY()); 
             getWorld().removeObject(this);
         }
-    }    
-
+    }
     /**
      * Private method, called by act(), that constantly checks for closer targets
      */

@@ -135,7 +135,7 @@ public class VehicleWorld extends World
         int direction = 1;
         if (y==TOP_SPAWN) direction = 1;
         else direction = -1;
-        switch (Greenfoot.getRandomNumber(3)) {
+        switch (Greenfoot.getRandomNumber(4)) {
             case 0:
                 addObject(new Civilian(direction), x, y);
                 break;
@@ -144,6 +144,9 @@ public class VehicleWorld extends World
                 break;
             case 2:
                 addObject(new Medic(direction),x,y);
+                break;
+            case 3:
+                addObject(new Soldier(direction), x, y);
                 break;
         }
     }

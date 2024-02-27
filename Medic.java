@@ -47,7 +47,7 @@ public class Medic extends Human
             else if (!obstructedPath()) setLocation (getX(), getY() + (speed*direction)); // if it does not, move normally
         }
         if (atEdge()) getWorld().removeObject(this);
-        else if (!isAwake()) { // run over.
+        else if (!isAwake()) { // killed.
             getWorld().addObject(new DeathParticle(), getX(), getY()); 
             getWorld().removeObject(this);
         }
