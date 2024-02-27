@@ -23,11 +23,12 @@ public abstract class Human extends Pedestrian
      */
     public void knockDownAndInfect() {
         super.knockDown();
+        // Turn into a zombie after 120 acts.
         createEvent(new DelayedEvent(() -> turnIntoZombie(), 120));
     }
     /**
      * Replaces the Human with a Zombie, if they still are in the world and is not awake.
-     * Used for knockDownAndInfect().
+     * Used for knockDownAndInfect(), put in a seperate method for readability.
      */
     private void turnIntoZombie() {
         if(exists() && !isAwake()) { // If I still am in the world, and I am not awake,

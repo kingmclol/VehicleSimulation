@@ -94,6 +94,7 @@ public class Medic extends Human
         if (distanceFrom(target) < 18) // Close enough. Heal them!
         {
             healHuman(target);
+            target=null;
         }
         else // Too far, go closer.
         {
@@ -101,23 +102,17 @@ public class Medic extends Human
         }
     }
     /**
-     * Makes the medic begin healing the downed human, making it unable to move for a moment.
+     * Heals the human. The medic is vulnerable for 30 acts (it cannot move while healing.)
      */
-    private void healHuman(Human target) {
+    private void healHuman(Human c) {
         speed = 0; // the medic cannot move while healing.
-        // Create a delayed event that would happen 30 acts later which finishes the healing.
-        createEvent(new DelayedEvent(() -> finishHealing(target), 30));
-    }
-    /**
-     * The medic has finished healing the human and can move again.
-     * Used in the DelayedEvent, but made seperate for readability.
-     */
-    private void finishHealing(Human target) {
-        if (isAwake()) { // if I didn't die while I was healing...
-            target.healMe(); // heal the dead human
-            System.out.println("healed");
-            target = null;
-            speed = maxSpeed; // can move again
-        }
+        
+        // Creates a delayed event that would happen 30 acts later which heals the target, and lets the medic move again.
+        createEvent(new DelayedEvent(() -> {
+                                        if (isAwake()) {
+                                            c.healMe(); // heal the dead citizen
+                                            target=null; // no more target, need to find a new one
+                                            speed = maxSpeed; // can move again
+                                        }}, 30));
     }
 }

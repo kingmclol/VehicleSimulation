@@ -78,7 +78,7 @@ public class Soldier extends Human
         getWorld().addObject(new Bullet(target), getX(), getY());
         createEvent(new DelayedEvent(() -> onCooldown = false, 10)); // cooldown will finish after 10 acts
         if (currentBullets == 0) { // if no bullets left
-            createEvent(new DelayedEvent(() -> currentBullets = maxBullets, 180)); // reload after 180 acts
+            createEvent(new DelayedEvent(() -> currentBullets = maxBullets, 120)); // reload after 120 acts
         }
     }
 }
