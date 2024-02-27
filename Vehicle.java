@@ -2,7 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 
 /**
- * This is the superclass for Vehicles.
+ * A Vehicle that drives along the road.
  * 
  */
 public abstract class Vehicle extends SuperActor

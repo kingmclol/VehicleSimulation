@@ -1,10 +1,11 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Grunt here.
+ * The Civilian has nothing special. It just wants to get the heck out of here,
+ * either through getting on a bus or moving off screen.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Freeman Wang
+ * @version 2024-02-27
  */
 public class Civilian extends Human
 {

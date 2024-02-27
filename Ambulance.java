@@ -21,7 +21,10 @@ public class Ambulance extends Vehicle
         super.act();
         
     }
-
+    /**
+     * Heals any downed Pedestrians that it touches. Humans wake up, while Zombies turn
+     * into civilians.
+     */
     public boolean checkHitPedestrian () {
         //Pedestrian p = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Pedestrian.class);
         Pedestrian p = (Pedestrian)getOneIntersectingObject(Pedestrian.class);

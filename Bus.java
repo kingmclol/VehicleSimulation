@@ -1,7 +1,11 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * The Bus subclass
+ * The Bus is trying to get out of the city, but wouldn't mind picking up any Civilians it comes by.
+ * Thankfully, it has quite a large max capacity for those panicked Civilians out there.
+ * 
+ * @author Freeman Wang
+ * @date 2024-02-27
  */
 public class Bus extends Vehicle
 {

@@ -1,10 +1,9 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * A Human is an abstract class. Actors that are of species human should
- * extend this, so they would be instances of Human for Zombies to
- * chase. It doesn't anything else, really, as each subclass used
- * have slight differences in logic that I can't combine into one.
+ * A Human is an abstract class. Humans can get infected by Zombies if they are
+ * knocked down by them and they are not healed for a period of time.
+ * I feel sorry for the poor Medics who would be in for quite a scare...
  * 
  * @author Freeman Wang
  * @version 2024-02-27

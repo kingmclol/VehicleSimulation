@@ -11,7 +11,9 @@ public class Utility
     public static int round(double val) {
         return (int) (val + 0.5);
     }
-    
+    public static int getSign(double val) {
+        return (val < 0) ? -1 : 1;
+    }
     // Moved to SuperActor
     // public static double getDistance(Vector a, Vector b) {
         // return a.distanceFrom(b).getMagnitude();

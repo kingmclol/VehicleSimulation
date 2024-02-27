@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * A Pedestrian that tries to walk across the street
+ * A Pedestrian that tries to walk across the street.
  */
 public abstract class Pedestrian extends SuperActor
 {
@@ -63,7 +63,12 @@ public abstract class Pedestrian extends SuperActor
      * @return If the target position is obstructed.
      */
     protected boolean obstructedAt(Vector displacement) {
-        return !(getOneObjectAtOffset(Utility.round(displacement.getX() + getImage().getHeight()/2 * direction), Utility.round(displacement.getY() + getImage().getHeight()/2 * direction), Vehicle.class) == null);
+        double dx = displacement.getX();
+        double dy = displacement.getY();
+        return !(getOneObjectAtOffset(
+                            Utility.round(dx + getImage().getWidth()/2 * Utility.getSign(dx)),
+                            Utility.round(dy + getImage().getHeight()/2 * Utility.getSign(dy)), 
+                            Vehicle.class) == null);
     }
     /**
      * Returns whether the Pedestrian is at the edge of the main area. Not to be confused with

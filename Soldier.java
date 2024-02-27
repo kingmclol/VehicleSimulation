@@ -2,10 +2,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 import java.util.ArrayList;
 /**
- * Write a description of class Soldier here.
+ * The Soldier is a brave person who fights against the Zombies with their trusty gun. 
+ * However, they don't know how to count, so they may be overwhelmed by trying to fight a group
+ * with only one bullet left in their gun!
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Freeman Wang
+ * @version 2024-02-27
  */
 public class Soldier extends Human
 {
@@ -18,7 +20,7 @@ public class Soldier extends Human
     private Zombie target;
     public Soldier(int direction) {
         super(direction);
-        maxBullets = 5;
+        maxBullets = 4;
         currentBullets = maxBullets;
         onCooldown = false;
     }

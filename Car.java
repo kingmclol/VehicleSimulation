@@ -2,13 +2,15 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 import java.util.ArrayList;
 /**
- * The Car subclass
+ * The Car is being driven by a Civilian that really wants to get out as fast as possible.
+ * In their rush, they don't care about anything that may be in their way, running over
+ * Humans and Zombies alike.
+ * 
+ * @author Freeman Wang
+ * @version 2024-02-27
  */
 public class Car extends Vehicle
 {
-    
-    private int xcfsdf;
-    private SuperActor target;
     public Car(VehicleSpawner origin) {
         super(origin); // call the superclass' constructor
         maxSpeed = 1.5 + ((Math.random() * 30)/5);
@@ -23,24 +25,16 @@ public class Car extends Vehicle
         super.act();
         // if(getWorld()!= null) shoot();
     }
-    // private void shoot() {
-        // if (target==null || target.getWorld()==null) {
-            // ArrayList<Zombie> zombies = (ArrayList<Zombie>)getObjectsInRange(200, Zombie.class);
-            // if (zombies.size() != 0) target = zombies.get(0);
-        // }
-        // else {
-            // getWorld().addObject(new Bullet(getPosition().distanceFrom(target.getPosition())), getX(), getY());
-            // System.out.println("aa");
-        // }
-    // }
     /**
-     * When a Car hit's a Pedestrian, it should knock it over
+     * Returns true if hits a Pedestrian, and knocks it over.
+     * @return true if a Pedestrian was hit, false otherwise.
      */
     public boolean checkHitPedestrian () {
+        // Get the pedestrian
         Pedestrian p = (Pedestrian)getOneObjectAtOffset((int)speed + getImage().getWidth()/2, 0, Pedestrian.class);
-        if (p != null)
+        if (p != null) // If it exists,
         {
-            p.knockDown();
+            p.knockDown(); // Knock it down.
             return true;
         }
         return false;

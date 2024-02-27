@@ -2,10 +2,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 import java.util.ArrayList;
 /**
- * Write a description of class ExplosiveTruck here.
+ * The ExplosiveTruck is a truck that is... explosive! Make sure no Pedestrians touch this
+ * thing, as the driver wasn't careful enough to ensure their explosives were
+ * disabled in their rush to get out of the city.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Freeman Wang
+ * @version 2024-02-27
  */
 public class ExplosiveTruck extends Vehicle
 {

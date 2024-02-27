@@ -15,6 +15,7 @@ public class Zombie extends Pedestrian
     public Zombie (int direction)
     {
         super(direction);
+        awake = false; // They're dead, thus, not awake.
     }
     /**
      * Act - do whatever the Zombie wants to do. This method is called whenever
@@ -39,9 +40,6 @@ public class Zombie extends Pedestrian
         }
         
         if (atEdge()) getWorld().removeObject(this);
-        else if (!isAwake()) { // run over, in this case, as only the car can knock me down.
-            killMe();
-        }
     }
     /**
      * Tries to find the closest Human that is still awake.
@@ -100,5 +98,21 @@ public class Zombie extends Pedestrian
         {
             if (!obstructedAt(getDisplacement(target, speed))) moveTowards(target, speed);
         }
+    }
+    /**
+     * Zombies cannot be knocked down. They just die, since they don't die twice.
+     */
+    @Override
+    public void knockDown(){
+        killMe();
+    }
+    /**
+     * Turns the zombie back into a civilian. Hopefully don't die again, as
+     * that wouldn't be fun.
+     */
+    @Override
+    public void healMe(){
+        getWorld().addObject(new Civilian(direction),getX(),getY());
+        getWorld().removeObject(this);
     }
 }
