@@ -2,9 +2,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 import java.util.ArrayList;
 /**
- * The Soldier is a brave person who fights against the Zombies with their trusty gun. 
+ * The Soldier is a brave person who fights against the Zombies by charing at them with their trusty gun. 
  * However, they don't know how to count, so they may be overwhelmed by trying to fight a group
- * with only one bullet left in their gun!
+ * with only one bullet left! Reloading takes a while, so it's not going to look good for them...
+ * In a group of Soldiers, however, that's a different story.
+ * 
+ * If the Soldier has nothing to do, it will try to cross the street normally.
  * 
  * @author Freeman Wang
  * @version 2024-02-27

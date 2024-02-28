@@ -1,7 +1,15 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * The Ambulance subclass
+ * Ambulances are a Vehicle that is very good at medicine, as it can heal any downed
+ * Pedestrians that it touches, even curing any Zombies in contact!
+ * It's not brave enough to go out of its way to heal others, though, opting to get away
+ * from the city as its first Priority.
+ * 
+ * @author Jordan Cohen
+ * @author Freeman Wang
+ * 
+ * @version 2024-02-27
  */
 public class Ambulance extends Vehicle
 {
@@ -10,6 +18,7 @@ public class Ambulance extends Vehicle
         
         maxSpeed = 2.5;
         speed = maxSpeed;
+        yOffset = 10;
     }
 
     /**

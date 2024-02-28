@@ -50,7 +50,9 @@ public class ExplosiveTruck extends Vehicle
         for (SuperActor a : actors){ 
             getWorld().removeObject(a); // Remove all nearby SuperActors.
         }
-        getWorld().addObject(new Explosion(explosionRadius+50), getX(), getY()); // Add an explosion effect.
+        // Add an explosion effect. Strangely, getObjectsInRange gives a larger radius than expected, so I 
+        // resize the explosion effect to match.
+        getWorld().addObject(new Explosion(explosionRadius+50), getX(), getY());
         getWorld().removeObject(this);
     }
     public double getSpeed() {

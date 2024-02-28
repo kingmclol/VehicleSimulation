@@ -4,7 +4,10 @@ import java.util.List;
 /**
  * The Medic is very helpful, moving towards and healing any Humans that are knocked down.
  * However, it is defenseless, and it takes time to heal a knocked down person,
- * making it very vulnerable out there on the street.
+ * making it very vulnerable out there on the street. They're also TOO nice, trying to heal a downed Human
+ * no matter how dangerous it is.
+ * 
+ * If the Medic has nothing to do, it will try to cross the street normally.
  * 
  * @author Freeman Wang
  * @version (a version number or a date)
@@ -13,8 +16,6 @@ public class Medic extends Human
 {
     private Human target;
     private ArrayList<Human> humans;
-    private double speed = 3.0;
-
     public Medic (int direction)
     {
         super(direction);

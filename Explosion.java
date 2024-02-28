@@ -9,13 +9,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Explosion extends Particle
 {
     public Explosion(int radius) {
-        super(new GreenfootImage(1,1), 60*2);
+        super(new GreenfootImage(1,1), 4);
         GreenfootImage image = new GreenfootImage(radius, radius);
-        // for (int i = 0; i < 3; i++) {
-            // if (i%2==0) image.setColor(Color.RED);
-            // else image.setColor(Color.ORANGE);
-            // image.fillOval(radius-radius/(i+1), radius-radius/(i+1),radius/(3-i), radius/(3-i));
-        // }
         image.setColor(Color.RED);
         image.clear();
         image.fillOval(0,0,radius,radius);
@@ -28,9 +23,6 @@ public class Explosion extends Particle
     public void act()
     {
         super.act();
-        if (timeToAct()) {
-            if (currentLifespan > 60/2) decaySize(0.95);
-            decayTransparency();
-        }
+        if (currentLifespan > 30) decaySize(0.99);
     }
 }

@@ -71,7 +71,7 @@ public class VehicleWorld extends World
 
         // set up background -- If you change this, make 100% sure
         // that your chosen image is the same size as the World
-        background = new GreenfootImage ("background01.png");
+        background = new GreenfootImage ("gameBackground2_expanded_v2.jpg");
         setBackground (background);
 
         // Set critical variables - will affect lane drawing
@@ -118,7 +118,7 @@ public class VehicleWorld extends World
         }
 
         // Chance to spawn a Pedestrian
-        if (Greenfoot.getRandomNumber (60) == 0){
+        if (Greenfoot.getRandomNumber (30) == 0){
             int xSpawnLocation = Greenfoot.getRandomNumber (600) + 100; // random between 99 and 699, so not near edges
             boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
             if (spawnAtTop){
@@ -198,21 +198,22 @@ public class VehicleWorld extends World
         // to the outer edge of the lane.
         int heightOffset = heightPerLane / 2;
         // draw top border
+        /*
         target.setColor (GREY_BORDER);
         target.fillRect (0, startY, target.getWidth(), spacing);
-
+        */
         // Main Loop to Calculate Positions and draw lanes
         for (int i = 0; i < lanes; i++){
             // calculate the position for the lane
             lanePositions[i] = startY + spacing + (i * (heightPerLane+spacing)) + heightOffset ;
-
+            /*
             // draw lane
             target.setColor(GREY_STREET); 
             // the lane body
             target.fillRect (0, lanePositions[i] - heightOffset, target.getWidth(), heightPerLane);
             // the lane spacing - where the white or yellow lines will get drawn
             target.fillRect(0, lanePositions[i] + heightOffset, target.getWidth(), spacing);
-
+            */
             // Place spawners and draw lines depending on whether its 2 way and centre split
             if (twoWay && centreSplit){
                 // first half of the lanes go rightward (no option for left-hand drive, sorry UK students .. ?)
@@ -261,18 +262,21 @@ public class VehicleWorld extends World
             } else { // One way traffic
                 spawners[i] = new VehicleSpawner(true, heightPerLane, i);
                 world.addObject(spawners[i], 0, lanePositions[i]);
+                /*
                 if (i > 0){
                     for (int j = 0; j < target.getWidth(); j += 120){
                         target.setColor (Color.WHITE);
                         target.fillRect (j, lanePositions[i] - heightOffset - spacing, 60, spacing);
                     }
                 }
+                */
             }
         }
         // draws bottom border
+        /*
         target.setColor (GREY_BORDER);
         target.fillRect (0, lanePositions[lanes-1] + heightOffset, target.getWidth(), spacing);
-
+        */
         return lanePositions;
     }
 

@@ -2,6 +2,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
  * Zombies are Pedestrians that attempt to chase and infect any Humans roaming around.
+ * While posing only a small threat when alone, things may get problmeatic really quickly
+ * if not handled properly...
+ * 
  * If no Humans are found, it moves normally to get to the other side.
  * 
  * @author Freeman Wang
@@ -11,7 +14,6 @@ public class Zombie extends Pedestrian
 {
     private Human target;
     private ArrayList<Human> humans;
-    private double speed = 2.0;
     public Zombie (int direction)
     {
         super(direction);

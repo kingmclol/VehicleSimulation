@@ -1,10 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class DeathParticle here.
+ * The DeathParticle is literally a Particle with a skull image signifying that something has died.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Freeman Wang
+ * @version 2024-02-27
  */
 public class DeathParticle extends Particle
 {
@@ -13,13 +13,10 @@ public class DeathParticle extends Particle
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public DeathParticle() {
-        super(new GreenfootImage("skull.png"), 60);
+        super(new GreenfootImage("skull.png"));
     }
     public void act()
     {
         super.act();
-        if (timeToAct()) {
-            decayTransparency();
-        }
     }
 }

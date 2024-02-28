@@ -66,7 +66,7 @@ public abstract class Pedestrian extends SuperActor
         double dx = displacement.getX();
         double dy = displacement.getY();
         return !(getOneObjectAtOffset(
-                            Utility.round(dx + getImage().getWidth()/2 * Utility.getSign(dx)),
+                            Utility.round(dx + getImage().getWidth()/2 * -1 * Utility.getSign(dx)),
                             Utility.round(dy + getImage().getHeight()/2 * Utility.getSign(dy)), 
                             Vehicle.class) == null);
     }

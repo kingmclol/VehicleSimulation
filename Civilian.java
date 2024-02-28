@@ -2,7 +2,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
  * The Civilian has nothing special. It just wants to get the heck out of here,
- * either through getting on a bus or moving off screen.
+ * either through getting on a bus or moving off screen. It has no means of defending
+ * itself or helping others.
  * 
  * @author Freeman Wang
  * @version 2024-02-27

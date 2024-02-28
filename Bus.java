@@ -4,6 +4,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * The Bus is trying to get out of the city, but wouldn't mind picking up any Civilians it comes by.
  * Thankfully, it has quite a large max capacity for those panicked Civilians out there.
  * 
+ * @author Jordan Cohen
  * @author Freeman Wang
  * @date 2024-02-27
  */
@@ -11,6 +12,7 @@ public class Bus extends Vehicle
 {
     private int passengers;
     private final int maxPassengers = 7;
+    private DelayedEvent pickedUpPassenger;
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         //Set up values for Bus
@@ -40,8 +42,8 @@ public class Bus extends Vehicle
         if (c!= null && c.isAwake() && passengers < maxPassengers) {
             addPassenger(c); // pick up the passenger.
             moving = false; // Stop the bus.
-            sleepFor(60);
-            createEvent(new DelayedEvent(() -> moving = true, 60)); // Allow the bus to move after 1 second.
+            // sleepFor(60); // Prevent this actor from acting for one second (only one Civilian can get on at a time).
+            createEvent(new DelayedEvent(() -> moving = true, 60)); // set moving to true after 1 second.
             return true;
         }
         return false;

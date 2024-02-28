@@ -2,10 +2,11 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.List;
 import java.util.ArrayList;
 /**
- * The Car is being driven by a Civilian that really wants to get out as fast as possible.
+ * The Car is being driven by a person that really wants to get out as fast as possible.
  * In their rush, they don't care about anything that may be in their way, running over
  * Humans and Zombies alike.
  * 
+ * @author Jordan Cohen
  * @author Freeman Wang
  * @version 2024-02-27
  */
@@ -13,7 +14,7 @@ public class Car extends Vehicle
 {
     public Car(VehicleSpawner origin) {
         super(origin); // call the superclass' constructor
-        maxSpeed = 1.5 + ((Math.random() * 30)/5);
+        maxSpeed = 2.5 + ((Math.random() * 30)/5);
         speed = maxSpeed;
         yOffset = 4;
         int z;
