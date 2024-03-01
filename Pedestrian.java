@@ -9,6 +9,9 @@ public abstract class Pedestrian extends SuperActor
     protected double maxSpeed;
     protected int direction; // direction is always -1 or 1, for moving down or up, respectively
     protected  boolean awake, entering;
+    protected int visionRangeDay, visionRangeNight;
+    protected int visionRange;
+    private boolean initialAct; // To get addedToWorld working...
     public Pedestrian(int direction) {
         // choose a random speed
         maxSpeed = Math.random() * 2 + 1;
@@ -17,6 +20,15 @@ public abstract class Pedestrian extends SuperActor
         awake = true;
         entering = true;
         this.direction = direction;
+        initialAct = true;
+    }
+    public void addedToWorld(World w) {
+        //System.out.println(this);
+        if (!initialAct) return;
+        VehicleWorld world = (VehicleWorld) w;
+        if (world.isDaytime()) visionRange = visionRangeDay;
+        else visionRange = visionRangeNight;
+        initialAct = false;
     }
     /**
      * Moves the pedestrian where it tries to get to the other side it spawned from.
@@ -112,5 +124,13 @@ public abstract class Pedestrian extends SuperActor
      */
     public double getSpeed() {
         return speed;
+    }
+    /**
+     * Changes the Pedestrian's vision range to their respective vision values for the
+     * time of day.
+     * @param daytime Whether the current world time is day.
+     */
+    public void setVisionRange(boolean daytime){
+        visionRange = (daytime) ? visionRangeDay : visionRangeNight;
     }
 }

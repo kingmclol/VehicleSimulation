@@ -11,7 +11,7 @@ public class Bullet extends SuperActor
     private double speed; // The speed of the bullet.
     private Vector targetPos; // The position of the target.
     private Vector velocity; // The velocity of the bullet (has direction)
-    int count; // Okay, so for some reason addedToWorld() is running infinitely. This count variable is to counter that.
+    boolean initialAct; // Okay, so for some reason addedToWorld() is running infinitely. This variable is to counter that.
     /**
      * Creates a Bullet.
      * @param target The SuperActor to target.
@@ -19,9 +19,11 @@ public class Bullet extends SuperActor
     public Bullet(SuperActor target) {
         speed = 6.0;
         targetPos = target.getPosition(); // get the position of the target.
+        initialAct = true;
     }
     public void addedToWorld(World w) {
-        if (count++ > 0) return; // Stop this method from running infinitely...
+        if (!initialAct) return; // Stop this method from running infinitely...
+        initialAct = false;
         velocity = getDisplacement(targetPos, speed); // get the distance travelled per act to move towards the target
         turnTowards(targetPos); // turn the image in the direction of the target.
     }

@@ -12,6 +12,9 @@ public class DeathParticle extends Particle
      * Act - do whatever the DeathParticle wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
+    /**
+     * Creates a :skull: Particle.
+     */
     public DeathParticle() {
         super(new GreenfootImage("skull.png"));
     }

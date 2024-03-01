@@ -47,7 +47,10 @@ public class VehicleWorld extends World
     private int laneHeight, laneCount, spaceBetweenLanes;
     private int[] lanePositionsY;
     private VehicleSpawner[] laneSpawners;
-
+    
+    // Variables related to world events.
+    private boolean daytime;
+    private DarkFilter nightFilter;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -61,13 +64,15 @@ public class VehicleWorld extends World
     {    
         // Create a new world with 1024x800 pixels, UNBOUNDED
         super(1024, 800, 1, false); 
-
+        addObject(new WorldEventManager(), 0 ,0);
+        nightFilter = new DarkFilter(this);
+        daytime = true;
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will
         // always be on top of everything else, then Vehicles (of all
         // sub class types) and after that, all other classes not listed
         // will be displayed in random order. 
-        //setPaintOrder (Pedestrian.class, Vehicle.class); // Commented out to use Z-sort instead
+        setPaintOrder (DarkFilter.class); // forcing the DarkFilter to remain on top, not affected by z sorting.
 
         // set up background -- If you change this, make 100% sure
         // that your chosen image is the same size as the World
@@ -98,7 +103,29 @@ public class VehicleWorld extends World
         spawn();
         zSort ((ArrayList<Actor>)(getObjects(Actor.class)), this);
     }
-
+    /**
+     * Progresses the time of the simulation between Daytime and Nighttime.
+     */
+    public void progressDayCycle(){
+        daytime = !daytime; // toggle world time.
+        System.out.println(daytime ? "DAY" : "NIGHT" + " | " + daytime);
+        
+        // Change all Pedestrians to their respective view ranges.
+        ArrayList<Pedestrian> pedestrians = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
+        for (Pedestrian p : pedestrians) p.setVisionRange(daytime);
+        
+        // Add the effect that dims/undims the screen.
+        if (!daytime){ // nightime. Add the filter.
+            nightFilter.timeToExist(); // Tells the nightFilter that it should prepare to make itself appear.
+            addObject(nightFilter, getWidth()/2, getHeight()/2); // Add it to the World.
+        }
+        else { // Day. remove the filter.
+            nightFilter.timeToRemove();
+        }
+    }
+    public boolean isDaytime(){
+        return daytime;
+    }
     private void spawn () {
         // Chance to spawn a vehicle
         if (Greenfoot.getRandomNumber (laneCount * 10) == 0){
@@ -138,18 +165,19 @@ public class VehicleWorld extends World
         int direction = 1;
         if (y==TOP_SPAWN) direction = 1;
         else direction = -1;
-        switch (Greenfoot.getRandomNumber(4)) {
+        switch (Greenfoot.getRandomNumber(5)) {
             case 0:
                 addObject(new Civilian(direction), x, y);
                 break;
             case 1:
-                addObject(new Zombie(direction), x, y);
+                addObject(new Soldier(direction), x, y);
                 break;
             case 2:
                 addObject(new Medic(direction),x,y);
                 break;
             case 3:
-                addObject(new Soldier(direction), x, y);
+            case 4:
+                addObject(new Zombie(direction), x, y);
                 break;
         }
     }

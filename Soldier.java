@@ -23,9 +23,12 @@ public class Soldier extends Human
     private Zombie target;
     public Soldier(int direction) {
         super(direction);
-        maxBullets = 4;
+        maxBullets = 5;
         currentBullets = maxBullets;
         onCooldown = false;
+        visionRangeDay = 300;
+        visionRangeNight = 150;
+        visionRange = visionRangeDay;
     }
     public void act()
     {
@@ -49,8 +52,8 @@ public class Soldier extends Human
         if (canShoot()) shoot();
     }
     private void scanForTargets() {
-        target = (Zombie)getClosestInRange(Zombie.class, 140);
-        if (target == null) target = (Zombie) getClosestInRange(Zombie.class, 300);
+        target = (Zombie)getClosestInRange(Zombie.class, visionRange/2);
+        if (target == null) target = (Zombie) getClosestInRange(Zombie.class, visionRange);
         // double closestTargetDistance = 0;
         // double distanceToActor;
         // ArrayList<Zombie> zombies = (ArrayList<Zombie>) getObjectsInRange(140, Zombie.class); // Search for a zombie around me
@@ -83,7 +86,7 @@ public class Soldier extends Human
         getWorld().addObject(new Bullet(target), getX(), getY());
         createEvent(new DelayedEvent(() -> onCooldown = false, 10)); // cooldown will finish after 10 acts
         if (currentBullets == 0) { // if no bullets left
-            createEvent(new DelayedEvent(() -> currentBullets = maxBullets, 120)); // reload after 120 acts
+            createEvent(new DelayedEvent(() -> currentBullets = maxBullets, 90)); // reload after 90 acts
         }
     }
 }

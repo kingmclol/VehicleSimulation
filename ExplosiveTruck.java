@@ -48,7 +48,8 @@ public class ExplosiveTruck extends Vehicle
         // any Events, or Particles.
         ArrayList<SuperActor> actors = (ArrayList<SuperActor>)getObjectsInRange(explosionRadius, SuperActor.class);
         for (SuperActor a : actors){ 
-            getWorld().removeObject(a); // Remove all nearby SuperActors.
+            if (a instanceof Pedestrian) ((Pedestrian)a).killMe(); // If a pedestrian, kill it.
+            else getWorld().removeObject(a); // Remove the object normally
         }
         // Add an explosion effect. Strangely, getObjectsInRange gives a larger radius than expected, so I 
         // resize the explosion effect to match.

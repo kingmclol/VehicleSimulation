@@ -18,6 +18,8 @@ public class Zombie extends Pedestrian
     {
         super(direction);
         awake = false; // They're dead, thus, not awake.
+        visionRangeDay = 250;
+        visionRangeNight = 400;
     }
     /**
      * Act - do whatever the Zombie wants to do. This method is called whenever
@@ -53,14 +55,14 @@ public class Zombie extends Pedestrian
         // Get a list of all Humans in the World, cast it to ArrayList
         // for easy management
 
-        humans = (ArrayList<Human>)getObjectsInRange(40, Human.class);
+        humans = (ArrayList<Human>)getObjectsInRange(visionRange/4, Human.class);
         humans.removeIf(p -> !p.isAwake()); // Remove any not awake humans, as they're not important to me.
         if (humans.size() == 0){
-            humans = (ArrayList<Human>)getObjectsInRange(140, Human.class);
+            humans = (ArrayList<Human>)getObjectsInRange(visionRange/2, Human.class);
             humans.removeIf(p -> !p.isAwake());
         } 
         if (humans.size() == 0){
-            humans = (ArrayList<Human>)getObjectsInRange(350, Human.class);
+            humans = (ArrayList<Human>)getObjectsInRange(visionRange, Human.class);
             humans.removeIf(p -> !p.isAwake());
         } 
         if (humans.size() > 0) // Found one or more awake humans

@@ -1,6 +1,6 @@
 /**
  * Vectors. I initially created this class to hopefully make developing on Greenfoot easier, but it seems like
- * it did the exact opposite than intended.
+ * it did the exact opposite than intended. I really should have looked that the Library of Code offered first...
  * 
  * @author Freeman Wang
  * @version 2024-02-27
@@ -103,7 +103,7 @@ public class Vector
      * Returns a Vector with a magnitude that will not exceed the given magnitude.
      * If the Vector's magnitude is less than the given magnitude, return the original Vector.
      * @param magnitude The magnitude to limit to.
-     * @return This Vector, with magnitude limited to the given magnitude.
+     * @return This Vector, with magnitude capped to the given magnitude.
      */
     public Vector limitMagnitude(double magnitude) {
         if (this.getMagnitude() > magnitude) {
@@ -111,6 +111,12 @@ public class Vector
         }
         return this;
     }
+    // public Vector limitMagnitudeMin(double magnitude) {
+        // if (this.getMagnitude() < magnitude) {
+            // return this.scaleTo(magnitude);
+        // }
+        // return this;
+    // }
     /**
      * Returns this Vector, but reversed.
      * @return This Vector, but reversed.

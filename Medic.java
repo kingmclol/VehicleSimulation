@@ -19,6 +19,9 @@ public class Medic extends Human
     public Medic (int direction)
     {
         super(direction);
+        visionRangeDay = 350;
+        visionRangeNight = 150;
+        visionRange = visionRangeDay;
     }
 
     /**
@@ -52,14 +55,14 @@ public class Medic extends Human
         // Get a list of all Humans in the World, cast it to ArrayList
         // for easy management
 
-        humans = (ArrayList<Human>)getObjectsInRange(40, Human.class); // Get nearby humans
+        humans = (ArrayList<Human>)getObjectsInRange(visionRange/4, Human.class); // Get nearby humans
         humans.removeIf(p -> p.isAwake()); // Remove any that are alive (they don't need to be healed)
-        if (humans.size() == 0){ // None found, expand search to 140 radius.
-            humans = (ArrayList<Human>)getObjectsInRange(140, Human.class);
+        if (humans.size() == 0){ // None found, expand search.
+            humans = (ArrayList<Human>)getObjectsInRange(visionRange/2, Human.class);
             humans.removeIf(p -> p.isAwake());
         } 
-        if (humans.size() == 0){ // Still none found? Expand search again to 350 radius.
-            humans = (ArrayList<Human>)getObjectsInRange(350, Human.class);
+        if (humans.size() == 0){ // Still none found? Expand search again to maximum radius.
+            humans = (ArrayList<Human>)getObjectsInRange(visionRange, Human.class);
             humans.removeIf(p -> p.isAwake());
         } 
         
