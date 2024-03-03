@@ -16,7 +16,7 @@ public class Bomb extends SuperActor
         targetY = yPos;
         speed = 4.0;
         aboutToExplode = false;
-        explosionRadius = 150;
+        explosionRadius = 125;
     }
     public void act()
     {

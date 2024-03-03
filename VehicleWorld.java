@@ -134,8 +134,17 @@ public class VehicleWorld extends World
     public void startBombing(){
         addObject(new BomberPlane(), 0, 50);
     }
+    /**
+     * Spawns a wave of Zombies at the top or bottom spawn.
+     */
     public void spawnZombieWave() {
-        
+        boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
+        int ySpawnLocation = spawnAtTop ? TOP_SPAWN:BOTTOM_SPAWN;
+        int direction = spawnAtTop ? 1:-1;
+        for (int i = 0; i < 15; i++) {
+            int xSpawnLocation = Greenfoot.getRandomNumber (600) + 100; // random between 99 and 699, so not near edges
+            addObject(new Zombie(direction), xSpawnLocation, ySpawnLocation);
+        }
     }
     /**
      * Returns a cloned Array of lanePositionsY. Unused after finding about
@@ -144,6 +153,9 @@ public class VehicleWorld extends World
     public int[] getLanePositionsY(){
         return lanePositionsY.clone();
     }
+    /**
+     * Returns whether it is currently daytime.
+     */
     public boolean isDaytime(){
         return daytime;
     }
@@ -167,38 +179,59 @@ public class VehicleWorld extends World
 
         // Chance to spawn a Pedestrian
         if (Greenfoot.getRandomNumber (30) == 0){
-            int xSpawnLocation = Greenfoot.getRandomNumber (600) + 100; // random between 99 and 699, so not near edges
-            boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
-            if (spawnAtTop){
-                spawnPedestrian(xSpawnLocation, TOP_SPAWN);
-            } else {
-                spawnPedestrian(xSpawnLocation, BOTTOM_SPAWN);
-            }
+            // int xSpawnLocation = Greenfoot.getRandomNumber (600) + 100; // random between 99 and 699, so not near edges
+            // boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
+            // if (spawnAtTop){
+                // spawnPedestrian(xSpawnLocation, TOP_SPAWN);
+            // } else {
+                // spawnPedestrian(xSpawnLocation, BOTTOM_SPAWN);
+            // }
+            spawnPedestrian();
         }
 
     }
     /**
-     * Spawns a Pedestrian. Moved the code to a distinct method.
-     * @param x The x coordinate to spawn the pedestrian.
-     * @param y The Top or Bottom spawn y coordinate.
+     * Spawns a Pedestrian.
      */
-    public void spawnPedestrian(int x, int y) {
-        int direction = 1; // default
-        direction = y==TOP_SPAWN ? 1:-1; // assign proper direction
-        
-        switch (Greenfoot.getRandomNumber(5)) {
+    public void spawnPedestrian() {
+        int xSpawnLocation = Greenfoot.getRandomNumber (600) + 100; // random between 99 and 699, so not near edges
+        boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
+        int ySpawnLocation = spawnAtTop ? TOP_SPAWN:BOTTOM_SPAWN;
+        int direction = spawnAtTop ? 1:-1;
+        switch (Greenfoot.getRandomNumber(6)) {
             case 0:
-                addObject(new Civilian(direction), x, y);
+                addObject(new Civilian(direction), xSpawnLocation, ySpawnLocation);
                 break;
             case 1:
-                addObject(new Soldier(direction), x, y);
+                addObject(new Soldier(direction), xSpawnLocation, ySpawnLocation);
                 break;
             case 2:
-                addObject(new Medic(direction),x,y);
+                addObject(new Medic(direction), xSpawnLocation, ySpawnLocation);
                 break;
             case 3: // Empty, moves to case 4 so Zombies have higher chances of spawning.
             case 4:
-                addObject(new Zombie(direction), x, y);
+                addObject(new Zombie(direction), xSpawnLocation, ySpawnLocation);
+                break;
+            case 5:// This is the variable spawn. Will react accordingly to current world conditions.
+                int numZombies = getObjects(Zombie.class).size();
+                if (numZombies >= 10) { // Too many zombies!
+                    addObject(new Soldier (direction), xSpawnLocation, ySpawnLocation);
+                    break;
+                }
+                else if (numZombies <= 3) { // Too few Zombies!
+                    addObject(new Zombie(direction), xSpawnLocation, ySpawnLocation);
+                    break;
+                }
+                
+                // Getting here means no need to spawn a new Zombie nor Soldier; check if a medic is needed.
+                ArrayList<Human> downedHumans = (ArrayList<Human>)getObjects(Human.class);
+                downedHumans.removeIf(h -> h.isAwake());
+                if (downedHumans.size() >= 5) {
+                    addObject(new Medic(direction), xSpawnLocation, ySpawnLocation);
+                }
+                else { // Nothing needed. Just add a Civilian, then.
+                    addObject(new Civilian(direction), xSpawnLocation, ySpawnLocation);
+                }
                 break;
         }
     }

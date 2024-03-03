@@ -12,19 +12,14 @@ public class WorldEventManager extends Actor
      * Act - do whatever the WorldEvent wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    int counterEvent, counterWorldTime;
+    int act;
     int possibleEvents;
     public WorldEventManager(){
-        counterEvent = 0;
-        counterWorldTime = 0;
-        possibleEvents = 1;
+        act = 0;
+        possibleEvents = 2;
     }
     public void act(){
-        // if (counterWorldTime++ >= 900) {
-            // progressWorldTime();
-        // }
-        
-        if (counterEvent++ >= 600) {
+        if (act++ >= 600) {
             if (Greenfoot.getRandomNumber(300) == 0) {
                 startRandomEvent();
             }
@@ -34,14 +29,14 @@ public class WorldEventManager extends Actor
      * Progresses the World's time.
      */
     private void progressWorldTime(){
-        counterWorldTime = 0;
+        act = 0;
         ((VehicleWorld) getWorld()).progressDayCycle();
     }
     /**
      * Starts a random possible event.
      */
     private void startRandomEvent() {
-        counterEvent = 0;
+        act = 0;
         VehicleWorld w = (VehicleWorld) getWorld();
         switch(Greenfoot.getRandomNumber(possibleEvents)) {
             case 0:

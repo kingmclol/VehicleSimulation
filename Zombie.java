@@ -17,7 +17,7 @@ public class Zombie extends Pedestrian
     public Zombie (int direction)
     {
         super(direction);
-        awake = false; // They're dead, thus, not awake.
+        awake = false; // They're dead, thus, not awake, and can be cured by ambulances.
         visionRangeDay = 250;
         visionRangeNight = 400;
     }

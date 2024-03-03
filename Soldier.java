@@ -18,13 +18,14 @@ public class Soldier extends Human
      * Act - do whatever the Soldier wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    private int maxBullets, currentBullets;
+    private static final int RELOAD_TIME = 60; // in acts
+    private static final int MAX_BULLETS = 4;
+    private int currentBullets;
     private boolean onCooldown;
     private Zombie target;
     public Soldier(int direction) {
         super(direction);
-        maxBullets = 4;
-        currentBullets = maxBullets;
+        currentBullets = MAX_BULLETS;
         onCooldown = false;
         visionRangeDay = 300;
         visionRangeNight = 100;
@@ -54,28 +55,6 @@ public class Soldier extends Human
     private void scanForTargets() {
         target = (Zombie)getClosestInRange(Zombie.class, visionRange/2);
         if (target == null) target = (Zombie) getClosestInRange(Zombie.class, visionRange);
-        // double closestTargetDistance = 0;
-        // double distanceToActor;
-        // ArrayList<Zombie> zombies = (ArrayList<Zombie>) getObjectsInRange(140, Zombie.class); // Search for a zombie around me
-        // if (zombies.size() == 0){ // If none found within 140 radius,
-            // zombies = (ArrayList<Zombie>)getObjectsInRange(300, Zombie.class); // Expand search to 300 radius
-        // } 
-        // if (zombies.size() > 0) // If a zombie (or more) is found
-        // {
-            // target = zombies.get(0);
-            // closestTargetDistance = distanceFrom(target);
-            // for (Zombie z : zombies)
-            // {
-                // distanceToActor = distanceFrom(z);
-                // // If I find a zombie closer than my current target, I will change
-                // // targets
-                // if (distanceToActor < closestTargetDistance)
-                // {
-                    // target = z;
-                    // closestTargetDistance = distanceToActor;
-                // }
-            // }
-        // }
     }
     private boolean canShoot() {
         return currentBullets > 0 && !onCooldown;
@@ -84,9 +63,9 @@ public class Soldier extends Human
         currentBullets--; // decrease bullets by 1
         onCooldown = true; // now on cooldown between shots
         getWorld().addObject(new Bullet(target), getX(), getY());
-        createEvent(new DelayedEvent(() -> onCooldown = false, 10)); // cooldown will finish after 10 acts
+        createEvent(new DelayedEvent(() -> onCooldown = false, 10)); // manage cooldown between shots
         if (currentBullets == 0) { // if no bullets left
-            createEvent(new DelayedEvent(() -> currentBullets = maxBullets, 90)); // reload after 90 acts
+            createEvent(new DelayedEvent(() -> currentBullets = MAX_BULLETS, 60)); // reloading
         }
     }
 }
