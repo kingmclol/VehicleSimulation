@@ -60,7 +60,7 @@ public class VehicleWorld extends World
     private int[] pStats;
     private int count;
     private static final boolean SHOW_STATS = true;
-    private static final boolean SHOW_AS_PERCENTAGE = false;
+    private static final boolean SHOW_AS_PERCENTAGE = true;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -157,10 +157,10 @@ public class VehicleWorld extends World
             for (int num : pStats) total+=num;
             
             System.out.println(String.join(" | ",
-                                    "Zoms: " + Utility.roundToPrecision((double)pStats[0]/total, 2) + "%",
-                                    "Civs: " + Utility.roundToPrecision((double)pStats[1]/total, 2) + "%",
-                                    "Meds: " + Utility.roundToPrecision((double)pStats[2]/total, 2) + "%",
-                                    "Sdrs: " + Utility.roundToPrecision((double)pStats[3]/total, 2) + "%"
+                                    "Zoms: " + Utility.roundToPrecision((double)pStats[0]/total*100, 2) + "%",
+                                    "Civs: " + Utility.roundToPrecision((double)pStats[1]/total*100, 2) + "%",
+                                    "Meds: " + Utility.roundToPrecision((double)pStats[2]/total*100, 2) + "%",
+                                    "Sdrs: " + Utility.roundToPrecision((double)pStats[3]/total*100, 2) + "%"
                                     ));
         }
         else {
