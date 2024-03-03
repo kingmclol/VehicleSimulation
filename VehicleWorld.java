@@ -67,6 +67,11 @@ public class VehicleWorld extends World
         addObject(new WorldEventManager(), 0 ,0);
         nightFilter = new DarkFilter(this);
         daytime = true;
+        
+        // The following command manages the day-night cycle by toggling between the two
+        // every 900 acts, infinitely.
+        addObject(new RepeatingEvent(() -> progressDayCycle(), 900, -1, false), 0,0);
+        
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will
         // always be on top of everything else, then Vehicles (of all
@@ -108,7 +113,7 @@ public class VehicleWorld extends World
      */
     public void progressDayCycle(){
         daytime = !daytime; // toggle world time.
-        System.out.println(daytime ? "DAY" : "NIGHT" + " | " + daytime);
+        System.out.println((daytime ? "DAY" : "NIGHT") + " | " + daytime);
         
         // Change all Pedestrians to their respective view ranges.
         ArrayList<Pedestrian> pedestrians = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
@@ -122,6 +127,22 @@ public class VehicleWorld extends World
         else { // Day. remove the filter.
             nightFilter.timeToRemove();
         }
+    }
+    /**
+     * Starts a carpet bombing event
+     */
+    public void startBombing(){
+        addObject(new BomberPlane(), 0, 50);
+    }
+    public void spawnZombieWave() {
+        
+    }
+    /**
+     * Returns a cloned Array of lanePositionsY. Unused after finding about
+     * getLaneY() lol
+     */
+    public int[] getLanePositionsY(){
+        return lanePositionsY.clone();
     }
     public boolean isDaytime(){
         return daytime;
@@ -162,9 +183,9 @@ public class VehicleWorld extends World
      * @param y The Top or Bottom spawn y coordinate.
      */
     public void spawnPedestrian(int x, int y) {
-        int direction = 1;
-        if (y==TOP_SPAWN) direction = 1;
-        else direction = -1;
+        int direction = 1; // default
+        direction = y==TOP_SPAWN ? 1:-1; // assign proper direction
+        
         switch (Greenfoot.getRandomNumber(5)) {
             case 0:
                 addObject(new Civilian(direction), x, y);
@@ -175,11 +196,18 @@ public class VehicleWorld extends World
             case 2:
                 addObject(new Medic(direction),x,y);
                 break;
-            case 3:
+            case 3: // Empty, moves to case 4 so Zombies have higher chances of spawning.
             case 4:
                 addObject(new Zombie(direction), x, y);
                 break;
         }
+    }
+    /**
+     * Returns the number of lanes that exist.
+     * @return The number of lanes that exist in the World.
+     */
+    public int getNumLanes(){
+        return lanePositionsY.length;
     }
     /**
      *  Given a lane number (zero-indexed), return the y position

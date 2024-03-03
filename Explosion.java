@@ -31,6 +31,6 @@ public class Explosion extends Particle
         super.act();
         // In addition to losing transparency over time, also decrease in the size
         // after existing for a bit.
-        if (currentLifespan > 30) decaySize(0.99);
+        if (currentLifespan > 30) decaySize(0.98);
     }
 }

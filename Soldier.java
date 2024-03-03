@@ -23,11 +23,11 @@ public class Soldier extends Human
     private Zombie target;
     public Soldier(int direction) {
         super(direction);
-        maxBullets = 5;
+        maxBullets = 4;
         currentBullets = maxBullets;
         onCooldown = false;
         visionRangeDay = 300;
-        visionRangeNight = 150;
+        visionRangeNight = 100;
         visionRange = visionRangeDay;
     }
     public void act()

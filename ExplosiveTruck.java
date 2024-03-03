@@ -49,6 +49,7 @@ public class ExplosiveTruck extends Vehicle
         ArrayList<SuperActor> actors = (ArrayList<SuperActor>)getObjectsInRange(explosionRadius, SuperActor.class);
         for (SuperActor a : actors){ 
             if (a instanceof Pedestrian) ((Pedestrian)a).killMe(); // If a pedestrian, kill it.
+            else if (a instanceof Bomb) continue; // Don't remove any bombs. Makes it more fun!
             else getWorld().removeObject(a); // Remove the object normally
         }
         // Add an explosion effect. Strangely, getObjectsInRange gives a larger radius than expected, so I 

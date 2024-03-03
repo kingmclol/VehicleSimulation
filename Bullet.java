@@ -1,7 +1,8 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * A Bullet is a projectile that would move towards a target zombie. If it hits a zombie, kill it.
+ * A Bullet is a projectile that would move towards a target position. It will move at a straight line.
+ * If the Bullet hits a Zombie, the Zombie will be killed.
  * 
  * @author Freeman Wang
  * @version 2024-02-27
@@ -34,6 +35,8 @@ public class Bullet extends SuperActor
             z.killMe();
             getWorld().removeObject(this); // remove the bullet.
         }
-        else if(isAtEdge()) getWorld().removeObject(this); // If at the edge of world, remove this.
+        else if(isAtEdge()) {
+            getWorld().removeObject(this); // If at the edge of world, remove this.
+        }
     }
 }

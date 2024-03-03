@@ -4,9 +4,11 @@ import greenfoot.*;
  * amount of time, I can simply use a counting variable in whatever Actor I want. But I thought I could do more and
  * make this work, as each Event can do something unique. I don't need to create multiple Event classes or define 
  * multiple functions to handle different things, as all I need to do is pass in a different function. This <i>does</i> work,
- * <i>for now</i>, but most likely there are many, many edge cases where this would crash and burn.</p>
+ * for <i>now</i>, but most likely there are many, many edge cases where this would crash and burn.</p>
  * 
- * <p> I'll just think of this as a learning experience. Yeah. </p>
+ * <p>And seeing that there was only <a href="https://www.greenfoot.org/topics/64859/0">one relevant post</a>
+ *  and a few other related ones on the Greenfoot Forums regarding this, there's probably a reason for that...</p>
+ * 
  * <hr>
  * 
  * <p>Event is abstract. It will should a given Runnable (function) when a condition is satisfied.
@@ -19,8 +21,6 @@ import greenfoot.*;
  * 
  * <p>This is <strong>not</strong> meant to be confused with World Events.
  * 
- * <p>Thus far, there hasn't been any notable issues with this implementation. Of course, that
- * could change at any time...</p>
  * 
  * @author Freeman Wang
  * @version 2024-02-27

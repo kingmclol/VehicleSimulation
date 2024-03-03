@@ -1,10 +1,11 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class DarkFilter here.
+ * The DarkFilter is basically an image that is semi-transparent that should overlay itself over the entire World
+ * for a "darkening" effect. Not the most effective.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Freeman Wang
+ * @version 2024-03-01
  */
 public class DarkFilter extends Actor
 {
@@ -14,7 +15,7 @@ public class DarkFilter extends Actor
      */
     private final int targetTransparency = 100;
     private final int step = 2;
-    private boolean shouldExist;
+    private boolean shouldExist; // Whether the DarkFilter should fade out or fade in.
     public DarkFilter(World w){
         shouldExist = false;
         GreenfootImage img = new GreenfootImage(w.getWidth(), w.getHeight());
@@ -39,6 +40,9 @@ public class DarkFilter extends Actor
             }
         }
     }
+    /**
+     * The DarkFilter should prepare to add itself.
+     */
     public void timeToExist(){
         shouldExist = true;
     }

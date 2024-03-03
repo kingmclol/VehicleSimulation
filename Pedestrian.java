@@ -22,12 +22,15 @@ public abstract class Pedestrian extends SuperActor
         this.direction = direction;
         initialAct = true;
     }
+    /**
+     * Determines the visionRange the Pedestrion should have, depending on
+     * the current time of the World.
+     */
     public void addedToWorld(World w) {
         //System.out.println(this);
         if (!initialAct) return;
         VehicleWorld world = (VehicleWorld) w;
-        if (world.isDaytime()) visionRange = visionRangeDay;
-        else visionRange = visionRangeNight;
+        visionRange = world.isDaytime() ? visionRangeDay : visionRangeNight;
         initialAct = false;
     }
     /**
@@ -77,10 +80,34 @@ public abstract class Pedestrian extends SuperActor
     protected boolean obstructedAt(Vector displacement) {
         double dx = displacement.getX();
         double dy = displacement.getY();
+        int collisionPoints = 0;
         return !(getOneObjectAtOffset(
                             Utility.round(dx + getImage().getWidth()/2 * -1 * Utility.getSign(dx)),
-                            Utility.round(dy + getImage().getHeight()/2 * Utility.getSign(dy)), 
+                            Utility.round(dy + getImage().getHeight()/2 * Utility.getSign(dy)),
                             Vehicle.class) == null);
+        /*
+        It seems like checking all corners is too excessive. Old implementation may be not as *proper*
+        but works because it is much less restrictive... slightly better than having no checks at all.
+        
+        Vehicle[] corners = new Vehicle[4];
+        //    Corner      i    x   y
+        // Bottom Right | 0 | +1, +1
+        // Bottom Left  | 1 | -1, +1
+        // Top Right    | 2 | +1, -1
+        // Top Left     | 3 | -1, -1
+        for (int i = 0; i < 4; i++) {
+            int xSign = (i%2 == 0) ? 1 : -1;
+            int ySign = (i < 2) ? 1 : -1;
+            corners[i] = (Vehicle) getOneObjectAtOffset(
+                                        Utility.round(dx + getImage().getWidth()/2*xSign),
+                                        Utility.round(dy + getImage().getHeight()/2*ySign),
+                                        Vehicle.class);
+        }
+        for (Vehicle v : corners) {
+            if (v!=null) collisionPoints++;
+        }
+        return collisionPoints > 1;
+        */
     }
     /**
      * Returns whether the Pedestrian is at the edge of the main area. Not to be confused with

@@ -56,7 +56,7 @@ public class Bus extends Vehicle
         //int offset = 17;
         c.getWorld().removeObject(c); // Remove the civilian (it is on the bus now)     
         GreenfootImage image = getImage();
-        image.setColor(Color.BLACK);
+        image.setColor(Color.DARK_GRAY);
         image.fillOval(image.getWidth()-48-(17*passengers),image.getHeight()/2-8,12,12);
         setImage(image);
         passengers++;

@@ -1,11 +1,15 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
- * A SuperActor is an Actor that provides new functionality, namely compatability with using Vectors
- * as I wanted movement without rotating the SuperActor's sprite. And then, I learned about static rotation
- * from SuperSmoothMover. Well, that sucks.
- * SuperActor should extend SuperSmoothMover by Mr. Cohen.
- * <i>"I intended for SuperActor to make my life easier while developing. It did not."</i>
+ * <strong>SuperActor should extend SuperSmoothMover by Mr. Cohen.</strong>  
+ * 
+ * <p>A SuperActor is an Actor that provides new functionality, namely compatability with using Vectors as positions. 
+ * SuperActors can do more than normal Actors, such as move towards a point while keeping its rotation unchanged.
+ * Well, that was before I learned about the existence of static rotation from SuperSmoothMover... whatever. I guess
+ * I'm just reinventing the wheel at this point. Should've looked at the Library of Code first...</p>
+ * 
+ * <blockquote>"I intended for SuperActor to make my life easier while working with Greenfoot. It did not."</blockquote>
+ * 
  * TODO: make speed as instance variable, add constructor for SuperActor. Will likely not do during this project.
  * 
  * @author Freeman Wang
@@ -14,10 +18,15 @@ import java.util.ArrayList;
 
 public class SuperActor extends SuperSmoothMover
 {
-    /*
+    /* Not to be added during the vehicle simulator, but here so I won't forget.
     ArrayList <Vector> path;
     private double speed;
     private boolean staticRotation;
+    public SuperActor(double speed) {
+        this.speed = speed;
+    }
+    Remove all "double distance" parameters in the methods, as will be managed 
+    by instance variable speed.
     */
     /** 
      * Creates a given event by adding it into the world.
@@ -32,21 +41,27 @@ public class SuperActor extends SuperSmoothMover
         return new Vector(getX(), getY());
     }
     /** 
-     * Moves [distance] units toward a SuperActor.
+     * Move towards a SuperActor.
+     * @param target The SuperActor to move towards.
+     * @param The distance the SuperActor should travel. Also can be seen as the "speed."
      */
-    protected void moveTowards(SuperActor a, double distance) {
+    protected void moveTowards(SuperActor target, double distance) {
         //displace(getPosition().distanceFrom(a.getPosition()).scaleTo(distance));
-        displace(getDisplacement(a, distance));
+        displace(getDisplacement(target, distance));
     }
     /**
-     * Moves [distance] units towards a position.
+     * Moves towards towards a position.
+     * @param targetPos The target position to head towards. 
+     * @param distance The distance the SuperActor should travel. Also can be seen as the "speed."
      */
-    protected void moveTowards(Vector v, double distance) {
+    protected void moveTowards(Vector targetPos, double distance) {
         //displace(getPosition().distanceFrom(v).scaleTo(distance));
-        displace(getDisplacement(v, distance));
+        displace(getDisplacement(targetPos, distance));
     }
     /**
-     * Apply the given [displacement] vector to the SuperActor's current position.
+     * Apply the given displacement vector to the SuperActor's current position. Can be thought
+     * of as "moving" the SuperActor.
+     * @param displacement The displacement the SuperActor should have.
      */
     protected void displace(Vector displacement) {
         setLocation(getX()+displacement.getX(), getY()+displacement.getY());
@@ -54,7 +69,7 @@ public class SuperActor extends SuperSmoothMover
     /**
      * Returns the displacement Vector pointing from the current position to the SuperActor's
      * position.
-     * @param target The Actor to go to.
+     * @param target The SuperActor to go to.
      * @param distance The amount of distance to move.
      * @return The potential displacement Vector this SuperActor would move by.
      */
@@ -71,13 +86,14 @@ public class SuperActor extends SuperSmoothMover
         /*
         First, gets the Vector pointing from this SuperActor to the target position, and scale to the
         speed of the SuperActor (in this case, it is equal to the distance travelled, as time = 1 act)
-        Then, limit the magnitude of the displacement to the ACTUAL distance from the target, so it would
-        not go past the target position.
+        Then, limit (cap) the magnitude of the displacement to the ACTUAL distance from the target, so it would
+        not go past the target position, in case that scenario will occur.
         */
         return getPosition().distanceFrom(target).scaleTo(distance).limitMagnitude(distanceFrom(target));
     }
     /**
      * Turns the SuperActor towards the given position.
+     * @param position The position the SuperActor should turn towards.
      */
     protected void turnTowards(Vector position) {
         turnTowards(Utility.round(position.getX()), Utility.round(position.getY()));
@@ -100,8 +116,8 @@ public class SuperActor extends SuperSmoothMover
         return getPosition().distanceFrom(targetPos).getMagnitude();
     }
     /**
-     * Returns true if the this SuperActor exists.
-     * @return Whether this SuperActor exists in the world.
+     * Returns true if the this SuperActor exists in a World.
+     * @return Whether this SuperActor exists in a World.
      */
     public boolean exists() {
         return (getWorld() != null);
@@ -143,9 +159,9 @@ public class SuperActor extends SuperSmoothMover
     }
     // I honestly tried, but I'm just digging myself into a deeper hole if I try to complete this.
     // I have no idea why I am doing all these unnecessary things, but god damn
-    // my code is edible spaghetti at this point.
+    // my code overall in this project is edible spaghetti at this point.
     /*
-    protected SuperActor getClosestActor(Class c, int range, Callable condition){
+    protected SuperActor getClosestActor(Class c, int range, ____ condition){
         double closestTargetDistance = 0;
         double distanceToActor;
         SuperActor target;
