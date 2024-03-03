@@ -46,7 +46,7 @@ public class Soldier extends Human
             else moveToOtherSide(); // if it does not, move normally
         }
 
-        if (atEdge()) getWorld().removeObject(this);
+        if (atEdge()) removeMe();
     }
     private void moveTowardsOrShootTarget() {
         if (!obstructedAt(getDisplacement(target, speed))) moveTowards(target, speed);

@@ -26,7 +26,7 @@ public class BomberPlane extends SuperActor
         if (!initialAct) return;
         VehicleWorld v = (VehicleWorld) w;
         numLanes = v.getNumLanes();
-        System.out.println("hello");
+        initialAct = false;
     }
     public void act()
     {

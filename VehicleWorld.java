@@ -51,6 +51,16 @@ public class VehicleWorld extends World
     // Variables related to world events.
     private boolean daytime;
     private DarkFilter nightFilter;
+    
+    // Varables related to pedestrian stats.
+    // 0 -> Zombies
+    // 1 -> Civilians
+    // 2 -> Medics
+    // 3 -> Soldiers
+    private int[] pStats;
+    private int count;
+    private static final boolean SHOW_STATS = true;
+    private static final boolean SHOW_AS_PERCENTAGE = false;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -68,6 +78,9 @@ public class VehicleWorld extends World
         nightFilter = new DarkFilter(this);
         daytime = true;
         
+        // initialize the stats array.
+        pStats = new int[4];
+        count = 0;
         // The following command manages the day-night cycle by toggling between the two
         // every 900 acts, infinitely.
         addObject(new RepeatingEvent(() -> progressDayCycle(), 900, -1, false), 0,0);
@@ -107,13 +120,20 @@ public class VehicleWorld extends World
         super.act();
         spawn();
         zSort ((ArrayList<Actor>)(getObjects(Actor.class)), this);
+        
+        if (SHOW_STATS) {
+            if (count++ >= 10) {
+                count = 0;
+                printStats(SHOW_AS_PERCENTAGE);
+            }
+        }
     }
     /**
      * Progresses the time of the simulation between Daytime and Nighttime.
      */
     public void progressDayCycle(){
         daytime = !daytime; // toggle world time.
-        System.out.println((daytime ? "DAY" : "NIGHT") + " | " + daytime);
+        System.out.println(daytime ? "DAY" : "NIGHT");
         
         // Change all Pedestrians to their respective view ranges.
         ArrayList<Pedestrian> pedestrians = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
@@ -126,6 +146,72 @@ public class VehicleWorld extends World
         }
         else { // Day. remove the filter.
             nightFilter.timeToRemove();
+        }
+    }
+    /**
+     * Prints out the pStats in a readable manner.
+     */
+    private void printStats(boolean asPercentage){
+        if (asPercentage) {
+            int total = 0;
+            for (int num : pStats) total+=num;
+            
+            System.out.println(String.join(" | ",
+                                    "Zoms: " + Utility.roundToPrecision((double)pStats[0]/total, 2) + "%",
+                                    "Civs: " + Utility.roundToPrecision((double)pStats[1]/total, 2) + "%",
+                                    "Meds: " + Utility.roundToPrecision((double)pStats[2]/total, 2) + "%",
+                                    "Sdrs: " + Utility.roundToPrecision((double)pStats[3]/total, 2) + "%"
+                                    ));
+        }
+        else {
+            System.out.println(String.join(" | ",
+                                    "Zoms: " + pStats[0],
+                                    "Civs: " + pStats[1],
+                                    "Meds: " + pStats[2],
+                                    "Sdrs: " + pStats[3]
+                                    ));
+        }
+    }
+    /**
+     * Decreases the count of the given Pedestrian by 1.
+     * @param a The actor to consider.
+     */
+    public void removeFromCount(Actor a){
+        int index = convertActorToIndex(a);
+        pStats[index] = Math.max(0, pStats[index]-1);
+    }
+    /**
+     * Increases the count of the given Pedestrian by 1.
+     * @param a The actor to consider in pStats.
+     */
+    public void addToCount(Actor a){
+        int index = convertActorToIndex(a);
+        pStats[index]+=1;
+    }
+    /**
+     * Converts the given Actor to its proper index for pStats based on its type.
+     * @param  a the Actor to analyze.
+     * @return 0 if the Actor is a Zombie. 
+     *         1 if the Actor is a Civilian.
+     *         2 if the Actor is a Medic.
+     *         3 if the Actor is a Soldier.
+     */
+    private int convertActorToIndex(Actor a){
+        if (a instanceof Zombie){
+            return 0;
+        }
+        else if (a instanceof Civilian){
+            return 1;
+        }
+        else if (a instanceof Medic) {
+            return 2;
+        }
+        else if (a instanceof Soldier) {
+            return 3;
+        }
+        else {
+            System.out.println("Given invalid actor for this use case.");
+            return -1; // give negative index to induce error.
         }
     }
     /**

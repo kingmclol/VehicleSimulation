@@ -43,7 +43,7 @@ public class Zombie extends Pedestrian
             else moveToOtherSide(); // if it does not, move normally
         }
         
-        if (atEdge()) getWorld().removeObject(this);
+        if (atEdge()) removeMe();
     }
     /**
      * Tries to find the closest Human that is still awake.
@@ -111,12 +111,12 @@ public class Zombie extends Pedestrian
         killMe();
     }
     /**
-     * Turns the zombie back into a civilian. Hopefully don't die again, as
-     * that wouldn't be fun.
+     * Turns the zombie back into a civilian. Hopefully they don't die again, as
+     * that wouldn't be fun. Better run!
      */
     @Override
     public void healMe(){
         getWorld().addObject(new Civilian(direction),getX(),getY());
-        getWorld().removeObject(this);
+        removeMe();
     }
 }

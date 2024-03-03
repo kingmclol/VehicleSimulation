@@ -20,7 +20,7 @@ public class Civilian extends Human
     public void act() {
         if (awake){
             moveToOtherSide();
-            if (atEdge()) getWorld().removeObject(this);
+            if (atEdge()) removeMe();
         }
     }
 }

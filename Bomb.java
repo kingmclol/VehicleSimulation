@@ -22,7 +22,7 @@ public class Bomb extends SuperActor
     {
         moveTowards(new Vector(getX(), targetY), speed); // Converts the targetY to a position (vector) which I move to.
         if (!aboutToExplode && getY() == targetY) {
-            System.out.println("AtPos.");
+            //System.out.println("AtPos.");
             createEvent(new DelayedEvent(() -> explode(), 60));
             aboutToExplode = true;
         }

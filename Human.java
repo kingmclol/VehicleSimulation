@@ -33,7 +33,7 @@ public abstract class Human extends Pedestrian
         if(exists() && !isAwake()) { // If I still am in the world, and I am not awake,
                 // Replace myself with a Zombie going in my direction.
                 getWorld().addObject(new Zombie(direction), getX(), getY());
-                getWorld().removeObject(this);
+                removeMe();
         }
     }
 }

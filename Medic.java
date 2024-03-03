@@ -42,7 +42,7 @@ public class Medic extends Human
             else moveToOtherSide(); // if it does not, move normally
         }
         
-        if (atEdge()) getWorld().removeObject(this);
+        if (atEdge()) removeMe();
     }    
 
     /**

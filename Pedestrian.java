@@ -32,6 +32,7 @@ public abstract class Pedestrian extends SuperActor
         VehicleWorld world = (VehicleWorld) w;
         visionRange = world.isDaytime() ? visionRangeDay : visionRangeNight;
         initialAct = false;
+        world.addToCount(this);
     }
     /**
      * Moves the pedestrian where it tries to get to the other side it spawned from.
@@ -64,7 +65,7 @@ public abstract class Pedestrian extends SuperActor
      */
     public void killMe() {
         getWorld().addObject(new DeathParticle(), getX(), getY()); 
-        getWorld().removeObject(this);
+        removeMe();
     }
     /**
      * Returns whether the Pedestrian's movement would be obstructed by a Vehicle.
@@ -108,6 +109,11 @@ public abstract class Pedestrian extends SuperActor
         }
         return collisionPoints > 1;
         */
+    }
+    public void removeMe() {
+        VehicleWorld v = (VehicleWorld) getWorld();
+        v.removeFromCount(this);
+        v.removeObject(this);
     }
     /**
      * Returns whether the Pedestrian is at the edge of the main area. Not to be confused with
