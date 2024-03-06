@@ -207,7 +207,7 @@ public abstract class SuperSmoothMover extends Actor
     {
         exactX = x;
         exactY = y;
-        super.setLocation(x, y);
+        super.setLocation((int) (x + (Math.signum(x) * 0.5)), (int) (y + (Math.signum(y) * 0.5)));
     }
 
     /**

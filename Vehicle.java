@@ -77,7 +77,42 @@ public abstract class Vehicle extends SuperActor
             return;
         }
     }
-
+    protected boolean changeLane() {
+        VehicleWorld world = (VehicleWorld) getWorld();
+        int currentLane = world.getLane(getY()+yOffset);
+        int whenToCheckAbove = Greenfoot.getRandomNumber(2);
+        int targetLane;
+        Vector currentPosition = getPosition();
+        
+        for (int i = 0; i < 2; i++) {
+            if (i == whenToCheckAbove) targetLane = currentLane - 1;
+            else targetLane = currentLane + 1;
+            
+            int targetLaneY = world.getLaneY(targetLane);
+            if (targetLaneY != -1) {
+                setLocation(getX(), targetLaneY-yOffset);
+                if (getOneIntersectingObject(Vehicle.class) == null) {
+                    return true;
+                }
+                else setLocation(currentPosition);
+            }
+        }
+        return false;
+        // boolean checkAboveLane = Greenfoot.getRandomNumber(2) == 0 ? true : false;
+        // int targetLane = checkAboveLane ? currentLane - 1 : currentLane + 1;
+        // int targetLaneY = world.getLaneY(targetLane);
+        // boolean canChangeLane = false;
+        
+        // if (targetLaneY != -1) {
+            
+        // }
+        // else {
+            
+        // }
+        // if (canChangeLane) {
+            // setLocation(getX(), targetLaneY-yOffset);
+        // }
+    }
     /**
      * A method used by all Vehicles to check if they are at the edge.
      * 
@@ -193,7 +228,7 @@ public abstract class Vehicle extends SuperActor
         // factors to reduce driving speed.
 
         if (otherVehicleSpeed >= 0 && otherVehicleSpeed < maxSpeed){ // Vehicle ahead is slower?
-            speed = otherVehicleSpeed;
+            if (!changeLane()) speed = otherVehicleSpeed;
         }
 
         else {

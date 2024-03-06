@@ -277,7 +277,9 @@ public class VehicleWorld extends World
     }
     private void spawn () {
         // Chance to spawn a vehicle
-        if (Greenfoot.getRandomNumber (laneCount * 10) == 0){
+        //if (Greenfoot.getRandomNumber (laneCount * 10) == 0){
+        if (Greenfoot.getRandomNumber (laneCount *5) == 0){
+
             int lane = Greenfoot.getRandomNumber(laneCount);
             if (!laneSpawners[lane].isTouchingVehicle()){
                 int vehicleType = Greenfoot.getRandomNumber(4);
@@ -342,7 +344,7 @@ public class VehicleWorld extends World
                 // Getting here means no need to spawn a new Zombie nor Soldier; check if a Medic is needed.
                 ArrayList<Human> downedHumans = (ArrayList<Human>)getObjects(Human.class);
                 downedHumans.removeIf(h -> h.isAwake());
-                if (downedHumans.size() > 5) {
+                if (downedHumans.size() > 3) {
                     addObject(new Medic(direction), xSpawnLocation, ySpawnLocation);
                 }
                 else { // Nothing needed. Just add a Civilian, then.
@@ -367,7 +369,7 @@ public class VehicleWorld extends World
      *  @return int the y position of the lane's center, or -1 if invalid
      */
     public int getLaneY (int lane){
-        if (lane < lanePositionsY.length){
+        if (lane >= 0 && lane < lanePositionsY.length){
             return lanePositionsY[lane];
         } 
         return -1;

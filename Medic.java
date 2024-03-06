@@ -112,11 +112,15 @@ public class Medic extends Human
         speed = 0; // the medic cannot move while healing.
         
         // Creates a delayed event that would happen 30 acts later which heals the target, and lets the medic move again.
-        createEvent(new DelayedEvent(() -> {
-                                        if (isAwake()) {
-                                            c.healMe(); // heal the dead citizen
-                                            target=null; // no more target, need to find a new one
-                                            speed = maxSpeed; // can move again
-                                        }}, 30));
+        // createEvent(new DelayedEvent(() -> {
+                                        // if (isAwake()) {
+                                            // c.healMe(); // heal the dead citizen
+                                            // target=null; // no more target, need to find a new one
+                                            // speed = maxSpeed; // can move again
+                                        // }}, 30));
+        
+    }
+    private void finishHealing(Human c) {
+        
     }
 }

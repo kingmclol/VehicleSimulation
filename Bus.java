@@ -42,8 +42,8 @@ public class Bus extends Vehicle
         if (c!= null && c.isAwake() && passengers < maxPassengers) {
             addPassenger(c); // pick up the passenger.
             moving = false; // Stop the bus.
-            // sleepFor(60); // Prevent this actor from acting for one second (only one Civilian can get on at a time).
-            createEvent(new DelayedEvent(() -> moving = true, 60)); // set moving to true after 1 second.
+            sleepFor(60); // Prevent this actor from acting for one second (only one Civilian can get on at a time).
+            createEvent(new DelayedEvent(() -> moving = true, 30)); // set moving to true after 1 second.
             return true;
         }
         return false;

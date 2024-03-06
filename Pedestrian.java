@@ -73,7 +73,20 @@ public abstract class Pedestrian extends SuperActor
      * @return If the movement would be obstructed.
      */
     protected boolean obstructedPath() {
-        return !(getOneObjectAtOffset(0, (int)(direction * getImage().getHeight()/2 + (int)(direction * speed)), Vehicle.class) == null);
+        int halfHeight = getImage().getHeight()/2;
+        int halfWidth = getImage().getWidth()/2;
+        if (getOneObjectAtOffset(0, (int)(direction * halfHeight + (int)(direction * speed)), Vehicle.class) != null){
+            return true;
+        }
+        else if (getOneObjectAtOffset(halfHeight, (int)(direction * halfHeight + (int)(direction * speed)), Vehicle.class) != null) {
+            return true;
+        }
+        else if(getOneObjectAtOffset(halfHeight, (int)(direction * halfHeight + (int)(direction * speed)), Vehicle.class) != null) {
+            return true;
+        }
+        return false;
+        
+        //return !(getOneObjectAtOffset(0, (int)(direction * getImage().getHeight()/2 + (int)(direction * speed)), Vehicle.class) == null);
     }
     /**
      * Returns whether the target position would be obstructed by a Vehicle.

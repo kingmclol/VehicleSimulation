@@ -123,6 +123,13 @@ public abstract class SuperActor extends SuperSmoothMover
         return (getWorld() != null);
     }
     /**
+     * Set the SuperActor's location to the given position.
+     * @param position The location the SuperActor should be at.
+     */
+    protected void setLocation(Vector position) {
+        setLocation(Utility.round(position.getX()), Utility.round(position.getY()));
+    }
+    /**
      * Get the closest SuperActor of a given class and radius. Inspired by Mr. Cohen's
      * implementation.
      * @param c The Class of the SuperActor to look for.
