@@ -97,7 +97,7 @@ public class VehicleWorld extends World
         
         // The following command manages the day-night cycle by toggling between the two
         // every 900 acts, infinitely.
-        createEvent(new RepeatingEvent(() -> progressDayCycle(), 600, -1, false));
+        createEvent(new RepeatingEvent(() -> progressDayCycle(), 900, -1, false));
         
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will

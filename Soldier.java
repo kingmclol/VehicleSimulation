@@ -1,5 +1,4 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-import java.util.List;
 import java.util.ArrayList;
 /**
  * The Soldier is a brave person who fights against the Zombies by charing at them with their trusty gun. 

@@ -1,5 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
+import java.util.function.Predicate;
 /**
  * Zombies are Pedestrians that attempt to chase and infect any Humans roaming around.
  * While posing only a small threat when alone, things may get problmeatic really quickly
@@ -50,9 +51,10 @@ public class Zombie extends Pedestrian
      */
     private void findTarget ()
     {
-        target = (Human) getClosestInRange(Human.class, visionRange/4, h -> !((Human)h).isAwake());
-        if (target == null) target = (Human) getClosestInRange(Human.class, visionRange/2, h -> !((Human)h).isAwake());
-        if (target == null) target = (Human) getClosestInRange(Human.class, visionRange, h -> !((Human)h).isAwake());
+        Predicate<Human> removalCondition = h -> !h.isAwake(); // If the human is downed, remove them from targeting.
+        target = (Human) getClosestInRange(Human.class, visionRange/4, removalCondition);
+        if (target == null) target = (Human) getClosestInRange(Human.class, visionRange/2, removalCondition);
+        if (target == null) target = (Human) getClosestInRange(Human.class, visionRange, removalCondition);
         // double closestTargetDistance = 0;
         // double distanceToActor;
         // // Get a list of all Humans in the World, cast it to ArrayList
