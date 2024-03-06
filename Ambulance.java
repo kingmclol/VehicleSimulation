@@ -2,9 +2,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
  * Ambulances are a Vehicle that is very good at medicine, as it can heal any downed
- * Pedestrians that it touches, even curing any Zombies in contact!
- * It's not brave enough to go out of its way to heal others, though, opting to get away
- * from the city as its first Priority.
+ * Pedestrians that it touches, even curing any Zombies on contact!
+ * Unfortunately, any cured Zombies wouldn't be happy to find themselves in the middle of a
+ * bad situation...
  * 
  * @author Jordan Cohen
  * @author Freeman Wang

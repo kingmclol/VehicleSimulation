@@ -16,7 +16,8 @@ public abstract class Vehicle extends SuperActor
     protected VehicleSpawner origin;
     protected int followingDistance;
     protected int myLaneNumber;
-
+    private CollisionBox carBox;
+    private static final boolean SHOW_COLLISION_BOXES = true;
     protected abstract boolean checkHitPedestrian ();
 
     public Vehicle (VehicleSpawner origin) {
@@ -54,7 +55,12 @@ public abstract class Vehicle extends SuperActor
      */
     public void addedToWorld (World w){
         if (isNew){
+            VehicleWorld v = (VehicleWorld) w;
             setLocation (origin.getX() - (direction * 100), origin.getY() - yOffset);
+            
+            // Add a collision box representing the space the car occupies in the lane.
+            carBox = new CollisionBox(getImage().getWidth(), v.getLaneHeight(), SHOW_COLLISION_BOXES, this, yOffset);
+            v.addObject(carBox, getX(), v.getLaneY(myLaneNumber));
             isNew = false;
         }
     }
@@ -68,7 +74,6 @@ public abstract class Vehicle extends SuperActor
      */
     public void act () {
         if (moving) drive(); 
-        //drive();
         if (!checkHitPedestrian()){
             repelPedestrians();
         }
@@ -77,12 +82,35 @@ public abstract class Vehicle extends SuperActor
             return;
         }
     }
-    protected boolean changeLane() {
+    protected void changeLane() {
+        // VehicleWorld world = (VehicleWorld) getWorld();
+        // int currentLane = world.getLane(getY()+yOffset);
+        // int whenToCheckAbove = Greenfoot.getRandomNumber(2);
+        // int targetLane;
+        // //CollisionBox newPosition = new CollisionBox(getImage().getWidth(), world.getLaneHeight(), false, null, yOffset);
+        // Vector currentPosition = getPosition();
+        
+        // for (int i = 0; i < 2; i++) {
+            // if (i == whenToCheckAbove) targetLane = currentLane - 1;
+            // else targetLane = currentLane + 1;
+            
+            // int targetLaneY = world.getLaneY(targetLane);
+            // if (targetLaneY != -1) {
+                // setLocation(getX(), targetLaneY-yOffset);
+                // //if (getOneIntersectingObject(Vehicle.class) == null) {
+                // if (!isTouching(CollisionBox.class)) {
+                    // return true;
+                // }
+                // else setLocation(currentPosition);
+            // }
+        // }
+        // return false;
+        
         VehicleWorld world = (VehicleWorld) getWorld();
         int currentLane = world.getLane(getY()+yOffset);
         int whenToCheckAbove = Greenfoot.getRandomNumber(2);
         int targetLane;
-        Vector currentPosition = getPosition();
+        //CollisionBox newPosition = new CollisionBox(getImage().getWidth(), world.getLaneHeight(), true);
         
         for (int i = 0; i < 2; i++) {
             if (i == whenToCheckAbove) targetLane = currentLane - 1;
@@ -90,28 +118,18 @@ public abstract class Vehicle extends SuperActor
             
             int targetLaneY = world.getLaneY(targetLane);
             if (targetLaneY != -1) {
-                setLocation(getX(), targetLaneY-yOffset);
-                if (getOneIntersectingObject(Vehicle.class) == null) {
-                    return true;
+                //world.addObject(newPosition, getX(), targetLaneY);
+                carBox.setLocation(getX(), targetLaneY);
+                if (!carBox.isIntersecting(CollisionBox.class)) { // Lane is clear
+                    setLocation(getX(), targetLaneY-yOffset); // move to the lane
+                    //world.removeObject(newPosition); // Remove the temporary collisionBox
+                    return; // succesful.
+                    //return true; // Successful.
                 }
-                else setLocation(currentPosition);
+                //world.removeObject(newPosition);
             }
         }
-        return false;
-        // boolean checkAboveLane = Greenfoot.getRandomNumber(2) == 0 ? true : false;
-        // int targetLane = checkAboveLane ? currentLane - 1 : currentLane + 1;
-        // int targetLaneY = world.getLaneY(targetLane);
-        // boolean canChangeLane = false;
-        
-        // if (targetLaneY != -1) {
-            
-        // }
-        // else {
-            
-        // }
-        // if (canChangeLane) {
-            // setLocation(getX(), targetLaneY-yOffset);
-        // }
+        //return false; // Unsuccessful.
     }
     /**
      * A method used by all Vehicles to check if they are at the edge.
@@ -228,7 +246,10 @@ public abstract class Vehicle extends SuperActor
         // factors to reduce driving speed.
 
         if (otherVehicleSpeed >= 0 && otherVehicleSpeed < maxSpeed){ // Vehicle ahead is slower?
-            if (!changeLane()) speed = otherVehicleSpeed;
+            speed = otherVehicleSpeed; // Match speed of ahead vehicle.
+            if (Greenfoot.getRandomNumber(30) == 0) { // Tired of moving slowly?
+                changeLane(); // Attempt to change lane.
+            }
         }
 
         else {

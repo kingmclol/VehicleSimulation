@@ -14,21 +14,19 @@ public class Car extends Vehicle
 {
     public Car(VehicleSpawner origin) {
         super(origin); // call the superclass' constructor
-        maxSpeed = 2.5 + ((Math.random() * 30)/5);
+        maxSpeed = 2.5 + ((Math.random() * 30)/4);
         speed = maxSpeed;
         yOffset = 4;
-        int z;
         followingDistance = 6;
     }
 
     public void act()
     {
         super.act();
-        // if(getWorld()!= null) shoot();
     }
     /**
      * Returns true if hits a Pedestrian, and knocks it over.
-     * @return true if a Pedestrian was hit, false otherwise.
+     * @return Whether a Pedestrian was hit.
      */
     public boolean checkHitPedestrian () {
         // Get the pedestrian

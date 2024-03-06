@@ -277,9 +277,7 @@ public class VehicleWorld extends World
     }
     private void spawn () {
         // Chance to spawn a vehicle
-        //if (Greenfoot.getRandomNumber (laneCount * 10) == 0){
-        if (Greenfoot.getRandomNumber (laneCount *5) == 0){
-
+        if (Greenfoot.getRandomNumber (laneCount * 8) == 0){
             int lane = Greenfoot.getRandomNumber(laneCount);
             if (!laneSpawners[lane].isTouchingVehicle()){
                 int vehicleType = Greenfoot.getRandomNumber(4);
@@ -359,6 +357,13 @@ public class VehicleWorld extends World
      */
     public int getNumLanes(){
         return lanePositionsY.length;
+    }
+    /**
+     * Returns the height for the lanes.
+     * @return The lane height.
+     */
+    public int getLaneHeight() {
+        return laneHeight;
     }
     /**
      *  Given a lane number (zero-indexed), return the y position

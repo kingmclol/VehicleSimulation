@@ -1,5 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
+import java.util.function.Predicate;
+
 /**
  * <strong>SuperActor should extend SuperSmoothMover by Mr. Cohen.</strong>  
  * 
@@ -127,7 +129,7 @@ public abstract class SuperActor extends SuperSmoothMover
      * @param position The location the SuperActor should be at.
      */
     protected void setLocation(Vector position) {
-        setLocation(Utility.round(position.getX()), Utility.round(position.getY()));
+        setLocation(position.getX(), position.getY());
     }
     /**
      * Get the closest SuperActor of a given class and radius. Inspired by Mr. Cohen's
@@ -164,29 +166,17 @@ public abstract class SuperActor extends SuperSmoothMover
         }
         return target;
     }
-    // I honestly tried, but I'm just digging myself into a deeper hole if I try to complete this.
-    // I have no idea why I am doing all these unnecessary things, but god damn
-    // my code overall in this project is edible spaghetti at this point.
-    /*
-    protected SuperActor getClosestActor(Class c, int range, ____ condition){
-        double closestTargetDistance = 0;
-        double distanceToActor;
-        SuperActor target;
+    /**
+     * I barely understand how I managed to make this, but eh.
+     * Returns the closest SuperActor of a given class within a the given radius, filtered by the given Predicate.
+     * @param c The class to look for.
+     * @param range The radius of the search.
+     * @param filter The condition to apply to remove ineligible targets (lambda)
+     */
+    protected SuperActor getClosestInRange(Class c, int range, Predicate filter){
         ArrayList<SuperActor> targets = (ArrayList<SuperActor>)getObjectsInRange(range, c);
-        targets.removeIf(condition);
-        if (targets.size() > 0) {
-            target = targets.get(0);
-            closestTargetDistance = distanceFrom(target);
-            for (SuperActor a : targets) {
-                distanceToActor = distanceFrom(a);
-                if (distanceToActor < closestTargetDistance)
-                {
-                    target = a;
-                    closestTargetDistance = distanceToActor;
-                }
-            }
-        }
-        return target;
+        targets.removeIf(filter);
+        return getClosest(targets);
     }
-    */
+    
 }

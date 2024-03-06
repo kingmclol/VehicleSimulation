@@ -4,7 +4,8 @@ import java.util.ArrayList;
 /**
  * The ExplosiveTruck is a truck that is... explosive! Make sure no Pedestrians touch this
  * thing, as the driver wasn't careful enough to ensure their explosives were
- * disabled in their rush to get out of the city.
+ * disabled in their rush to get out of the city, making the slightest disturbance enough to
+ * cause a bright fireworks show.
  * 
  * @author Freeman Wang
  * @version 2024-02-27
@@ -41,7 +42,7 @@ public class ExplosiveTruck extends Vehicle
         return false;
     }
     /**
-     * Explodes the ExplosiveTruck, removing all unlucky vehicles or pedestrians from the world.
+     * Explodes the ExplosiveTruck, removing all unlucky vehicles or pedestrians from the world caught in the blast.
      */
     private void explode() { 
         // By checking for SuperActors, I will not accidetnally remove the VehicleSpawner,

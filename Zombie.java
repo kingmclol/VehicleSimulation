@@ -50,42 +50,45 @@ public class Zombie extends Pedestrian
      */
     private void findTarget ()
     {
-        double closestTargetDistance = 0;
-        double distanceToActor;
-        // Get a list of all Humans in the World, cast it to ArrayList
-        // for easy management
+        target = (Human) getClosestInRange(Human.class, visionRange/4, h -> !((Human)h).isAwake());
+        if (target == null) target = (Human) getClosestInRange(Human.class, visionRange/2, h -> !((Human)h).isAwake());
+        if (target == null) target = (Human) getClosestInRange(Human.class, visionRange, h -> !((Human)h).isAwake());
+        // double closestTargetDistance = 0;
+        // double distanceToActor;
+        // // Get a list of all Humans in the World, cast it to ArrayList
+        // // for easy management
 
-        humans = (ArrayList<Human>)getObjectsInRange(visionRange/4, Human.class);
-        humans.removeIf(p -> !p.isAwake()); // Remove any not awake humans, as they're not important to me.
-        if (humans.size() == 0){
-            humans = (ArrayList<Human>)getObjectsInRange(visionRange/2, Human.class);
-            humans.removeIf(p -> !p.isAwake());
-        } 
-        if (humans.size() == 0){
-            humans = (ArrayList<Human>)getObjectsInRange(visionRange, Human.class);
-            humans.removeIf(p -> !p.isAwake());
-        } 
-        if (humans.size() > 0) // Found one or more awake humans
-        {
-            // set the first one as my target
-            target = humans.get(0);
-            // Use method to get distance to target. This will be used
-            // to check if any other targets are closer
-            closestTargetDistance = distanceFrom(target);
+        // humans = (ArrayList<Human>)getObjectsInRange(visionRange/4, Human.class);
+        // humans.removeIf(p -> !p.isAwake()); // Remove any not awake humans, as they're not important to me.
+        // if (humans.size() == 0){
+            // humans = (ArrayList<Human>)getObjectsInRange(visionRange/2, Human.class);
+            // humans.removeIf(p -> !p.isAwake());
+        // } 
+        // if (humans.size() == 0){
+            // humans = (ArrayList<Human>)getObjectsInRange(visionRange, Human.class);
+            // humans.removeIf(p -> !p.isAwake());
+        // } 
+        // if (humans.size() > 0) // Found one or more awake humans
+        // {
+            // // set the first one as my target
+            // target = humans.get(0);
+            // // Use method to get distance to target. This will be used
+            // // to check if any other targets are closer
+            // closestTargetDistance = distanceFrom(target);
 
-            // Loop through the objects in the ArrayList to find the closest target
-            for (Human h : humans)
-            {
-                distanceToActor = distanceFrom(h);
-                // If I find a Human closer than my current target, I will change
-                // targets
-                if (distanceToActor < closestTargetDistance)
-                {
-                    target = h;
-                    closestTargetDistance = distanceToActor;
-                }
-            }
-        }
+            // // Loop through the objects in the ArrayList to find the closest target
+            // for (Human h : humans)
+            // {
+                // distanceToActor = distanceFrom(h);
+                // // If I find a Human closer than my current target, I will change
+                // // targets
+                // if (distanceToActor < closestTargetDistance)
+                // {
+                    // target = h;
+                    // closestTargetDistance = distanceToActor;
+                // }
+            // }
+        // }
     }
     /**
      * Move toward, or infect the target Human.

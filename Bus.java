@@ -12,7 +12,6 @@ public class Bus extends Vehicle
 {
     private int passengers;
     private final int maxPassengers = 7;
-    private DelayedEvent pickedUpPassenger;
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         //Set up values for Bus
@@ -42,8 +41,8 @@ public class Bus extends Vehicle
         if (c!= null && c.isAwake() && passengers < maxPassengers) {
             addPassenger(c); // pick up the passenger.
             moving = false; // Stop the bus.
-            sleepFor(60); // Prevent this actor from acting for one second (only one Civilian can get on at a time).
-            createEvent(new DelayedEvent(() -> moving = true, 30)); // set moving to true after 1 second.
+            sleepFor(30); // Prevent this actor from acting for one second (only one Civilian can get on at a time).
+            createEvent(new DelayedEvent(() -> moving = true, 30)); // set moving to true after 30 acts.
             return true;
         }
         return false;
@@ -57,7 +56,7 @@ public class Bus extends Vehicle
         c.removeMe(); // Remove the civilian (it is on the bus now)     
         GreenfootImage image = getImage();
         image.setColor(Color.DARK_GRAY);
-        // Draw a circle on the bus, accounting for initila offseft and
+        // Draw a circle on the bus, accounting for initial offseft and offset between windows
         image.fillOval(image.getWidth()-48-(17*passengers),image.getHeight()/2-8,12,12);
         setImage(image);
         passengers++;
