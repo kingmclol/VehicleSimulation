@@ -6,13 +6,13 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author Freeman Wang
  * @version 2024-02-29
  */
-public class Explosion extends Particle
+public class ExplosionParticle extends Particle
 {
     /**
      * Creates an Explosion effect. Nothing fancy.
      * @int radius The radius of the explosion image.
      */
-    public Explosion(int radius) {
+    public ExplosionParticle(int radius) {
         super(new GreenfootImage(1,1), 4); // Pass in a TEMPOARY image to the superclass.
         
         // Construct the image of given radius.

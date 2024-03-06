@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @version 2024-02-27
  */
 
-public class SuperActor extends SuperSmoothMover
+public abstract class SuperActor extends SuperSmoothMover
 {
     /* Not to be added during the vehicle simulator, but here so I won't forget.
     ArrayList <Vector> path;

@@ -39,7 +39,8 @@ public class VehicleWorld extends World
     // Set Y Positions for Pedestrians to spawn
     public static final int TOP_SPAWN = 190; // Pedestrians who spawn on top
     public static final int BOTTOM_SPAWN = 705; // Pedestrians who spawn on the bottom
-
+    
+    public static final int NUM_PEDESTRIAN_TYPES = 4;
 
     
     // Instance variables / Objects
@@ -61,6 +62,7 @@ public class VehicleWorld extends World
     private int count;
     private static final boolean SHOW_STATS = true;
     private static final boolean SHOW_AS_PERCENTAGE = true;
+    private SuperDisplayLabel statsBar;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -81,16 +83,33 @@ public class VehicleWorld extends World
         // initialize the stats array.
         pStats = new int[4];
         count = 0;
+        if (SHOW_STATS) {
+            String[] labels = new String[] {
+                "  ZOMS: ",
+                "  CIVS: ",
+                "  MEDS: ",
+                "  SDRS: "
+            };
+            statsBar = new SuperDisplayLabel();
+            statsBar.setLabels(labels);
+            addObject(statsBar, getWidth()/2, 0);
+        }
+        
         // The following command manages the day-night cycle by toggling between the two
         // every 900 acts, infinitely.
-        addObject(new RepeatingEvent(() -> progressDayCycle(), 900, -1, false), 0,0);
+        createEvent(new RepeatingEvent(() -> progressDayCycle(), 600, -1, false));
         
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will
         // always be on top of everything else, then Vehicles (of all
         // sub class types) and after that, all other classes not listed
         // will be displayed in random order. 
-        setPaintOrder (DarkFilter.class); // forcing the DarkFilter to remain on top, not affected by z sorting.
+        
+        // SuperDisplayLable has highest priority since it is UI
+        // Explosions have second highest priority, unaffected by the DarkFilter since 
+        // They are technically light sources
+        // DarkFilter has third highest priority to avoid z-sort affecting them
+        setPaintOrder(SuperDisplayLabel.class, ExplosionParticle.class, DarkFilter.class);
 
         // set up background -- If you change this, make 100% sure
         // that your chosen image is the same size as the World
@@ -124,7 +143,8 @@ public class VehicleWorld extends World
         if (SHOW_STATS) {
             if (count++ >= 10) {
                 count = 0;
-                printStats(SHOW_AS_PERCENTAGE);
+                statsBar.update(pStats);
+                //printStats(SHOW_AS_PERCENTAGE);
             }
         }
     }
@@ -137,7 +157,7 @@ public class VehicleWorld extends World
         
         // Change all Pedestrians to their respective view ranges.
         ArrayList<Pedestrian> pedestrians = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
-        for (Pedestrian p : pedestrians) p.setVisionRange(daytime);
+        for (Pedestrian p : pedestrians) p.setStats(daytime);
         
         // Add the effect that dims/undims the screen.
         if (!daytime){ // nightime. Add the filter.
@@ -149,13 +169,16 @@ public class VehicleWorld extends World
         }
     }
     /**
-     * Prints out the pStats in a readable manner.
+     * Prints out the pStats in a readable manner. For debugging purposes, or you just want to read it
+     * from the terminal.
+     * @param asPercentage Whether to print out the stats as relative frequencies rather than count.
      */
     private void printStats(boolean asPercentage){
         if (asPercentage) {
             int total = 0;
             for (int num : pStats) total+=num;
-            
+            // This does not get / by zero, possibiliy because I cast to doubles?
+            // Either way, it works. Somehow. And if it ain't broken, don't fix it.
             System.out.println(String.join(" | ",
                                     "Zoms: " + Utility.roundToPrecision((double)pStats[0]/total*100, 2) + "%",
                                     "Civs: " + Utility.roundToPrecision((double)pStats[1]/total*100, 2) + "%",
@@ -218,7 +241,7 @@ public class VehicleWorld extends World
      * Starts a carpet bombing event
      */
     public void startBombing(){
-        addObject(new BomberPlane(), 0, 50);
+        addObject(new BomberPlane(), 0, 80);
     }
     /**
      * Spawns a wave of Zombies at the top or bottom spawn.
@@ -227,10 +250,17 @@ public class VehicleWorld extends World
         boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
         int ySpawnLocation = spawnAtTop ? TOP_SPAWN:BOTTOM_SPAWN;
         int direction = spawnAtTop ? 1:-1;
-        for (int i = 0; i < 15; i++) {
-            int xSpawnLocation = Greenfoot.getRandomNumber (600) + 100; // random between 99 and 699, so not near edges
-            addObject(new Zombie(direction), xSpawnLocation, ySpawnLocation);
-        }
+        
+        // Add some zombies with staggered spawns to limit frame drops.
+        createEvent(new RepeatingEvent(()->addObject(new Zombie(direction), Greenfoot.getRandomNumber(600)+100, ySpawnLocation),
+                        10, // 10 act delay between spawns.
+                        15)); // add zombies 15 times.
+    }
+    /**
+     * Spawns the given Event at 0,0.
+     */
+    private void createEvent(Event e){
+        addObject(e,0,0);
     }
     /**
      * Returns a cloned Array of lanePositionsY. Unused after finding about
@@ -284,7 +314,7 @@ public class VehicleWorld extends World
         boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
         int ySpawnLocation = spawnAtTop ? TOP_SPAWN:BOTTOM_SPAWN;
         int direction = spawnAtTop ? 1:-1;
-        switch (Greenfoot.getRandomNumber(6)) {
+        switch (Greenfoot.getRandomNumber(NUM_PEDESTRIAN_TYPES+2)) { // add 2 to increase chance for variable spawn
             case 0:
                 addObject(new Civilian(direction), xSpawnLocation, ySpawnLocation);
                 break;
@@ -294,25 +324,25 @@ public class VehicleWorld extends World
             case 2:
                 addObject(new Medic(direction), xSpawnLocation, ySpawnLocation);
                 break;
-            case 3: // Empty, moves to case 4 so Zombies have higher chances of spawning.
-            case 4:
+            case 3:
                 addObject(new Zombie(direction), xSpawnLocation, ySpawnLocation);
                 break;
-            case 5:// This is the variable spawn. Will react accordingly to current world conditions.
+            default: // capture any other possibilities.
+                // This is the variable spawn. Will react accordingly to current world conditions.
                 int numZombies = getObjects(Zombie.class).size();
-                if (numZombies >= 10) { // Too many zombies!
+                if (numZombies > 10) { // Too many zombies!
                     addObject(new Soldier (direction), xSpawnLocation, ySpawnLocation);
                     break;
                 }
-                else if (numZombies <= 3) { // Too few Zombies!
+                else if (numZombies < 5) { // Too few Zombies!
                     addObject(new Zombie(direction), xSpawnLocation, ySpawnLocation);
                     break;
                 }
                 
-                // Getting here means no need to spawn a new Zombie nor Soldier; check if a medic is needed.
+                // Getting here means no need to spawn a new Zombie nor Soldier; check if a Medic is needed.
                 ArrayList<Human> downedHumans = (ArrayList<Human>)getObjects(Human.class);
                 downedHumans.removeIf(h -> h.isAwake());
-                if (downedHumans.size() >= 5) {
+                if (downedHumans.size() > 5) {
                     addObject(new Medic(direction), xSpawnLocation, ySpawnLocation);
                 }
                 else { // Nothing needed. Just add a Civilian, then.

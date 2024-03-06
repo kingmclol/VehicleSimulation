@@ -20,7 +20,7 @@ public class DelayedEvent extends Event
         this.delay = delay;
     }
     public void act() {
-        if (act++ >= delay) { // Check if the amount of acts I have existed is greater or equal to the required delay.
+        if (++act >= delay) { // Check if the amount of acts I have existed is greater or equal to the required delay.
             event.run(); // Run the event.
             getWorld().removeObject(this); // Remove this from the world, as the event has been run.
         }

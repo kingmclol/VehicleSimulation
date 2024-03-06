@@ -12,6 +12,7 @@ public abstract class Pedestrian extends SuperActor
     protected int visionRangeDay, visionRangeNight;
     protected int visionRange;
     private boolean initialAct; // To get addedToWorld working...
+    private static final double MAX_ZOMBIE_SPEED_BOOST = 0.75;
     public Pedestrian(int direction) {
         // choose a random speed
         maxSpeed = Math.random() * 2 + 1;
@@ -23,14 +24,14 @@ public abstract class Pedestrian extends SuperActor
         initialAct = true;
     }
     /**
-     * Determines the visionRange the Pedestrion should have, depending on
+     * Determines the visionRange the Pedestrian should have, depending on
      * the current time of the World.
      */
-    public void addedToWorld(World w) {
+    protected void addedToWorld(World w) {
         //System.out.println(this);
         if (!initialAct) return;
         VehicleWorld world = (VehicleWorld) w;
-        visionRange = world.isDaytime() ? visionRangeDay : visionRangeNight;
+        setStats(world.isDaytime()); // Update stats to respective stats for world time.
         initialAct = false;
         world.addToCount(this);
     }
@@ -159,11 +160,14 @@ public abstract class Pedestrian extends SuperActor
         return speed;
     }
     /**
-     * Changes the Pedestrian's vision range to their respective vision values for the
+     * Changes the Pedestrian's stats (vision range and speed) to their respective values for the
      * time of day.
      * @param daytime Whether the current world time is day.
      */
-    public void setVisionRange(boolean daytime){
-        visionRange = (daytime) ? visionRangeDay : visionRangeNight;
+    public void setStats(boolean daytime){
+        visionRange = (daytime) ? visionRangeDay : visionRangeNight; // Update vision
+        if (this instanceof Zombie) { // Update speed, if is a zombie.
+            speed = daytime ? maxSpeed : maxSpeed + Math.random()*MAX_ZOMBIE_SPEED_BOOST;
+        }
     }
 }

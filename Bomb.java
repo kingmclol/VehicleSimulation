@@ -20,9 +20,11 @@ public class Bomb extends SuperActor
     }
     public void act()
     {
-        moveTowards(new Vector(getX(), targetY), speed); // Converts the targetY to a position (vector) which I move to.
+        if (!aboutToExplode) {
+            moveTowards(new Vector(getX(), targetY), speed); // Converts the targetY to a position (vector) which I move to.
+        }
+        
         if (!aboutToExplode && getY() == targetY) {
-            //System.out.println("AtPos.");
             createEvent(new DelayedEvent(() -> explode(), 60));
             aboutToExplode = true;
         }
@@ -39,7 +41,7 @@ public class Bomb extends SuperActor
             }
             // Add an explosion effect. Strangely, getObjectsInRange gives a larger radius than expected, so I 
             // resize the explosion effect to match.
-            getWorld().addObject(new Explosion(explosionRadius+50), getX(), getY());
+            getWorld().addObject(new ExplosionParticle(explosionRadius+50), getX(), getY());
             getWorld().removeObject(this);
         }
     }

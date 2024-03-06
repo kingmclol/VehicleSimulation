@@ -87,7 +87,6 @@ public class Zombie extends Pedestrian
             }
         }
     }
-
     /**
      * Move toward, or infect the target Human.
      */
@@ -104,7 +103,7 @@ public class Zombie extends Pedestrian
         }
     }
     /**
-     * Zombies cannot be knocked down. They just die, since they don't die twice.
+     * Zombies cannot be knocked down. They just die, again, so they die for real now.
      */
     @Override
     public void knockDown(){
@@ -112,7 +111,7 @@ public class Zombie extends Pedestrian
     }
     /**
      * Turns the zombie back into a civilian. Hopefully they don't die again, as
-     * that wouldn't be fun. Better run!
+     * that wouldn't be fun.
      */
     @Override
     public void healMe(){

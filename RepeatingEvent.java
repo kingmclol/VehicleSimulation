@@ -39,26 +39,19 @@ public class RepeatingEvent extends Event
     }
 
     public void act() {
-        // The reason I did not put (act==0 && executeInstantly) is so that the if else if would skip the
-        // else if portion during the first act, since if (act==0) evaluated to true.
-        
-        if (act == 0) { // If in the first act,
-            if (executeInstantly){ // If I should run instantly, do it.
-                event.run();
-                iterations++;
-            }
-        }
-        else if (act % delay == 0) { // If I should act right now,
+        if (executeInstantly || ++act % delay == 0) { // If I should act right now,
             event.run(); // Run the event.
             iterations++; // Increase the number of triggers that have occured.
+            executeInstantly = false; // should be false after triggering. If false to begin with, no change.
         }
         
         if (count != -1 && iterations >= count) { // If not -1, and I have executed enought times,
             getWorld().removeObject(this); // Finished execution. remove.
         }
-        
-        act++;
     }
+    /**
+     * Unused and fairly useless.
+     */
     public RepeatingEvent copy() {
         return new RepeatingEvent(event, delay, count);
     }

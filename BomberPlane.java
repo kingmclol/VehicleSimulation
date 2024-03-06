@@ -20,7 +20,7 @@ public class BomberPlane extends SuperActor
     int numLanes;
     public BomberPlane(){
         initialAct = true;
-        speed = 3.0;
+        speed = 3.0 + Greenfoot.getRandomNumber(2);
     }
     protected void addedToWorld(World w) {
         if (!initialAct) return;
@@ -32,7 +32,7 @@ public class BomberPlane extends SuperActor
     {
         move(speed);
         if (getX() >= 50 && getX() <= getWorld().getWidth()-50){ // Don't drop bombs too close to the side.
-            if (Greenfoot.getRandomNumber(30) == 0){ // Randomly drop bombs.
+            if (Greenfoot.getRandomNumber(20) == 0){ // Randomly drop bombs.
                 dropBomb();
             }
         }
