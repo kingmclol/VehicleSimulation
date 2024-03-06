@@ -40,8 +40,8 @@ public class VehicleWorld extends World
     public static final int TOP_SPAWN = 190; // Pedestrians who spawn on top
     public static final int BOTTOM_SPAWN = 705; // Pedestrians who spawn on the bottom
     
-    public static final int NUM_PEDESTRIAN_TYPES = 4;
-
+    private static final int NUM_PEDESTRIAN_TYPES = 4;
+    private static final int NUM_VEHICLE_TYPES = 4;
     
     // Instance variables / Objects
     private boolean twoWayTraffic, splitAtCenter;
@@ -280,16 +280,17 @@ public class VehicleWorld extends World
         if (Greenfoot.getRandomNumber (laneCount * 8) == 0){
             int lane = Greenfoot.getRandomNumber(laneCount);
             if (!laneSpawners[lane].isTouchingVehicle()){
-                int vehicleType = Greenfoot.getRandomNumber(4);
-                if (vehicleType == 0){
-                    addObject(new Car(laneSpawners[lane]), 0, 0);
-                } else if (vehicleType == 1){
-                    addObject(new Bus(laneSpawners[lane]), 0, 0);
-                } else if (vehicleType == 2){
-                    addObject(new Ambulance(laneSpawners[lane]), 0, 0);
-                } else if (vehicleType == 3) {
-                    addObject(new ExplosiveTruck(laneSpawners[lane]), 0, 0);
-                }
+                // int vehicleType = Greenfoot.getRandomNumber(4);
+                spawnVehicle(laneSpawners[lane]);
+                // if (vehicleType == 0){
+                    // addObject(new Car(laneSpawners[lane]), 0, 0);
+                // } else if (vehicleType == 1){
+                    // addObject(new Bus(laneSpawners[lane]), 0, 0);
+                // } else if (vehicleType == 2){
+                    // addObject(new Ambulance(laneSpawners[lane]), 0, 0);
+                // } else if (vehicleType == 3) {
+                    // addObject(new ExplosiveTruck(laneSpawners[lane]), 0, 0);
+                // }
             }
         }
 
@@ -307,9 +308,49 @@ public class VehicleWorld extends World
 
     }
     /**
+     * Spawns a Vehicle.
+     */
+    private void spawnVehicle(VehicleSpawner spawn) {
+        int vehicleType = Greenfoot.getRandomNumber(NUM_VEHICLE_TYPES+2); // add 2 to increase chance for variable spawn
+        switch(vehicleType){
+            case 0:
+                addObject(new Car(spawn), 0, 0);
+                break;
+            case 1:
+                addObject(new Bus(spawn), 0, 0);
+                break;
+            case 2:
+                addObject(new Ambulance(spawn), 0, 0);
+                break;
+            case 3:
+                addObject(new ExplosiveTruck(spawn), 0, 0);
+                break;
+            default: // capture all other possibilities
+                ArrayList<Pedestrian> peds = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
+                if (peds.size() > 20) { // Too many people on screen. Add an explosive truck to clear a bit.
+                    addObject(new ExplosiveTruck(spawn), 0, 0);
+                    break;
+                }
+                
+                // Getting here means there were not enough people. Check if an ambulance is needed.
+                peds.removeIf(p -> p.isAwake()); // remove awake pedestrians.
+                if (peds.size() > 10) { // Too many downed people and zombies. Add an ambulance.
+                    addObject(new Ambulance(spawn),0,0);
+                    break;
+                }
+                else { // No need to add anything specific, then.
+                    // Randomly choose between adding a Bus or a Car.
+                    if (Greenfoot.getRandomNumber(2) == 0) {
+                        addObject(new Bus(spawn),0,0);
+                    }
+                    else addObject(new Car(spawn), 0, 0);
+                }
+        }
+    }
+    /**
      * Spawns a Pedestrian.
      */
-    public void spawnPedestrian() {
+    private void spawnPedestrian() {
         int xSpawnLocation = Greenfoot.getRandomNumber (600) + 100; // random between 99 and 699, so not near edges
         boolean spawnAtTop = Greenfoot.getRandomNumber(2) == 0 ? true : false;
         int ySpawnLocation = spawnAtTop ? TOP_SPAWN:BOTTOM_SPAWN;
