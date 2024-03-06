@@ -97,8 +97,8 @@ public abstract class Pedestrian extends SuperActor
         double dy = displacement.getY();
         int collisionPoints = 0;
         return !(getOneObjectAtOffset(
-                            Utility.round(dx + getImage().getWidth()/2 * -1 * Utility.getSign(dx)),
-                            Utility.round(dy + getImage().getHeight()/2 * Utility.getSign(dy)),
+                            Utility.round(dx + getImage().getWidth()/2 * -1 * Math.signum(dx)),
+                            Utility.round(dy + getImage().getHeight()/2 * Math.signum(dy)),
                             Vehicle.class) == null);
         /*
         It seems like checking all corners is too excessive. Old implementation may be not as *proper*
