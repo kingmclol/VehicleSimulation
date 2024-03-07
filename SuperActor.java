@@ -10,12 +10,12 @@ import java.util.function.Predicate;
  * Well, that was before I learned about the existence of static rotation from SuperSmoothMover... whatever. I guess
  * I'm just reinventing the wheel at this point. Should've looked at the Library of Code first...</p>
  * 
- * <blockquote>"I intended for SuperActor to make my life easier while working with Greenfoot. It did not."</blockquote>
+ * <blockquote><i>I intended for SuperActor to make my life easier while working with Greenfoot. It did not.</i></blockquote>
  * 
  * TODO: make speed as instance variable, add constructor for SuperActor. Will likely not do during this project.
  * 
  * @author Freeman Wang
- * @version 2024-02-27
+ * @version 2024-03-06
  */
 
 public abstract class SuperActor extends SuperSmoothMover
@@ -167,16 +167,16 @@ public abstract class SuperActor extends SuperSmoothMover
         return target;
     }
     /**
-     * I barely understand how I managed to make this, but eh.
-     * Returns the closest SuperActor of a given class within a the given radius, filtered by the given Predicate.
+     * 
+     * <p>Returns the closest SuperActor of a given class within a the given radius, filtered by the given Predicate.</p>
+     * <blockquote><i>I barely understand how I managed to make this, but eh. I did it, though!</i></blockquote>
      * @param c The class to look for.
      * @param range The radius of the search.
-     * @param filter The condition to apply to remove ineligible targets (lambda)
+     * @param filter The condition to apply to remove ineligible targets (basically a function)
      */
     protected SuperActor getClosestInRange(Class c, int range, Predicate filter){
         ArrayList<SuperActor> targets = (ArrayList<SuperActor>)getObjectsInRange(range, c);
         targets.removeIf(filter);
         return getClosest(targets);
     }
-    
 }

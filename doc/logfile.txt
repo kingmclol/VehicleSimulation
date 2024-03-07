@@ -20,37 +20,19 @@ javadoc
 UTF-8
 -charset
 UTF-8
-/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/VehicleWorld.java
+/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/SuperActor.java
 <---- end of javadoc command ---->
-Loading source file /Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/VehicleWorld.java...
+Loading source file /Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/SuperActor.java...
 Constructing Javadoc information...
 warning: unknown enum constant Tag.Any
   reason: class file for threadchecker.Tag not found
 warning: unknown enum constant Tag.Any
-warning: unknown enum constant Tag.Any
-warning: unknown enum constant Tag.Any
 Standard Doclet version 17.0.4.1+1
 Building tree for all the packages and classes...
-Generating /Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/doc/VehicleWorld.html...
-/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/VehicleWorld.java:14: warning: invalid input: '<'
- * --> Includes grid <--> lane conversion method
-                     ^
-/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/VehicleWorld.java:461: warning: invalid input: '<'
-     *                  <=== Start Y
-                        ^
-/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/VehicleWorld.java:462: warning: invalid input: '<'
-     *  ||||||||||||||  <=== Top Border
-                        ^
-/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/VehicleWorld.java:465: warning: invalid input: '<'
-     *  |      Y[0]  |  <=== Lane Position (Y) is the middle of the lane
-                        ^
-/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/VehicleWorld.java:468: warning: invalid input: '<'
-     *  [##] [##] [##| <== spacing ( where the lane lines or borders are )
-                       ^
-/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/VehicleWorld.java:474: warning: invalid input: '<'
-     *  ||||||||||||||  <== Bottom Border
-                        ^
+Generating /Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/doc/SuperActor.html...
+/Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/SuperActor.java:48: warning: @param argument "The" is not a parameter name.
+     * @param The distance the SuperActor should travel. Also can be seen as the "speed."
+       ^
 Generating /Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/doc/package-summary.html...
-Generating /Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/doc/constant-values.html...
 Generating /Users/freemanwang/gitrepo/greenfoot/VehicleSim2023v04/doc/index.html...
-10 warnings
+3 warnings

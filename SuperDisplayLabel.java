@@ -106,7 +106,6 @@ public class SuperDisplayLabel extends Actor
      */
     public void addedToWorld (World w){
         if(!initialAct) return;
-        System.out.println(this);
         image = new GreenfootImage (w.getWidth(), height);
         
         bottomY = image.getHeight() - (int)((image.getHeight() - textFont.getSize())/1.8);

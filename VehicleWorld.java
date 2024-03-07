@@ -61,7 +61,8 @@ public class VehicleWorld extends World
     private int[] pStats;
     private int count;
     private static final boolean SHOW_STATS = true;
-    private static final boolean SHOW_AS_PERCENTAGE = true;
+    private static final boolean SHOW_AS_PERCENTAGE = true; // Only used for printing in terminal.
+    private static final boolean ALWAYS_SPAWN_VEHICLES = true;
     private SuperDisplayLabel statsBar;
     /**
      * Constructor for objects of class MyWorld.
@@ -153,9 +154,9 @@ public class VehicleWorld extends World
      */
     public void progressDayCycle(){
         daytime = !daytime; // toggle world time.
-        System.out.println(daytime ? "DAY" : "NIGHT");
+        // System.out.println(daytime ? "DAY" : "NIGHT");
         
-        // Change all Pedestrians to their respective view ranges.
+        // Change all Pedestrians to their respective stats.
         ArrayList<Pedestrian> pedestrians = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
         for (Pedestrian p : pedestrians) p.setStats(daytime);
         
@@ -277,7 +278,7 @@ public class VehicleWorld extends World
     }
     private void spawn () {
         // Chance to spawn a vehicle
-        if (Greenfoot.getRandomNumber (laneCount * 8) == 0){
+        if (Greenfoot.getRandomNumber (laneCount * 8) == 0 || ALWAYS_SPAWN_VEHICLES){
             int lane = Greenfoot.getRandomNumber(laneCount);
             if (!laneSpawners[lane].isTouchingVehicle()){
                 // int vehicleType = Greenfoot.getRandomNumber(4);
@@ -375,7 +376,7 @@ public class VehicleWorld extends World
                     addObject(new Soldier (direction), xSpawnLocation, ySpawnLocation);
                     break;
                 }
-                else if (numZombies < 5) { // Too few Zombies!
+                else if (numZombies < 5 || !daytime) { // Too few Zombies! Or it's currently nighttime...
                     addObject(new Zombie(direction), xSpawnLocation, ySpawnLocation);
                     break;
                 }

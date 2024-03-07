@@ -17,7 +17,7 @@ public abstract class Vehicle extends SuperActor
     protected int followingDistance;
     protected int myLaneNumber;
     private CollisionBox carBox;
-    private static final boolean SHOW_COLLISION_BOXES = false;
+    private static final boolean SHOW_COLLISION_BOXES = true;
     protected abstract boolean checkHitPedestrian ();
 
     public Vehicle (VehicleSpawner origin) {
