@@ -62,7 +62,7 @@ public class VehicleWorld extends World
     private int count;
     private static final boolean SHOW_STATS = true;
     private static final boolean SHOW_AS_PERCENTAGE = true; // Only used for printing in terminal.
-    private static final boolean ALWAYS_SPAWN_VEHICLES = true;
+    private static final boolean ALWAYS_SPAWN_VEHICLES = false;
     private SuperDisplayLabel statsBar;
     /**
      * Constructor for objects of class MyWorld.
@@ -140,7 +140,6 @@ public class VehicleWorld extends World
         super.act();
         spawn();
         zSort ((ArrayList<Actor>)(getObjects(Actor.class)), this);
-        
         if (SHOW_STATS) {
             if (count++ >= 10) {
                 count = 0;

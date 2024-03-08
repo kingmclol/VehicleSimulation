@@ -76,4 +76,12 @@ public class CollisionBox extends Actor
     public void makeInvisible() {
         getImage().clear();
     }
+    /**
+     * Returns an intersecting object of the given Class.
+     * @param c The Class to look for.
+     * @return The Actor being intersected. Returns null if none found.
+     */
+    public Actor getOneIntersectingObject(Class c) {
+        return super.getOneIntersectingObject(c); // Haha, no recursion this time!
+    }
 }
