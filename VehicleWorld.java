@@ -49,10 +49,11 @@ public class VehicleWorld extends World
     private int[] lanePositionsY;
     private VehicleSpawner[] laneSpawners;
     
-    // Variables related to world events.
+    // Variables related to events.
     private boolean daytime;
     private DarkFilter nightFilter;
-    
+    private boolean alwaysSpawnVehicles;
+
     // Varables related to pedestrian stats.
     // 0 -> Zombies
     // 1 -> Civilians
@@ -62,7 +63,7 @@ public class VehicleWorld extends World
     private int count;
     private static final boolean SHOW_STATS = true;
     private static final boolean SHOW_AS_PERCENTAGE = true; // Only used for printing in terminal.
-    private static final boolean ALWAYS_SPAWN_VEHICLES = false;
+    private static final boolean TEST_LANE_CHANGE = false; // If true, spawns many vehicles, always.
     private SuperDisplayLabel statsBar;
     /**
      * Constructor for objects of class MyWorld.
@@ -80,7 +81,7 @@ public class VehicleWorld extends World
         addObject(new WorldEventManager(), 0 ,0);
         nightFilter = new DarkFilter(this);
         daytime = true;
-        
+        alwaysSpawnVehicles = false;
         // initialize the stats array.
         pStats = new int[4];
         count = 0;
@@ -97,8 +98,8 @@ public class VehicleWorld extends World
         }
         
         // The following command manages the day-night cycle by toggling between the two
-        // every 900 acts, infinitely.
-        createEvent(new RepeatingEvent(() -> progressDayCycle(), 900, -1, false));
+        // every 1200 acts, infinitely.
+        createEvent(new RepeatingEvent(() -> progressDayCycle(), 1200, -1, false));
         
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will
@@ -134,6 +135,8 @@ public class VehicleWorld extends World
         laneSpawners[3].setSpeedModifier(1.4);
 
         setBackground (background);
+        
+        Greenfoot.setSpeed(50);
     }
 
     public void act () {
@@ -254,7 +257,18 @@ public class VehicleWorld extends World
         // Add some zombies with staggered spawns to limit frame drops.
         createEvent(new RepeatingEvent(()->addObject(new Zombie(direction), Greenfoot.getRandomNumber(600)+100, ySpawnLocation),
                         10, // 10 act delay between spawns.
-                        15)); // add zombies 15 times.
+                        20)); // add zombies 20 times.
+    }
+    /**
+     * Makes the world spawn... many vehicles for 180 acts. Why am I even commenting these?
+     */
+    public void spawnManyVehicles() {
+        // Make it so spawnVehicle() will always run. Note that this will not spam vehicles, as
+        // they won't spawn if another Vehicle is already touching the LaneSpawner.
+        alwaysSpawnVehicles = true;
+        
+        // After 120 acts, undo the action.
+        createEvent(new DelayedEvent(() -> alwaysSpawnVehicles = false, 180)); 
     }
     /**
      * Spawns the given Event at 0,0.
@@ -277,11 +291,12 @@ public class VehicleWorld extends World
     }
     private void spawn () {
         // Chance to spawn a vehicle
-        if (Greenfoot.getRandomNumber (laneCount * 8) == 0 || ALWAYS_SPAWN_VEHICLES){
-            int lane = Greenfoot.getRandomNumber(laneCount);
-            if (!laneSpawners[lane].isTouchingVehicle()){
+        if (Greenfoot.getRandomNumber (laneCount * 8) == 0 || TEST_LANE_CHANGE || alwaysSpawnVehicles){
+            spawnVehicle();
+            // int lane = Greenfoot.getRandomNumber(laneCount);
+            // if (!laneSpawners[lane].isTouchingVehicle()){
                 // int vehicleType = Greenfoot.getRandomNumber(4);
-                spawnVehicle(laneSpawners[lane]);
+                // spawnVehicle();
                 // if (vehicleType == 0){
                     // addObject(new Car(laneSpawners[lane]), 0, 0);
                 // } else if (vehicleType == 1){
@@ -291,7 +306,7 @@ public class VehicleWorld extends World
                 // } else if (vehicleType == 3) {
                     // addObject(new ExplosiveTruck(laneSpawners[lane]), 0, 0);
                 // }
-            }
+            //}
         }
 
         // Chance to spawn a Pedestrian
@@ -310,7 +325,10 @@ public class VehicleWorld extends World
     /**
      * Spawns a Vehicle.
      */
-    private void spawnVehicle(VehicleSpawner spawn) {
+    private void spawnVehicle() {
+        int lane = Greenfoot.getRandomNumber(laneCount);
+        VehicleSpawner spawn = laneSpawners[lane];
+        if (spawn.isTouchingVehicle()) return;
         int vehicleType = Greenfoot.getRandomNumber(NUM_VEHICLE_TYPES+2); // add 2 to increase chance for variable spawn
         switch(vehicleType){
             case 0:
@@ -325,7 +343,9 @@ public class VehicleWorld extends World
             case 3:
                 addObject(new ExplosiveTruck(spawn), 0, 0);
                 break;
-            default: // capture all other possibilities
+            default: // capture all other possibilities.
+                // This is the variable spawn, where what appears will be dependent on the current world state.
+                
                 ArrayList<Pedestrian> peds = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
                 if (peds.size() > 20) { // Too many people on screen. Add an explosive truck to clear a bit.
                     addObject(new ExplosiveTruck(spawn), 0, 0);
@@ -334,7 +354,7 @@ public class VehicleWorld extends World
                 
                 // Getting here means there were not enough people. Check if an ambulance is needed.
                 peds.removeIf(p -> p.isAwake()); // remove awake pedestrians.
-                if (peds.size() > 10) { // Too many downed people and zombies. Add an ambulance.
+                if (peds.size() > 10) { // Too many downed people and/or zombies. Add an ambulance.
                     addObject(new Ambulance(spawn),0,0);
                     break;
                 }
@@ -370,7 +390,9 @@ public class VehicleWorld extends World
                 break;
             default: // capture any other possibilities.
                 // This is the variable spawn. Will react accordingly to current world conditions.
-                int numZombies = getObjects(Zombie.class).size();
+                
+                //int numZombies = getObjects(Zombie.class).size();
+                int numZombies = pStats[0];
                 if (numZombies > 10) { // Too many zombies!
                     addObject(new Soldier (direction), xSpawnLocation, ySpawnLocation);
                     break;

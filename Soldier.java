@@ -1,12 +1,13 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
- * The Soldier is a brave person who fights against the Zombies by charing at them with their trusty gun. 
- * However, they don't know how to count, so they may be overwhelmed by trying to fight a group
- * with only one bullet left! Reloading takes a while, so it's not going to look good for them...
- * In a group of Soldiers, however, that's a different story.
+ * <p>The Soldier is a brave person who fights against the Zombies by charging at them with their trusty gun. 
+ * With godlike reaction time but mediocre accuracy, the Soldier can be relied on by others to keep them safe</p>
  * 
- * If the Soldier has nothing to do, it will try to cross the street normally.
+ * <p>However, with their relatively low firerate, lone Soldiers are easily overwhelmed when fighting a group
+ * of Zombies. A group of Soldiers, however, is a different story.</p>
+ * 
+ * <p>If the Soldier has nothing to do, it will try to cross the street normally.</p>
  * 
  * @author Freeman Wang
  * @version 2024-02-27
@@ -17,7 +18,7 @@ public class Soldier extends Human
      * Act - do whatever the Soldier wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    private static final int RELOAD_TIME = 60; // in acts
+    private static final int RELOAD_TIME = 90; // in acts
     private static final int MAX_BULLETS = 4;
     private int currentBullets;
     private boolean onCooldown;
@@ -62,9 +63,9 @@ public class Soldier extends Human
         currentBullets--; // decrease bullets by 1
         onCooldown = true; // now on cooldown between shots
         getWorld().addObject(new Bullet(target), getX(), getY());
-        createEvent(new DelayedEvent(() -> onCooldown = false, 10)); // manage cooldown between shots
+        createEvent(new DelayedEvent(() -> onCooldown = false, 15)); // manage cooldown between shots
         if (currentBullets == 0) { // if no bullets left
-            createEvent(new DelayedEvent(() -> currentBullets = MAX_BULLETS, 60)); // reloading
+            createEvent(new DelayedEvent(() -> currentBullets = MAX_BULLETS, RELOAD_TIME)); // reloading
         }
     }
 }

@@ -17,7 +17,7 @@ public class WorldEventManager extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     private int act;
-    private static final int NUM_EVENTS = 2;
+    private static final int NUM_EVENTS = 3;
     private static final int WAIT_BETWEEN_EVENTS=600;
     public WorldEventManager(){
         act = 0;
@@ -41,6 +41,9 @@ public class WorldEventManager extends Actor
                 break;
             case 1:
                 w.spawnZombieWave();
+                break;
+            case 2:
+                w.spawnManyVehicles();
                 break;
         }
     }

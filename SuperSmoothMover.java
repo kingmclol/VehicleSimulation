@@ -202,7 +202,6 @@ public abstract class SuperSmoothMover extends Actor
      * @param x the new x location
      * @param y the new y location
      */
-    @Override
     public void setLocation(int x, int y) 
     {
         exactX = x;

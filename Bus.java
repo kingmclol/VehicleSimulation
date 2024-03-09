@@ -12,7 +12,7 @@ public class Bus extends Vehicle
 {
     private int passengers;
     private final int maxPassengers = 7;
-    private CollisionBox topPickupBox, bottomPickupBox;
+    private HiddenBox topPickupBox, bottomPickupBox;
     private final boolean SHOW_PICKUP_BOXES = false;
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
@@ -22,8 +22,8 @@ public class Bus extends Vehicle
         passengers = 0;
         // because the Bus graphic is tall, offset it a up (this may result in some collision check issues)
         yOffset = 15;
-        topPickupBox = new CollisionBox(getImage().getWidth(), 5, SHOW_PICKUP_BOXES, this, -40);
-        bottomPickupBox = new CollisionBox(getImage().getWidth(), 5, SHOW_PICKUP_BOXES, this, yOffset+25);
+        topPickupBox = new HiddenBox(getImage().getWidth(), 5, SHOW_PICKUP_BOXES, this, 0, -40);
+        bottomPickupBox = new HiddenBox(getImage().getWidth(), 5, SHOW_PICKUP_BOXES, this, 0, 40);
     }
     public void addedToWorld(World w) {
         if (!isNew) return;
@@ -46,12 +46,13 @@ public class Bus extends Vehicle
      * @return true if the Bus hit a civilian.
      */
     public boolean checkHitPedestrian () {
-        //Civilian c = (Civilian)getOneIntersectingObject(Civilian.class); // Check if a civilian is in contact w/ the bus
+        // Checking the sides for picking up any Civilians
         Civilian c = (Civilian) topPickupBox.getOneIntersectingObject(Civilian.class);
         if (c == null) {
             c = (Civilian) bottomPickupBox.getOneIntersectingObject(Civilian.class);
         }
-        // If the civilian exists, is awake, and the Bus still can take on more passengers,
+        
+        // If the civilian exists, is awake, and the Bus still can take on more passengers...
         if (c!= null && c.isAwake() && passengers < maxPassengers) {
             addPassenger(c); // pick up the passenger.
             moving = false; // Stop the bus.

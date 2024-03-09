@@ -12,6 +12,7 @@ public class Bomb extends SuperActor
     double speed;
     boolean aboutToExplode; // Whether I should explode soon.
     int explosionRadius; // Explosio radius. Why am I commenting things that are self-explanatory?
+    GifImage bombImage = new GifImage("Bomb_v1.gif");
     public Bomb(int yPos){
         targetY = yPos;
         speed = 4.0;
@@ -28,6 +29,8 @@ public class Bomb extends SuperActor
             createEvent(new DelayedEvent(() -> explode(), 60));
             aboutToExplode = true;
         }
+        setImage(bombImage.getCurrentImage());
+        getImage().scale(48, 48);
     }
     private void explode(){
         if (getWorld()!=null) { // If I am still in the World...

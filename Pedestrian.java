@@ -12,7 +12,7 @@ public abstract class Pedestrian extends SuperActor
     protected int visionRangeDay, visionRangeNight;
     protected int visionRange;
     private boolean initialAct; // To get addedToWorld working due to zSort
-    private static final double MAX_ZOMBIE_SPEED_BOOST = 0.75;
+    private static final double MAX_ZOMBIE_SPEED_BOOST = 2.5;
     public Pedestrian(int direction) {
         // choose a random speed
         maxSpeed = Math.random() * 2 + 1;
