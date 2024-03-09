@@ -15,7 +15,7 @@ public abstract class Particle extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     protected GreenfootImage baseImage, currentImage;
-    protected int currentLifespan, lifespan, step, actsPerStep;
+    protected int currentLifespan, lifespan, step;
     // public Particle(GreenfootImage baseImage, int lifespan) {
         // currentLifespan = 0;
         // step = 5; // Lose 5 transparency every action.
@@ -50,17 +50,10 @@ public abstract class Particle extends Actor
         //if (timeToAct()) decayTransparency();
         decayTransparency();
         // Remove the Particle if it is transparent, or very small.
-        if (currentImage.getTransparency() <= 0 || currentImage.getWidth() <= 15 || currentImage.getHeight() <= 15) {
+        if (currentImage.getTransparency() <= 0 || currentImage.getWidth() <= 15 && currentImage.getHeight() <= 15) {
             getWorld().removeObject(this);
         }
     }
-    // /**
-     // * Determine if it is time to do an action (e.g. decayTransparency).
-     // * @return true if the Particle should act right now.
-     // */
-    // protected boolean timeToAct() {
-        // return (currentLifespan % actsPerStep == 0);
-    // }
     /**
      * Decays the transparancy of the Particle.
      */

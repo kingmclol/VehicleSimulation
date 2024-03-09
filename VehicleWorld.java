@@ -99,7 +99,7 @@ public class VehicleWorld extends World
         
         // The following command manages the day-night cycle by toggling between the two
         // every 1200 acts, infinitely.
-        createEvent(new RepeatingEvent(() -> progressDayCycle(), 1200, -1, false));
+        // createEvent(new RepeatingEvent(() -> progressDayCycle(), 1200, -1, false));
         
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will
@@ -111,7 +111,7 @@ public class VehicleWorld extends World
         // Explosions have second highest priority, unaffected by the DarkFilter since 
         // They are technically light sources
         // DarkFilter has third highest priority to avoid z-sort affecting them
-        setPaintOrder(SuperDisplayLabel.class, ExplosionParticle.class, DarkFilter.class);
+        setPaintOrder(SuperDisplayLabel.class, ExplosionParticle.class, Effect.class);
 
         // set up background -- If you change this, make 100% sure
         // that your chosen image is the same size as the World
@@ -151,32 +151,37 @@ public class VehicleWorld extends World
             }
         }
     }
-    /**
-     * Progresses the time of the simulation between Daytime and Nighttime.
-     */
-    public void progressDayCycle(){
-        daytime = !daytime; // toggle world time.
-        // System.out.println(daytime ? "DAY" : "NIGHT");
+    // /**
+     // * Progresses the time of the simulation between Daytime and Nighttime.
+     // * DEPRECATED.
+     // */
+    // public void progressDayCycle(){
+        // daytime = !daytime; // toggle world time.
+        // // System.out.println(daytime ? "DAY" : "NIGHT");
         
-        // Change all Pedestrians to their respective stats.
-        ArrayList<Pedestrian> pedestrians = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
-        for (Pedestrian p : pedestrians) p.setStats(daytime);
+        // // Change all Pedestrians to their respective stats.
+        // ArrayList<Pedestrian> pedestrians = (ArrayList<Pedestrian>)getObjects(Pedestrian.class);
+        // for (Pedestrian p : pedestrians) p.setStats(daytime);
         
-        // Add the effect that dims/undims the screen.
-        if (!daytime){ // nightime. Add the filter.
-            nightFilter.timeToExist(); // Tells the nightFilter that it should prepare to make itself appear.
-            addObject(nightFilter, getWidth()/2, getHeight()/2); // Add it to the World.
-        }
-        else { // Day. remove the filter.
-            nightFilter.timeToRemove();
-        }
+        // // Add the effect that dims/undims the screen.
+        // if (!daytime){ // nightime. Add the filter.
+            // nightFilter.timeToExist(); // Tells the nightFilter that it should prepare to make itself appear.
+            // addObject(nightFilter, getWidth()/2, getHeight()/2); // Add it to the World.
+        // }
+        // else { // Day. remove the filter.
+            // nightFilter.timeToRemove();
+        // }
+    // }
+    public void setTime(boolean daytime){
+        this.daytime = daytime;
     }
     /**
-     * Prints out the pStats in a readable manner. For debugging purposes, or you just want to read it
-     * from the terminal.
+     * Prints out the pStats in a readable manner for debugging purposes, or you just want to read it
+     * from the terminal. Not meant to be used normally.
      * @param asPercentage Whether to print out the stats as relative frequencies rather than count.
      */
     private void printStats(boolean asPercentage){
+        // In before i get nuked for unreadable code
         if (asPercentage) {
             int total = 0;
             for (int num : pStats) total+=num;
@@ -260,7 +265,7 @@ public class VehicleWorld extends World
                         20)); // add zombies 20 times.
     }
     /**
-     * Makes the world spawn... many vehicles for 180 acts. Why am I even commenting these?
+     * Makes the world spawn many vehicles for 180 acts. Why am I even commenting these?
      */
     public void spawnManyVehicles() {
         // Make it so spawnVehicle() will always run. Note that this will not spam vehicles, as

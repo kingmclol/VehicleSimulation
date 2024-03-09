@@ -4,6 +4,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * The DarkFilter is basically an image that is semi-transparent that should overlay itself over the entire World
  * for a "darkening" effect. Not the most effective.
  * 
+ * <p><strong>deprecated. "Nighttime" is used instead.</strong></p>
  * @author Freeman Wang
  * @version 2024-03-01
  */

@@ -19,7 +19,7 @@ import greenfoot.*;
  * to it. That action is a function which is run when the Event is triggered, and is passed in as a parameter.
  * Obviously, a lot of this comes from Google and researching, and is not completely mine.<p>
  * 
- * <p>This is <strong>not</strong> meant to be confused with World Events.
+ * <p>This is <strong>not</strong> meant to be confused with World Events or Effects.
  * 
  * 
  * @author Freeman Wang

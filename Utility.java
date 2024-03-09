@@ -12,4 +12,7 @@ public class Utility
     public static double roundToPrecision(double val, int decimalPoints) {
         return Math.round(val * Math.pow(10, decimalPoints)) / Math.pow(10, decimalPoints);
     }
+    public static int clamp(int val, int min, int max) {
+        return Math.max(min, Math.min(val, max));
+    }
 }
