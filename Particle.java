@@ -49,7 +49,7 @@ public abstract class Particle extends Actor
         setImage(currentImage);
         //if (timeToAct()) decayTransparency();
         decayTransparency();
-        // Remove the Particle if it is transparent, or very small.
+        // Remove the Particle if it is transparent, or fairly small.
         if (currentImage.getTransparency() <= 0 || currentImage.getWidth() <= 15 && currentImage.getHeight() <= 15) {
             getWorld().removeObject(this);
         }
@@ -62,17 +62,16 @@ public abstract class Particle extends Actor
     }
     /**
      * Decays the particle's size by a given Factor. Using this *may* make the Particle decide to
-     * remove itself earlier than your chosen lifespan... Not recommended to use, but *does* work.
+     * remove itself earlier than your chosen lifespan... Not recommended to use, but kind of works.
      * 
      * @param scaleFactor The factor to scale the image by. Should be greater than 0, and less than 1.
      */
     protected void decaySize(double scaleFactor) {
-        /*
-        As it seems, scaling a scaled image leads to weird behaviours (circle becomes a square)
-        Solution is to always scale from the base image, so each image is only scaled once, so any
-        issues from compounding scale() actions will not snowball into visible issues with the image.
-        */
+        // As it seems, scaling a scaled image leads to weird behaviours (circle becomes a square).
+        // Solution is to always scale from the base image, so each image is only scaled once. Thus, any
+        // issues from compounding scale() actions will not snowball into visible issues with the image.
         GreenfootImage newImage = new GreenfootImage(baseImage);
+        // Scale the base image by using dimensions of current image w/ scaleFactor applied.
         newImage.scale(Math.max(1, Utility.round(currentImage.getWidth()*scaleFactor)), Math.max(1, Utility.round(currentImage.getHeight()*scaleFactor)));
         newImage.setTransparency(currentImage.getTransparency()); // To ensure transparency decay will carry over between images
         currentImage = newImage;

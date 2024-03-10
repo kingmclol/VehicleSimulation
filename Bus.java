@@ -46,6 +46,7 @@ public class Bus extends Vehicle
      * @return true if the Bus hit a civilian.
      */
     public boolean checkHitPedestrian () {
+        // Surely this counts as a collision/detection event, right?
         // Checking the sides for picking up any Civilians
         Civilian c = (Civilian) topPickupBox.getOneIntersectingObject(Civilian.class);
         if (c == null) {

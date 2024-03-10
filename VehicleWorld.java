@@ -61,7 +61,7 @@ public class VehicleWorld extends World
     // 3 -> Soldiers
     private int[] pStats;
     private int count;
-    private static final boolean SHOW_STATS = true;
+    private static final boolean SHOW_STATS = true; // Enable showing stats about the simulation.
     private static final boolean SHOW_AS_PERCENTAGE = true; // Only used for printing in terminal.
     private static final boolean TEST_LANE_CHANGE = false; // If true, spawns many vehicles, always.
     private SuperDisplayLabel statsBar;
@@ -110,8 +110,9 @@ public class VehicleWorld extends World
         // SuperDisplayLable has highest priority since it is UI
         // Explosions have second highest priority, unaffected by the DarkFilter since 
         // They are technically light sources
-        // DarkFilter has third highest priority to avoid z-sort affecting them
-        setPaintOrder(SuperDisplayLabel.class, ExplosionParticle.class, Effect.class);
+        // AnnounceText has third priority, as they act as UI
+        // DarkFilter has fourth highest priority to avoid z-sort affecting them
+        setPaintOrder(SuperDisplayLabel.class, ExplosionParticle.class, AnnounceText.class, Effect.class);
 
         // set up background -- If you change this, make 100% sure
         // that your chosen image is the same size as the World
@@ -147,6 +148,8 @@ public class VehicleWorld extends World
             if (count++ >= 10) {
                 count = 0;
                 statsBar.update(pStats);
+                
+                // Show more detailed statistics of the simluation in the terminal.
                 //printStats(SHOW_AS_PERCENTAGE);
             }
         }

@@ -1,13 +1,16 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 /**
- * The Box is literally a box that exists for collision detection.
- * It's just a box. I swear.
+ * The Box is literally a box that exists for collision detection. It can be visibile or invisible
+ * depending on what you want. It also can follow an "owner" actor to act as a hitbox, or something
+ * like an indicator for an attack's range.
+ * 
+ * <p>But in the end, it's just a box. I swear.</p>
  * 
  * @author Freeman Wang
  * @version 2024-03-08
  */
-public class Box extends Actor
+public abstract class Box extends Actor
 {
     private int height, width, xOffset, yOffset;
     private Actor owner;
@@ -103,7 +106,8 @@ public class Box extends Actor
         return super.getOneIntersectingObject(c); // Haha, no recursion this time!
     }
     /**
-     * Returns the Owner of the CollisionBox. Returns null if the CollisionBox does not have one.
+     * Returns the owner of the Box. Returns null if the Box does not have one,
+     * even though at that point the Box shouldn't be existing in the first place.
      */
     public Actor getOwner() {
         return owner;

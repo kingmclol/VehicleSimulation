@@ -46,13 +46,24 @@ public class WorldEventManager extends Actor
         switch(Greenfoot.getRandomNumber(NUM_EVENTS)) {
             case 0:
                 w.startBombing();
+                announce("BOMBING");
                 break;
             case 1:
                 w.spawnZombieWave();
+                announce("ZOMBIE RUSH");
                 break;
             case 2:
                 w.spawnManyVehicles();
+                announce("TRAFFIC RUSH");
                 break;
         }
+    }
+    /**
+     * Draws some text onto the world to announce what event is occuring.
+     * @param text The text to draw on the World.
+     */
+    private void announce(String text) {
+        World w = getWorld();
+        w.addObject(new AnnounceText(text), w.getWidth()/2, 100);
     }
 }

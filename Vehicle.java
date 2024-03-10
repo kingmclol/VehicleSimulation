@@ -59,7 +59,7 @@ public abstract class Vehicle extends SuperActor
             setLocation (origin.getX() - (direction * 100), origin.getY() - yOffset);
             
             // Add a collision box representing the space the car occupies in the lane.
-            carBox = new CollisionBox(getImage().getWidth(), v.getLaneHeight(), SHOW_COLLISION_BOXES, this, 0, yOffset);
+            carBox = new CollisionBox(getImage().getWidth()+10, v.getLaneHeight(), SHOW_COLLISION_BOXES, this, 0, yOffset);
             v.addObject(carBox, getX(), v.getLaneY(myLaneNumber));
             isNew = false;
         }
@@ -267,9 +267,5 @@ public abstract class Vehicle extends SuperActor
         if (moving)
             return speed;
         return 0;
-    }
-    
-    public void setMoving(boolean isMoving) {
-        moving = isMoving;
     }
 }
