@@ -27,7 +27,6 @@ public class WorldEventManager extends Actor
     public void act(){
         if (++nightAct >= WAIT_BETWEEN_NIGHTTIME) {
             nightAct = 0;
-            System.out.println("a");
             getWorld().addObject(new Nighttime(), 0, 0);
         }
         

@@ -112,6 +112,7 @@ public class Zombie extends Pedestrian
      */
     @Override
     public void knockDown(){
+        hurtSound.play();
         killMe();
     }
     /**

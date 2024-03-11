@@ -13,12 +13,17 @@ import java.util.ArrayList;
 public class ExplosiveTruck extends Vehicle
 {
     private int explosionRadius; // The radius of the explosion.
+    private SuperSound explosionSound;
     public ExplosiveTruck(VehicleSpawner o) {
         super(o);
         maxSpeed = 1.5 + ((Math.random() * 10)/5);
         speed = maxSpeed;
         yOffset = 12;
         explosionRadius = 150;
+        
+        // Randomly choose between Explosion1, Explosion2, Explosion3
+        String explosionName = "Explosion" + (Greenfoot.getRandomNumber(3) + 1) + ".mp3";
+        explosionSound = new SuperSound(explosionName);
     }
     /**
      * Act - do whatever the ExplosiveTruck wants to do. This method is called whenever
@@ -45,6 +50,7 @@ public class ExplosiveTruck extends Vehicle
      * Explodes the ExplosiveTruck, removing all unlucky vehicles or pedestrians from the world caught in the blast.
      */
     private void explode() { 
+        explosionSound.play(60);
         // By checking for SuperActors, I will not accidetnally remove the VehicleSpawner,
         // any Events, or Particles.
         ArrayList<SuperActor> actors = (ArrayList<SuperActor>)getObjectsInRange(explosionRadius, SuperActor.class);

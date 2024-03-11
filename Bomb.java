@@ -8,16 +8,21 @@ import java.util.ArrayList;
  */
 public class Bomb extends SuperActor
 {
-    int targetY; // The target Y position to go to (i.e. the lane)
-    double speed;
-    boolean aboutToExplode; // Whether I should explode soon.
-    int explosionRadius; // Explosion radius. Why am I commenting things that are self-explanatory?
-    GifImage bombImage = new GifImage("Bomb_v2.gif");
+    private int targetY; // The target Y position to go to (i.e. the lane)
+    private double speed;
+    private boolean aboutToExplode; // Whether I should explode soon.
+    private int explosionRadius; // Explosion radius. Why am I commenting things that are self-explanatory?
+    private GifImage bombImage = new GifImage("Bomb_v2.gif");
+    private SuperSound explosionSound;
     public Bomb(int yPos){
         targetY = yPos;
         speed = 4.0;
         aboutToExplode = false;
         explosionRadius = 125;
+        
+        // Randomly choose between Explosion1, Explosion2, Explosion3
+        String explosionName = "Explosion" + (Greenfoot.getRandomNumber(3) + 1) + ".mp3";
+        explosionSound = new SuperSound(explosionName);
     }
     public void act()
     {
@@ -32,7 +37,8 @@ public class Bomb extends SuperActor
         setImage(bombImage.getCurrentImage());
     }
     private void explode(){
-        if (getWorld()!=null) { // If I am still in the World...
+        if (getWorld()!=null) { // If I am still in the World... Not an necessary check anymore but eh
+            explosionSound.play(40);
             // By checking for SuperActors, I will not accidetnally remove the VehicleSpawner,
             // any Events, or Particles.
             ArrayList<SuperActor> actors = (ArrayList<SuperActor>)getObjectsInRange(explosionRadius, SuperActor.class);

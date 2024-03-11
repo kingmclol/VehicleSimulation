@@ -32,7 +32,7 @@ public class Bullet extends SuperActor
         displace(velocity); // move
         if(isTouching(Zombie.class)) { // If hit a zombie, kill it.
             Zombie z = (Zombie)getOneIntersectingObject(Zombie.class);
-            z.killMe();
+            z.knockDown();
             getWorld().removeObject(this); // remove the bullet.
         }
         else if(isAtEdge()) {

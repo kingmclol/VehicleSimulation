@@ -1,35 +1,46 @@
 import greenfoot.*;
 import java.util.HashMap;
 /**
- * The SoundManager manages playing various sounds.
+ * The SoundManager manages playing various sounds. Meant for use with multiple sounds, but deprecated for
+ * using SuperSound instead (which only manages one sound at a time.)
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Freeman Wang
+ * @version 2024-03-11
  */
 public class SoundManager  
 {
-    private HashMap<String, String> sounds;
+    private HashMap<String, GreenfootSound[]> soundMap;
+    private HashMap<String, Integer> iteratorMap;
     /**
      * Constructor for objects of class SoundManager
      */
-    public SoundManager(HashMap<String, String> soundFilenamePairs)
-    {
-        sounds = soundFilenamePairs;
+    public SoundManager() {
+        soundMap = new HashMap();
+        iteratorMap = new HashMap();
     }
-    public void playSound(String soundNameKey) {
-        playSound(soundNameKey, 100);
+    public void init(String filename, int n) {
+        GreenfootSound[] soundObjects = new GreenfootSound[n];
+        for(int i = 0; i < n; i++) {
+            soundObjects[i] = new GreenfootSound(filename);
+        }
+        soundMap.put(filename, soundObjects);
+        iteratorMap.put(filename, 0);
     }
-    public void playSound(String soundNameKey, int volume) {
-        String fileName = sounds.get(soundNameKey);
-        if (fileName == null) {
-            System.out.println("Requested: " + soundNameKey + " whose corresponding file did not exist.");
-            return;
+    public void play(String filename) {
+        GreenfootSound[] sounds = soundMap.get(filename);
+        int i = iteratorMap.get(filename);
+        
+        sounds[i].play();
+        
+        if(++i > sounds.length) {
+            i = 0;
         }
-        if (volume < 0 || volume > 100) {
-            System.out.println("Requested volume of " + volume + " is not within range [0, 100]");
+        iteratorMap.put(filename, i);
+    }
+    public void stop(String filename){
+        GreenfootSound[] sounds = soundMap.get(filename);
+        for (GreenfootSound sound : sounds) {
+            sound.stop();
         }
-        GreenfootSound sound = new GreenfootSound(fileName);
-        sound.setVolume(volume);
-        sound.play();
     }
 }

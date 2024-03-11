@@ -13,6 +13,7 @@ public abstract class Pedestrian extends SuperActor
     protected int visionRange;
     private boolean initialAct; // To get addedToWorld working due to zSort
     private static final double MAX_ZOMBIE_SPEED_BOOST = 2.5;
+    protected SuperSound hurtSound;
     public Pedestrian(int direction) {
         // choose a random speed
         maxSpeed = Math.random() * 2 + 1;
@@ -22,6 +23,8 @@ public abstract class Pedestrian extends SuperActor
         entering = true;
         this.direction = direction;
         initialAct = true;
+        
+        hurtSound = new SuperSound("Pedestrian Hurt.mp3", 1, 25);
     }
     /**
      * Determines the visionRange the Pedestrian should have, depending on
@@ -146,6 +149,8 @@ public abstract class Pedestrian extends SuperActor
      * Method to cause this Pedestrian to become knocked down - stop moving, turn onto side.
      */
     public void knockDown () {
+        if (!awake) return;
+        hurtSound.play();
         speed = 0;
         setRotation (direction * 90);
         awake = false;

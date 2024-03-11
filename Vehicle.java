@@ -17,7 +17,7 @@ public abstract class Vehicle extends SuperActor
     protected int followingDistance;
     protected int myLaneNumber;
     private CollisionBox carBox;
-    private static final boolean SHOW_COLLISION_BOXES = false;
+    private static final boolean SHOW_COLLISION_BOXES = false; // Show or not show collision boxes.
     protected abstract boolean checkHitPedestrian ();
 
     public Vehicle (VehicleSpawner origin) {
@@ -58,7 +58,7 @@ public abstract class Vehicle extends SuperActor
             VehicleWorld v = (VehicleWorld) w;
             setLocation (origin.getX() - (direction * 100), origin.getY() - yOffset);
             
-            // Add a collision box representing the space the car occupies in the lane.
+            // Add a collision box representing the space the Vehicle occupies in the lane.
             carBox = new CollisionBox(getImage().getWidth()+10, v.getLaneHeight(), SHOW_COLLISION_BOXES, this, 0, yOffset);
             v.addObject(carBox, getX(), v.getLaneY(myLaneNumber));
             isNew = false;
@@ -83,53 +83,28 @@ public abstract class Vehicle extends SuperActor
         }
     }
     protected void changeLane() {
-        // VehicleWorld world = (VehicleWorld) getWorld();
-        // int currentLane = world.getLane(getY()+yOffset);
-        // int whenToCheckAbove = Greenfoot.getRandomNumber(2);
-        // int targetLane;
-        // //CollisionBox newPosition = new CollisionBox(getImage().getWidth(), world.getLaneHeight(), false, null, yOffset);
-        // Vector currentPosition = getPosition();
-        
-        // for (int i = 0; i < 2; i++) {
-            // if (i == whenToCheckAbove) targetLane = currentLane - 1;
-            // else targetLane = currentLane + 1;
-            
-            // int targetLaneY = world.getLaneY(targetLane);
-            // if (targetLaneY != -1) {
-                // setLocation(getX(), targetLaneY-yOffset);
-                // //if (getOneIntersectingObject(Vehicle.class) == null) {
-                // if (!isTouching(CollisionBox.class)) {
-                    // return true;
-                // }
-                // else setLocation(currentPosition);
-            // }
-        // }
-        // return false;
-        
         VehicleWorld world = (VehicleWorld) getWorld();
-        int currentLane = world.getLane(getY()+yOffset);
+        int currentLane = world.getLane(getY()+yOffset); // Get current lane number.
+        // Determines whether the 0th or 1st iteration should be for checking the above lane.
         int whenToCheckAbove = Greenfoot.getRandomNumber(2);
         int targetLane;
-        //CollisionBox newPosition = new CollisionBox(getImage().getWidth(), world.getLaneHeight(), true);
         
+        // Iterate through all possibilities (top and bottom lane)
         for (int i = 0; i < 2; i++) {
-            if (i == whenToCheckAbove) targetLane = currentLane - 1;
-            else targetLane = currentLane + 1;
+            if (i == whenToCheckAbove) targetLane = currentLane - 1; // Check above lane
+            else targetLane = currentLane + 1; // Check below lane
             
-            int targetLaneY = world.getLaneY(targetLane);
-            if (targetLaneY != -1) {
-                //world.addObject(newPosition, getX(), targetLaneY);
+            int targetLaneY = world.getLaneY(targetLane); // Get lane # of target lane
+            if (targetLaneY != -1) { // If the target lane exists,
                 carBox.setLocation(getX(), targetLaneY);
                 if (!carBox.isIntersecting(CollisionBox.class)) { // Lane is clear
                     setLocation(getX(), targetLaneY-yOffset); // move to the lane
-                    //world.removeObject(newPosition); // Remove the temporary collisionBox
-                    return; // succesful.
-                    //return true; // Successful.
+                    return; // successful. No need to check other side.
                 }
-                //world.removeObject(newPosition);
             }
         }
-        //return false; // Unsuccessful.
+        // Getting here means the lane changing was not successful.
+        // That is, the Vehicle remains in the lane it is currently in.
     }
     /**
      * A method used by all Vehicles to check if they are at the edge.

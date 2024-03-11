@@ -23,6 +23,7 @@ public class Soldier extends Human
     private int currentBullets;
     private boolean onCooldown;
     private Zombie target;
+    private SuperSound shootSound;
     public Soldier(int direction) {
         super(direction);
         currentBullets = MAX_BULLETS;
@@ -30,6 +31,7 @@ public class Soldier extends Human
         visionRangeDay = 300;
         visionRangeNight = 100;
         visionRange = visionRangeDay;
+        shootSound = new SuperSound("Gunshot.mp3", 4, 40);
     }
     public void act()
     {
@@ -60,6 +62,7 @@ public class Soldier extends Human
         return currentBullets > 0 && !onCooldown;
     }
     private void shoot() {
+        shootSound.play();
         currentBullets--; // decrease bullets by 1
         onCooldown = true; // now on cooldown between shots
         getWorld().addObject(new Bullet(target), getX(), getY());

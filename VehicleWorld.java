@@ -65,6 +65,8 @@ public class VehicleWorld extends World
     private static final boolean SHOW_AS_PERCENTAGE = true; // Only used for printing in terminal.
     private static final boolean TEST_LANE_CHANGE = false; // If true, spawns many vehicles, always.
     private SuperDisplayLabel statsBar;
+    
+    private SuperSound raidSound;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -97,9 +99,8 @@ public class VehicleWorld extends World
             addObject(statsBar, getWidth()/2, 0);
         }
         
-        // The following command manages the day-night cycle by toggling between the two
-        // every 1200 acts, infinitely.
-        // createEvent(new RepeatingEvent(() -> progressDayCycle(), 1200, -1, false));
+        // Initializing sounds.
+        raidSound = new SuperSound("Air Raid Warning.mp3", 1, 50);
         
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will
@@ -139,7 +140,12 @@ public class VehicleWorld extends World
         
         Greenfoot.setSpeed(50);
     }
-
+    public void started() {
+        if (getObjects(BomberPlane.class).size() > 0) raidSound.play();
+    }
+    public void stopped() {
+        raidSound.stop();
+    }
     public void act () {
         super.act();
         spawn();
@@ -252,7 +258,16 @@ public class VehicleWorld extends World
      * Starts a carpet bombing event
      */
     public void startBombing(){
-        addObject(new BomberPlane(), 0, 80);
+        System.out.println("playing");
+        raidSound.play();
+        // Spawn the plane slightly later.
+        createEvent(new DelayedEvent(() -> addObject(new BomberPlane(), 0, 80), 120));
+    }
+    /**
+     * Stops carpet bombing event (no more siren)
+     */
+    public void stopBombing(){
+        raidSound.stop();
     }
     /**
      * Spawns a wave of Zombies at the top or bottom spawn.

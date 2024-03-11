@@ -15,9 +15,9 @@ public class BomberPlane extends SuperActor
      * Act - do whatever the BomberPlane wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    double speed;
-    boolean initialAct;
-    int numLanes;
+    private double speed;
+    private boolean initialAct;
+    private int numLanes;
     public BomberPlane(){
         initialAct = true;
         speed = 3.0 + Greenfoot.getRandomNumber(2);
@@ -37,6 +37,7 @@ public class BomberPlane extends SuperActor
             }
         }
         if (isAtEdge()){
+            ((VehicleWorld)getWorld()).stopBombing();
             getWorld().removeObject(this);
         }
     }
