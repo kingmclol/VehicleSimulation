@@ -14,8 +14,10 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Ambulance extends Vehicle
 {
-    private HiddenBox topBox, bottomBox, frontBox;
-    private final boolean SHOW_HEAL_BOXES = false;
+    private HiddenBox topBox;
+    private HiddenBox bottomBox;
+    private HiddenBox frontBox;
+    private final boolean SHOW_HEAL_BOXES = true;
     public Ambulance(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         
@@ -50,9 +52,9 @@ public class Ambulance extends Vehicle
      * into civilians.
      */
     public boolean checkHitPedestrian () {
-        Pedestrian p = (Pedestrian)topBox.getOneIntersectingObject(Pedestrian.class);
+        Pedestrian p = (Pedestrian)frontBox.getOneIntersectingObject(Pedestrian.class);
         if (p == null) p = (Pedestrian)bottomBox.getOneIntersectingObject(Pedestrian.class);
-        if (p == null) p = (Pedestrian)frontBox.getOneIntersectingObject(Pedestrian.class);
+        if (p == null) p = (Pedestrian)topBox.getOneIntersectingObject(Pedestrian.class);
         
         if (p!=null && !p.isAwake()) {
             p.healMe();

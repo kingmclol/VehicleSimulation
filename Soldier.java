@@ -23,7 +23,7 @@ public class Soldier extends Human
     private int currentBullets;
     private boolean onCooldown;
     private Zombie target;
-    private SuperSound shootSound;
+    private static SuperSound shootSound = new SuperSound("Gunshot.mp3", 30, 30);
     public Soldier(int direction) {
         super(direction);
         currentBullets = MAX_BULLETS;
@@ -31,7 +31,7 @@ public class Soldier extends Human
         visionRangeDay = 300;
         visionRangeNight = 100;
         visionRange = visionRangeDay;
-        shootSound = new SuperSound("Gunshot.mp3", 4, 40);
+        // shootSound = new SuperSound("Gunshot.mp3", 30, 30);
     }
     public void act()
     {

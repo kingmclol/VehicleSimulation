@@ -15,12 +15,14 @@ public class Zombie extends Pedestrian
 {
     private Human target;
     private ArrayList<Human> humans;
+    // private static SuperSound eatSound = new SuperSound("Bite.mp3", 40, 80);
     public Zombie (int direction)
     {
         super(direction);
         awake = false; // They're dead, thus, not awake, and can be cured by ambulances.
         visionRangeDay = 250;
         visionRangeNight = 400;
+        // eatSound = new SuperSound("Bite.mp3", 40, 80);
     }
     /**
      * Act - do whatever the Zombie wants to do. This method is called whenever
@@ -112,7 +114,6 @@ public class Zombie extends Pedestrian
      */
     @Override
     public void knockDown(){
-        hurtSound.play();
         killMe();
     }
     /**

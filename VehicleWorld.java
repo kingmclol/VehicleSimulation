@@ -53,7 +53,7 @@ public class VehicleWorld extends World
     private boolean daytime;
     private DarkFilter nightFilter;
     private boolean alwaysSpawnVehicles;
-
+    private boolean airRaid;
     // Varables related to pedestrian stats.
     // 0 -> Zombies
     // 1 -> Civilians
@@ -67,6 +67,7 @@ public class VehicleWorld extends World
     private SuperDisplayLabel statsBar;
     
     private SuperSound raidSound;
+    private SuperSound cityAmbience;
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -84,6 +85,7 @@ public class VehicleWorld extends World
         nightFilter = new DarkFilter(this);
         daytime = true;
         alwaysSpawnVehicles = false;
+        airRaid = false;
         // initialize the stats array.
         pStats = new int[4];
         count = 0;
@@ -101,7 +103,7 @@ public class VehicleWorld extends World
         
         // Initializing sounds.
         raidSound = new SuperSound("Air Raid Warning.mp3", 1, 50);
-        
+        cityAmbience = new SuperSound("City Ambience.mp3", 1, 40);
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will
         // always be on top of everything else, then Vehicles (of all
@@ -141,10 +143,14 @@ public class VehicleWorld extends World
         Greenfoot.setSpeed(50);
     }
     public void started() {
-        if (getObjects(BomberPlane.class).size() > 0) raidSound.play();
+        if (airRaid) raidSound.play();
+        cityAmbience.playLoop();
+        if (!daytime) Nighttime.resumeAmbience();
     }
     public void stopped() {
-        raidSound.stop();
+        raidSound.pause();
+        cityAmbience.pause();
+        if (!daytime) Nighttime.pauseAmbience();
     }
     public void act () {
         super.act();
@@ -258,7 +264,7 @@ public class VehicleWorld extends World
      * Starts a carpet bombing event
      */
     public void startBombing(){
-        System.out.println("playing");
+        airRaid = true;
         raidSound.play();
         // Spawn the plane slightly later.
         createEvent(new DelayedEvent(() -> addObject(new BomberPlane(), 0, 80), 120));
@@ -267,6 +273,7 @@ public class VehicleWorld extends World
      * Stops carpet bombing event (no more siren)
      */
     public void stopBombing(){
+        airRaid = false;
         raidSound.stop();
     }
     /**

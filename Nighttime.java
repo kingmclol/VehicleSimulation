@@ -14,8 +14,13 @@ import java.util.ArrayList;
  */
 public class Nighttime extends Effect
 {
+    private static SuperSound nightAmbience;
+    /**
+     * Creates an effect that lasts for 1200 acts, and targets 100 transparency.
+     */
     public Nighttime(){
         super(1200, 100);
+        nightAmbience = new SuperSound("Night Ambience.mp3", 1, 40);
     }
     public void addedToWorld(World w){
         if (!initialAct) return;
@@ -32,15 +37,31 @@ public class Nighttime extends Effect
         setLocation(w.getWidth()/2, w.getHeight()/2);
     }
     /**
+     * Resumes playing the ambience
+     */
+    public static void resumeAmbience() {
+        nightAmbience.play();
+    }
+    /**
+     * Pauses the ambience
+     */
+    public static void pauseAmbience() {
+        nightAmbience.pause();
+    }
+    /**
      * Starts the effect, which is to change view ranges and Zombie speeds.
      */
     public void startEffect() {
+        // Start night ambience.
+        nightAmbience.play();
         setPedestrianStats(false); // Set the pedestrian stats to nighttime counterparts
     }
     /**
      * Stops the effect, which is to revert view ranges Zombies speeds to normal.
      */
     public void stopEffect() {
+        // Stop night ambience.
+        nightAmbience.stop();
         setPedestrianStats(true); // Set the pedestrian stats to daytime counterparts
     }
     /**

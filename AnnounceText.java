@@ -16,6 +16,7 @@ public class AnnounceText extends Particle
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     private String text;
+    private SuperSound announceSound;
     public AnnounceText(String text) {
         this(text, 54, Color.WHITE, null, Color.DARK_GRAY, 2);
     }
@@ -33,6 +34,8 @@ public class AnnounceText extends Particle
         
         GreenfootImage img = new GreenfootImage(text, size, textColor, backgroundColor, outline);
         useNewImage(img);
+        announceSound = new SuperSound("UI Announcement.mp3", 1, 50);
+        announceSound.play();
     }
     public void act() {
         super.act();

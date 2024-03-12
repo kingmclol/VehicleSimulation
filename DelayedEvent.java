@@ -25,6 +25,9 @@ public class DelayedEvent extends Event
             getWorld().removeObject(this); // Remove this from the world, as the event has been run.
         }
     }
+    public void reset(){
+        act = 0;
+    }
     public DelayedEvent copy() {
         return new DelayedEvent(event, delay);
     }

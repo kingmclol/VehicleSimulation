@@ -12,6 +12,7 @@ public class SuperSound
 {
     private GreenfootSound[] sounds;
     private int index;
+    private int volume;
     /**
      * Creates a single SuperSound.
      */
@@ -35,27 +36,24 @@ public class SuperSound
     public SuperSound(String filename, int n, int volume) {
         sounds = new GreenfootSound[n];
         for (int i = 0; i < sounds.length; i++) {
-            GreenfootSound sound = new GreenfootSound(filename);
-            sound.setVolume(volume);
-            sounds[i] = sound;
+            sounds[i] = new GreenfootSound(filename);
         }
         index = 0;
+        this.volume = volume;
     }
     /**
      * Plays the SuperSound.
      */
     public void play() {
-        sounds[index].play();
-        getNextIndex();
+        play(volume);
     }
     /**
-     * Temporarily overrides the original sound's volume to play it at the given volume.
+     * Plays the Sound at the given volume.
      * @param volume The volume to play the SuperSound at.
      */
     public void play(int volume) {
-        GreenfootSound sound = sounds[index];
-        sound.setVolume(volume);
-        sound.play();
+        sounds[index].setVolume(volume);
+        sounds[index].play();
         getNextIndex();
     }
     /**
@@ -70,7 +68,8 @@ public class SuperSound
      * something weird. Don't do that.
      */
     public void playLoop() {
-        sounds[0].play();
+        sounds[0].setVolume(volume);
+        sounds[0].playLoop();
     }
     /**
      * Get the next index for the next GreenfootSound to play.
@@ -82,12 +81,17 @@ public class SuperSound
         }
     }
     public int getVolume() {
-        return sounds[0].getVolume();
+        return volume;
     }
     public boolean isPlaying() {
         for (GreenfootSound sound: sounds) {
             if (sound.isPlaying()) return true;
         }
         return false;
+    }
+    public void pause(){
+        for (GreenfootSound sound : sounds) {
+            sound.pause();
+        }
     }
 }

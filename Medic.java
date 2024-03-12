@@ -17,12 +17,14 @@ public class Medic extends Human
 {
     private Human target;
     private ArrayList<Human> humans;
+    private static SuperSound healSound = new SuperSound("Heal.mp3", 10, 25);
     public Medic (int direction)
     {
         super(direction);
         visionRangeDay = 350;
         visionRangeNight = 150;
         visionRange = visionRangeDay;
+        // healSound = new SuperSound("Heal.mp3", 10, 30);
     }
 
     /**
@@ -131,8 +133,11 @@ public class Medic extends Human
      */
     private void finishHealing(Human c) {
         if (isAwake()) { // If still awake,
-            c.healMe(); // Heal dead citizen
-            target = null; // no more target, need to find new one
+            if (c.exists()) { // If the target is in the world still,
+                healSound.play();
+                c.healMe(); // Heal dead citizen
+            }
+            target = null; // need to find new target no matter what
             speed = maxSpeed; // can move again
         }
     }
