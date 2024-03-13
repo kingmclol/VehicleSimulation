@@ -13,7 +13,7 @@ public class Bus extends Vehicle
     private int passengers;
     private final int maxPassengers = 7;
     private HiddenBox topPickupBox, bottomPickupBox;
-    private final boolean SHOW_PICKUP_BOXES = false;
+    private final boolean SHOW_PICKUP_BOXES = true;
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         //Set up values for Bus

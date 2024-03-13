@@ -33,7 +33,6 @@ public abstract class Effect extends Actor
     }
     public void act() {
         if (fadingIn && getImage().getTransparency() < fadeInTarget) {
-            System.out.println(getImage().getTransparency());
             fadeIn(1);
         }
         else fadingIn = false; // Done fading in
