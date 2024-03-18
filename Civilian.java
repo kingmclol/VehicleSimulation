@@ -24,4 +24,10 @@ public class Civilian extends Human
             if (atEdge()) removeMe();
         }
     }
+    /**
+     * The civilian is the same both night and day. Does nothing.
+     */
+    public void setStats(boolean daytime) {
+        return;
+    }
 }

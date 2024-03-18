@@ -19,14 +19,13 @@ public class Medic extends Human
     private ArrayList<Human> humans;
     private static SuperSound healSound = new SuperSound("Heal.mp3", 10, 60);
     private boolean healing; // if the Medic is currently trying to heal
+    private static final int VISION_DAY = 350;
+    private static final int VISION_NIGHT = 150;
     public Medic (int direction)
     {
         super(direction);
-        visionRangeDay = 350;
-        visionRangeNight = 150;
-        visionRange = visionRangeDay;
         healing = false;
-        maxSpeed = maxSpeed + 1; // make more faster than other pedestrians on avg
+        maxSpeed = maxSpeed + Math.random()*2; // make more faster than other pedestrians on avg
         // healSound = new SuperSound("Heal.mp3", 10, 30);
     }
 
@@ -147,5 +146,12 @@ public class Medic extends Human
             healing = false; // done healing
             speed = maxSpeed; // can move again
         }
+    }
+    /**
+     * Sets the Medic's vision range to the one it should have during day/night.
+     * @param daytime whether it is currently daytime.
+     */
+    public void setStats(boolean daytime) {
+       visionRange = (daytime) ? VISION_DAY : VISION_NIGHT;
     }
 }

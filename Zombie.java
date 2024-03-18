@@ -16,12 +16,13 @@ public class Zombie extends Pedestrian
     private Human target;
     private ArrayList<Human> humans;
     // private static SuperSound eatSound = new SuperSound("Bite.mp3", 40, 80);
+    private static final double MAX_ZOMBIE_SPEED_BOOST = 2.5;
+    private static final int VISION_DAY = 250;
+    private static final int VISION_NIGHT = 400;
     public Zombie (int direction)
     {
         super(direction);
         awake = false; // They're dead, thus, not awake, and can be cured by ambulances.
-        visionRangeDay = 250;
-        visionRangeNight = 400;
         // eatSound = new SuperSound("Bite.mp3", 40, 80);
     }
     /**
@@ -124,5 +125,13 @@ public class Zombie extends Pedestrian
     public void healMe(){
         getWorld().addObject(new Civilian(direction),getX(),getY());
         removeMe();
+    }
+    /**
+     * Sets the view range and speed of the Zombie for the current time of day.
+     * @param daytime whether the world is currenlty daytime.
+     */
+    public void setStats(boolean daytime) {
+        visionRange = (daytime) ? VISION_DAY : VISION_NIGHT;
+        speed = daytime ? maxSpeed : maxSpeed + Math.random()*MAX_ZOMBIE_SPEED_BOOST;
     }
 }

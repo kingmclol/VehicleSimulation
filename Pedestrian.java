@@ -9,10 +9,8 @@ public abstract class Pedestrian extends SuperActor
     protected double maxSpeed;
     protected int direction; // direction is always -1 or 1, for moving down or up, respectively
     protected boolean awake, entering;
-    protected int visionRangeDay, visionRangeNight;
     protected int visionRange;
     protected boolean initialAct; // To get addedToWorld working due to zSort
-    private static final double MAX_ZOMBIE_SPEED_BOOST = 2.5;
     public Pedestrian(int direction) {
         // choose a random speed
         maxSpeed = Math.random() * 2 + 1;
@@ -177,14 +175,18 @@ public abstract class Pedestrian extends SuperActor
         return speed;
     }
     /**
-     * Changes the Pedestrian's stats (vision range and speed) to their respective values for the
-     * time of day.
-     * @param daytime Whether the current world time is day.
+     * Abstract method. Would set the Pedestrian's stats depending on the time of day.
      */
-    public void setStats(boolean daytime){
-        visionRange = (daytime) ? visionRangeDay : visionRangeNight; // Update vision
-        if (this instanceof Zombie) { // Update speed, if is a zombie.
-            speed = daytime ? maxSpeed : maxSpeed + Math.random()*MAX_ZOMBIE_SPEED_BOOST;
-        }
-    }
+    public abstract void setStats(boolean daytime);
+    // /**
+     // * Changes the Pedestrian's stats (vision range and speed) to their respective values for the
+     // * time of day.
+     // * @param daytime Whether the current world time is day.
+     // */
+    // public void setStats(boolean daytime){
+        // visionRange = (daytime) ? visionRangeDay : visionRangeNight; // Update vision
+        // if (this instanceof Zombie) { // Update speed, if is a zombie.
+            // speed = daytime ? maxSpeed : maxSpeed + Math.random()*MAX_ZOMBIE_SPEED_BOOST;
+        // }
+    // }
 }

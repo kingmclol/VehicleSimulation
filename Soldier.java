@@ -24,13 +24,12 @@ public class Soldier extends Human
     private boolean onCooldown;
     private Zombie target;
     private static SuperSound shootSound = new SuperSound("Gunshot.mp3", 30, 30);
+    private static final int VISION_DAY = 300;
+    private static final int VISION_NIGHT = 100;
     public Soldier(int direction) {
         super(direction);
         currentBullets = MAX_BULLETS;
         onCooldown = false;
-        visionRangeDay = 300;
-        visionRangeNight = 100;
-        visionRange = visionRangeDay;
         // shootSound = new SuperSound("Gunshot.mp3", 30, 30);
     }
     public void act()
@@ -70,5 +69,12 @@ public class Soldier extends Human
         if (currentBullets == 0) { // if no bullets left
             createEvent(new DelayedEvent(() -> currentBullets = MAX_BULLETS, RELOAD_TIME)); // reloading
         }
+    }
+    /**
+     * Sets the Soldier's view range depending on the time of day.
+     * @param daytime whether the world is currently day.
+     */
+    public void setStats(boolean daytime) {
+        visionRange = (daytime) ? VISION_DAY : VISION_NIGHT;
     }
 }
