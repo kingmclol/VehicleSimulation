@@ -8,7 +8,7 @@ public abstract class Pedestrian extends SuperActor
     protected double speed;
     protected double maxSpeed;
     protected int direction; // direction is always -1 or 1, for moving down or up, respectively
-    protected  boolean awake, entering;
+    protected boolean awake, entering;
     protected int visionRangeDay, visionRangeNight;
     protected int visionRange;
     protected boolean initialAct; // To get addedToWorld working due to zSort
@@ -28,12 +28,11 @@ public abstract class Pedestrian extends SuperActor
      * the current time of the World.
      */
     protected void addedToWorld(World w) {
-        //System.out.println(this);
         if (!initialAct) return;
         VehicleWorld world = (VehicleWorld) w;
         setStats(world.isDaytime()); // Update stats to respective stats for world time.
         initialAct = false;
-        world.addToCount(this);
+        world.addToCount(this); // add this pedestrian to the world stats.
     }
     /**
      * Moves the pedestrian where it tries to get to the other side it spawned from.
@@ -76,20 +75,20 @@ public abstract class Pedestrian extends SuperActor
         int halfHeight = getImage().getHeight()/2;
         int halfWidth = getImage().getWidth()/2;
         if (getOneObjectAtOffset(0, (int)(direction * halfHeight + (int)(direction * speed)), Vehicle.class) != null){
-            return true;
+            return true; // vehicle directly in front
         }
-        else if (getOneObjectAtOffset(halfHeight, (int)(direction * halfHeight + (int)(direction * speed)), Vehicle.class) != null) {
-            return true;
+        else if (getOneObjectAtOffset(halfWidth, (int)(direction * halfHeight + (int)(direction * speed)), Vehicle.class) != null) {
+            return true; // vehicle in front-right side
         }
-        else if(getOneObjectAtOffset(halfHeight, (int)(direction * halfHeight + (int)(direction * speed)), Vehicle.class) != null) {
-            return true;
+        else if(getOneObjectAtOffset(-halfWidth, (int)(direction * halfHeight - (int)(direction * speed)), Vehicle.class) != null) {
+            return true; // vehicle in front-left side
         }
         return false;
         
         //return !(getOneObjectAtOffset(0, (int)(direction * getImage().getHeight()/2 + (int)(direction * speed)), Vehicle.class) == null);
     }
     /**
-     * Returns whether the target position would be obstructed by a Vehicle.
+     * Returns whether the target position would be obstructed by a Vehicle. Not the best implementation.
      * @return If the target position is obstructed.
      */
     protected boolean obstructedAt(Vector displacement) {
@@ -124,6 +123,9 @@ public abstract class Pedestrian extends SuperActor
         return collisionPoints > 1;
         */
     }
+    /**
+     * Removes the Pedestrian, and accounts for its removal in the World's stats management.
+     */
     public void removeMe() {
         VehicleWorld v = (VehicleWorld) getWorld();
         v.removeFromCount(this);
@@ -146,7 +148,7 @@ public abstract class Pedestrian extends SuperActor
      * Method to cause this Pedestrian to become knocked down - stop moving, turn onto side.
      */
     public void knockDown () {
-        if (!awake) return;
+        if (!awake) return; // already knocked down
         speed = 0;
         setRotation (direction * 90);
         awake = false;
@@ -155,6 +157,7 @@ public abstract class Pedestrian extends SuperActor
      * Method to allow a downed Pedestrian to be healed
      */
     public void healMe () {
+        if (awake) return; // no need to heal
         speed = maxSpeed;
         setRotation (0);
         awake = true;

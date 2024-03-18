@@ -13,6 +13,8 @@ import java.util.function.Predicate;
  * <blockquote><i>I intended for SuperActor to make my life easier while working with Greenfoot. It did not.</i></blockquote>
  * 
  * TODO: make speed as instance variable, add constructor for SuperActor. Will likely not do during this project.
+ * Additionally, potentially create an ArrayList of Events, so any Events created will be tied to its SuperActor
+ * owner.
  * 
  * @author Freeman Wang
  * @version 2024-03-06
@@ -20,15 +22,17 @@ import java.util.function.Predicate;
 
 public abstract class SuperActor extends SuperSmoothMover
 {
-    /* Not to be added during the vehicle simulator, but here so I won't forget.
+    /*
+    Not to be added during the vehicle simulator, but here so I won't forget. May or may not be neglected later on.
     ArrayList <Vector> path;
+    ArrayList <Event> myEvents;
     private double speed;
     private boolean staticRotation;
     public SuperActor(double speed) {
         this.speed = speed;
     }
     Remove all "double distance" parameters in the methods, as will be managed 
-    by instance variable speed.
+    by instance variable speed. Or overload them instead.
     */
     /** 
      * Creates a given event by adding it into the world.

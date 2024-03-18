@@ -50,9 +50,10 @@ public class RepeatingEvent extends Event
         }
     }
     /**
-     * Unused and fairly useless.
+     * Resets this event to basic state.
      */
-    public RepeatingEvent copy() {
-        return new RepeatingEvent(event, delay, count);
+    public void reset() {
+        act = 0;
+        iterations = 0;
     }
 }

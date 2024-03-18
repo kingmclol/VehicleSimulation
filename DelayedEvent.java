@@ -28,7 +28,4 @@ public class DelayedEvent extends Event
     public void reset(){
         act = 0;
     }
-    public DelayedEvent copy() {
-        return new DelayedEvent(event, delay);
-    }
 }

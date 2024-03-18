@@ -3,7 +3,7 @@ import greenfoot.*;
  * <p>This is a scuffed, unnecessary solution to a simple problem. If I want something to run after a set
  * amount of time, I can simply use a counting variable in whatever Actor I want. But I thought I could do more and
  * make this work, as each Event can do something unique. I don't need to create multiple Event classes or define 
- * multiple functions to handle different things, as all I need to do is pass in a different function. This <i>does</i> work,
+ * multiple functions to handle different things, as all I need to do is pass in a different function. This does work,
  * for <i>now</i>, but most likely there are many, many edge cases where this would crash and burn.</p>
  * 
  * <p>And seeing that there was only <a href="https://www.greenfoot.org/topics/64859/0">one relevant post</a>
@@ -37,5 +37,15 @@ public abstract class Event extends Actor
         act = 0; // Current acts of existence is 0.
         event = action; // Set the event to run as the given action.
     }
-    public abstract Event copy();
+    /**
+     * Cancels the event by removing it from the world.
+     */
+    public void cancel() {
+        World w = getWorld();
+        if (w != null) getWorld().removeObject(this);
+    }
+    /**
+     * Used for resetting an Event to default (unexecuted) state.
+     */
+    public abstract void reset();
 }

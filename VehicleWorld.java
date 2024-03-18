@@ -2,28 +2,69 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.Collections;
 import java.util.ArrayList;
 /**
- * <h1>The new and vastly improved 2022 Vehicle Simulation Assignment.</h1>
- * <p> This is the first redo of the 8 year old project. Lanes are now drawn dynamically, allowing for
- *     much greater customization. Pedestrians can now move in two directions. The graphics are better
- *     and the interactions smoother.</p>
- * <p> The Pedestrians are not as dumb as before (they don't want straight into Vehicles) and the Vehicles
- *     do a somewhat better job detecting Pedestrians.</p>
+ * Freeman Wang ICS4U
+ * <=================-STORY-===================>
+ * This Vehicle Simulation is set in a city that is currently experiencing a zombie apocalypse! Obviously,
+ * everything is in chaos, so those who can want to leave as soon as possible (moving to the right) whilst those who are
+ * unlucky are stuck running around on the roads.
  * 
- * Version Notes - Feb 2023
- * --> Includes grid <--> lane conversion method
- * --> Now starts with 1-way, 5 lane setup (easier)
+ * Different Humans work together (along with those driving the Vehicles) to try to survive this zombie outbreak.
+ * <=================-PEDESTRIANS-==================>
+ * There are 4 pedestrian types in total; split into Humans and Zombies.
+ * Zombies simply try to bite and infect any Humans nearby.
  * 
- * V2023_021
- * --> Improved Vehicle Repel (still work in progress)
- * --> Implemented Z-sort, disabled paint order between Pedestrians and Vehicles (looks much better now)
- * --> Implemented lane-based speed modifiers for max speed
+ * Humans are split into 3 subclasses:
+ * 1. Civilians, who simply move around the city with no notable abilities,
+ * 2. Medics, who can revive any downed Humans (and possibly save them from infection),
+ * 3. Soldiers, who protect any Humans around by shooting Zombies,
+ * Any Human who is bit by a Zombie will turn into one, if not treated within a time limit.
+ * <=================-VEHICLES-==================>
+ * There are 4 Vehicle types in total, all with different interactions between Pedestrians:
+ * 1. Cars, which drive quickly and run over Humans and Zombies alike,
+ * 2. Ambulances, which heal downed Humans and cures Zombies on contact,
+ * 3. Buses, which pick up any Civilians that get on from the sides, bringing them to safety,
+ * 4. Trucks, which carry explosives and will EXPLODE on contact with any Pedestrian (downed or not).
+ * <=================-EVENTS-==================>
+ * The primary *Local Effect* is the Explosions from the Bombs and Explosive Trucks.
+ * The primary *World Effect* is when it becomes night. Zombies see farther and move faster while Humans see less.
  * 
- * V2023_04
- * --> Repel has been re-imagined and now takes the sizes of Actors into consideration better, and also only
- *     moves Actors verically. (The code to move in both dimensions is there and works but it's commented out
- *     because this is the effect I was going for).
- * --> TODO -- Improve flow to avoid Removed From World errors when a Vehicle calls super.act() and is removed there.
+ * Additionally, there are other "Events" which may randomly occur, to make the simulation more interesting:
+ * 1. Carpet Bombing. A plane will spawn in and drop bombs randomly throughout the city.
+ * 2. Traffic Rush. Maximizes the spawn rate for Vehicles for a short moment.
+ * 3. Zombie Rush. Spawns a large wave of Zombies in a short time span.
+ * <=================-KNOWN BUGS-==================>
+ * --I guess you need Java 8 at a minimum for Lambda support. Probably not an issue.
+ * --There is a bug when the city ambience sound file begins to loop, which results in an
+ *   IndexOutOfBounds Exception. It should be caused by either metadata in the sound file (which I cleared already),
+ *   or a corruption in the file itself. It should be fixed now.
+ * --There will be stutters/performance drops when Ambulances interact with Pedestrians, likely because the Pedestrian it is healing
+ *   is also getting knocked down at the same time. Thus, any sounds may play in a short moment, which causes stuttering. The
+ *   effect should be minimized now.
+ * --Some Pedestrians would go ZOOOOM when they're sandwitched between two Vehicles with tall sprites (such as the Bus
+ *   or the Ambulance). This is likely because of how Vehicles handle repelling Pedestrians... which I don't want to modify,
+ *   as my changes would probably cause more issues without proper understanding on how it works.
+ * <=================-CREDITS & ATTRIBUTION-==================>
+ * Bombing Plane sprite from Adobe Stock
+ * Background image from iopwiki.com
+ * Most other images are Greenfoot default assets, some painted over by me.
  * 
+ * Tornado Siren II by Delilah from SoundBible.com
+ * Vehicle Alarm by nps.gov from SoundBible.com
+ * Crickets Chirping by Lisa Redfern from SoundBible.com
+ * Male Grunt by anonymous from SoundBible.com
+ * Car Horn Honk 1 by anonymous from SoundBible.com
+ * Horn Honk by Mike Koenig from SoundBible.com
+ * 
+ * Sounds from ZapSplat.com:
+ * Big and heavy dynamite explosion 1 
+ * Big and heavy dynamite explosion 2
+ * Big and heavy dynamite explosion 3
+ * City ambience, busy road, cars, trucks, and motercycles passing, police siren, horn honks, occasional people, Mekong Delta, Vietnam 1
+ * Game sound, generic musical beep 2
+ * Gore bite, flesh rip with mouth
+ * One shot, electric, electricity, Lofi, Game Audio, Action, UI, HUD 3
+ * 
+ * SuperDisplayLabel by Mr.Cohen
  */
 public class VehicleWorld extends World
 {
@@ -40,6 +81,7 @@ public class VehicleWorld extends World
     public static final int TOP_SPAWN = 190; // Pedestrians who spawn on top
     public static final int BOTTOM_SPAWN = 705; // Pedestrians who spawn on the bottom
     
+    // Self explanatory, but they're number of pedestrian and vehicle types
     private static final int NUM_PEDESTRIAN_TYPES = 4;
     private static final int NUM_VEHICLE_TYPES = 4;
     
@@ -54,7 +96,9 @@ public class VehicleWorld extends World
     private DarkFilter nightFilter;
     private boolean alwaysSpawnVehicles;
     private boolean airRaid;
-    // Varables related to pedestrian stats.
+    
+    // Varables related to managing pedestrian stats.
+    // Index assignment as follows:
     // 0 -> Zombies
     // 1 -> Civilians
     // 2 -> Medics
@@ -63,11 +107,13 @@ public class VehicleWorld extends World
     private int count;
     private static final boolean SHOW_STATS = true; // Enable showing stats about the simulation.
     private static final boolean SHOW_AS_PERCENTAGE = true; // Only used for printing in terminal.
-    private static final boolean TEST_LANE_CHANGE = false; // If true, spawns many vehicles, always.
     private SuperDisplayLabel statsBar;
+
+    private static final boolean TEST_LANE_CHANGE = false; // If true, spawns many vehicles, always.
     
-    private SuperSound raidSound;
-    private SuperSound cityAmbience;
+    // Ambience and raid sounds
+    private static SuperSound raidSound = new SuperSound("Air Raid Warning.mp3", 1, 50);
+    private static SuperSound cityAmbience = new SuperSound("City Ambience.mp3", 1, 40);
     /**
      * Constructor for objects of class MyWorld.
      * 
@@ -88,8 +134,9 @@ public class VehicleWorld extends World
         airRaid = false;
         // initialize the stats array.
         pStats = new int[4];
-        count = 0;
+        count = 0; // for UI refreshing
         if (SHOW_STATS) {
+            // Create String array for SuperDisplayLabel, initialize, add to world
             String[] labels = new String[] {
                 "  ZOMS: ",
                 "  CIVS: ",
@@ -100,10 +147,6 @@ public class VehicleWorld extends World
             statsBar.setLabels(labels);
             addObject(statsBar, getWidth()/2, 0);
         }
-        
-        // Initializing sounds.
-        raidSound = new SuperSound("Air Raid Warning.mp3", 1, 50);
-        cityAmbience = new SuperSound("City Ambience.mp3", 1, 40);
         // This command (from Greenfoot World API) sets the order in which 
         // objects will be displayed. In this example, Pedestrians will
         // always be on top of everything else, then Vehicles (of all
@@ -224,7 +267,7 @@ public class VehicleWorld extends World
      */
     public void removeFromCount(Actor a){
         int index = convertActorToIndex(a);
-        pStats[index] = Math.max(0, pStats[index]-1);
+        pStats[index] = Math.max(0, pStats[index]-1); // restrict to lowest as 0, just to be safe
     }
     /**
      * Increases the count of the given Pedestrian by 1.
@@ -257,7 +300,7 @@ public class VehicleWorld extends World
         }
         else {
             System.out.println("Given invalid actor for this use case.");
-            return -1; // give negative index to induce error.
+            return -1; // give negative index to induce error. Obviously, it's user error.
         }
     }
     /**
@@ -284,7 +327,7 @@ public class VehicleWorld extends World
         int ySpawnLocation = spawnAtTop ? TOP_SPAWN:BOTTOM_SPAWN;
         int direction = spawnAtTop ? 1:-1;
         
-        // Add some zombies with staggered spawns to limit frame drops.
+        // Add some zombies with staggered spawns to limit frame drops. Random X value for each.
         createEvent(new RepeatingEvent(()->addObject(new Zombie(direction), Greenfoot.getRandomNumber(600)+100, ySpawnLocation),
                         10, // 10 act delay between spawns.
                         20)); // add zombies 20 times.

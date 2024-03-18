@@ -17,13 +17,16 @@ public class Medic extends Human
 {
     private Human target;
     private ArrayList<Human> humans;
-    private static SuperSound healSound = new SuperSound("Heal.mp3", 10, 25);
+    private static SuperSound healSound = new SuperSound("Heal.mp3", 10, 60);
+    private boolean healing; // if the Medic is currently trying to heal
     public Medic (int direction)
     {
         super(direction);
         visionRangeDay = 350;
         visionRangeNight = 150;
         visionRange = visionRangeDay;
+        healing = false;
+        maxSpeed = maxSpeed + 1; // make more faster than other pedestrians on avg
         // healSound = new SuperSound("Heal.mp3", 10, 30);
     }
 
@@ -103,7 +106,10 @@ public class Medic extends Human
     {
         if (distanceFrom(target) < 18) // Close enough. Heal them!
         {
-            healHuman(target);
+            if (!healing) {
+                healHuman(target);
+                healing = true;
+            }
             target=null;
         }
         else // Too far, go closer.
@@ -132,12 +138,13 @@ public class Medic extends Human
      * @param c The human to finish healing.
      */
     private void finishHealing(Human c) {
-        if (isAwake()) { // If still awake,
+        if (getWorld() != null && isAwake()) { // If still awake and alive,
             if (c.exists()) { // If the target is in the world still,
                 healSound.play();
                 c.healMe(); // Heal dead citizen
             }
             target = null; // need to find new target no matter what
+            healing = false; // done healing
             speed = maxSpeed; // can move again
         }
     }

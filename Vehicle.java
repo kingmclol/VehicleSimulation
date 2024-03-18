@@ -222,6 +222,12 @@ public abstract class Vehicle extends SuperActor
 
         if (otherVehicleSpeed >= 0 && otherVehicleSpeed < maxSpeed){ // Vehicle ahead is slower?
             speed = otherVehicleSpeed; // Match speed of ahead vehicle.
+            if (Greenfoot.getRandomNumber(60) == 0) { // Irritated?
+                // Honk at the guy in front.
+                // Play either Car Honk 1 or Car Honk 2.
+                GreenfootSound honk = new GreenfootSound("Car Honk " + (Greenfoot.getRandomNumber(2)+1) + ".mp3");
+                honk.play();
+            }
             if (Greenfoot.getRandomNumber(30) == 0) { // Tired of moving slowly?
                 changeLane(); // Attempt to change lane.
             }

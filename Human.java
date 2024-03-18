@@ -34,6 +34,7 @@ public abstract class Human extends Pedestrian
      * Heals the Human normally and gives immunity period
      */
     public void healMe() {
+        if (awake) return; // no need to heal already awake human
         super.healMe();
         immune = true;
         createEvent(new DelayedEvent(() -> immune = false, IMMUNITY_PERIOD)); // After 20 acts, the Pedestrian can be infected.
