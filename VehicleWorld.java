@@ -11,13 +11,14 @@ import java.util.ArrayList;
  * Different Humans work together (along with those driving the Vehicles) to try to survive this zombie outbreak.
  * <=================-PEDESTRIANS-==================>
  * There are 4 pedestrian types in total; split into Humans and Zombies.
- * Zombies simply try to bite and infect any Humans nearby.
  * 
  * Humans are split into 3 subclasses:
  * 1. Civilians, who simply move around the city with no notable abilities,
  * 2. Medics, who can revive any downed Humans (and possibly save them from infection),
  * 3. Soldiers, who protect any Humans around by shooting Zombies,
  * Any Human who is bit by a Zombie will turn into one, if not treated within a time limit.
+ * 
+ * Zombies simply try to bite and infect any Humans nearby.
  * <=================-VEHICLES-==================>
  * There are 4 Vehicle types in total, all with different interactions between Pedestrians:
  * 1. Cars, which drive quickly and run over Humans and Zombies alike,
@@ -33,12 +34,12 @@ import java.util.ArrayList;
  * 2. Traffic Rush. Maximizes the spawn rate for Vehicles for a short moment.
  * 3. Zombie Rush. Spawns a large wave of Zombies in a short time span.
  * <=================-KNOWN BUGS-==================>
- * --I guess you need Java 8 at a minimum for Lambda support. Probably not an issue.
- * --There is a bug when the city ambience sound file begins to loop, which results in an
- *   IndexOutOfBounds Exception. It should be caused by either metadata in the sound file (which I cleared already),
- *   or a corruption in the file itself. It should be fixed now.
+ * --I guess you need Java 8 at a minimum for Lambda support. Probably not an issue. Why did I do this?
+ * --There is a bug when the for sound files which results in an
+ *   IndexOutOfBounds Exception. It should be caused by either metadata in the sound file or
+ *   a corruption in the file itself. It should be fixed now, but seems to be a Greenfoot issue.
  * --There will be stutters/performance drops when Ambulances interact with Pedestrians, likely because the Pedestrian it is healing
- *   is also getting knocked down at the same time. Thus, any sounds may play in a short moment, which causes stuttering. The
+ *   is also getting knocked down at the same time. Thus, many sounds may play in a short moment, which causes stuttering. The
  *   effect should be minimized now.
  * --Some Pedestrians would go ZOOOOM when they're sandwitched between two Vehicles with tall sprites (such as the Bus
  *   or the Ambulance). This is likely because of how Vehicles handle repelling Pedestrians... which I don't want to modify,
@@ -46,7 +47,7 @@ import java.util.ArrayList;
  * <=================-CREDITS & ATTRIBUTION-==================>
  * Bombing Plane sprite from Adobe Stock
  * Background image from iopwiki.com
- * Most other images are Greenfoot default assets, some painted over by me.
+ * Most other images are Greenfoot default assets, some painted over/modified by me.
  * 
  * Tornado Siren II by Delilah from SoundBible.com
  * Vehicle Alarm by nps.gov from SoundBible.com
@@ -64,7 +65,7 @@ import java.util.ArrayList;
  * Gore bite, flesh rip with mouth
  * One shot, electric, electricity, Lofi, Game Audio, Action, UI, HUD 3
  * 
- * SuperDisplayLabel by Mr.Cohen
+ * SuperDisplayLabel class by Mr.Cohen
  */
 public class VehicleWorld extends World
 {
