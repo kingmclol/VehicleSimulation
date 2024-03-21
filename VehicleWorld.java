@@ -9,6 +9,8 @@ import java.util.ArrayList;
  * unlucky are stuck running around on the roads.
  * 
  * Different Humans work together (along with those driving the Vehicles) to try to survive this zombie outbreak.
+ * <=================-INSTRUCTIONS-===================>
+ * Simply run the game, no human interaction after that should be required, hopefully.
  * <=================-PEDESTRIANS-==================>
  * There are 4 pedestrian types in total; split into Humans and Zombies.
  * 
@@ -25,7 +27,11 @@ import java.util.ArrayList;
  * 2. Ambulances, which heal downed Humans and cures Zombies on contact,
  * 3. Buses, which pick up any Civilians that get on from the sides, bringing them to safety,
  * 4. Trucks, which carry explosives and will EXPLODE on contact with any Pedestrian (downed or not).
- * <=================-EVENTS-==================>
+ * <=================-OTHER FEATURES-==================>
+ * ---STATS TRACKING---
+ * There is a label on the top of the world that keeps track of the number of each pedestrian.
+ * Also shows the current time.
+ * -------EVENTS-------
  * The primary *Local Effect* is the Explosions from the Bombs and Explosive Trucks.
  * The primary *World Effect* is when it becomes night. Zombies see farther and move faster while Humans see less.
  * 
@@ -34,18 +40,15 @@ import java.util.ArrayList;
  * 2. Traffic Rush. Maximizes the spawn rate for Vehicles for a short moment.
  * 3. Zombie Rush. Spawns a large wave of Zombies in a short time span.
  * <=================-KNOWN BUGS-==================>
- * --I guess you need Java 8 at a minimum for Lambda support. Probably not an issue. Why did I do this?
- * --There is a bug when the for sound files which results in an
- *   IndexOutOfBounds Exception. It should be caused by either metadata in the sound file or
- *   a corruption in the file itself. It should be fixed now, but seems to be a Greenfoot issue.
+ * --I guess you need Java 8 at a minimum for Lambda support. Probably not an issue, right? Why did I use this in the first place?
+ * --There is a bug when the for sound files which results in an IndexOutOfBounds Exception. It should
+ *   be caused by either metadata in the sound file or a corruption in the file itself. It should be fixed now,
+ *   but seems to be a Greenfoot issue.
  * --Some Pedestrians would go ZOOOOM when they're sandwitched between two Vehicles with tall sprites (such as the Bus
  *   or the Ambulance). This is likely because of how Vehicles handle repelling Pedestrians... which I don't want to modify,
  *   as my changes would probably cause more issues without proper understanding on how it works.
- * --Say that a Car is running over a Pedestrian, which is also being healed by a nearby Ambulance. What happens is that the Pedestrian
- *   is knocked over, revived, knocked over... very quickly, which ends up with many sounds being played in a short time. It results
- *   in a minor lag spike, and louder (as they're stacked) noise(s) playing.
  * <=================-CREDITS & ATTRIBUTION-==================>
- * Bombing Plane sprite from Adobe Stock
+ * Bombing Plane sprite from stock.adobe.com
  * Background image from iopwiki.com
  * Most other images are Greenfoot default assets, some painted over/modified by me.
  * 
