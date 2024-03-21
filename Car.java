@@ -12,13 +12,14 @@ import java.util.ArrayList;
  */
 public class Car extends Vehicle
 {
-    private static SuperSound hitSound = new SuperSound("Car Rev.mp3", 15, 60);
+    private SuperSound hitSound;
     public Car(VehicleSpawner origin) {
         super(origin); // call the superclass' constructor
         maxSpeed = 2.5 + ((Math.random() * 30)/4);
         speed = maxSpeed;
         yOffset = 4;
         followingDistance = 6;
+        hitSound = new SuperSound("Car Rev.mp3", 1, 60);
     }
 
     public void act()
@@ -35,7 +36,7 @@ public class Car extends Vehicle
         if (p != null && p.isAwake() || p instanceof Zombie) // If it exists and is awake, or is Zombie,
         {
             p.knockDown(); // Knock it down.
-            hitSound.play(); // The car celebrates its victory.
+            if (!hitSound.isPlaying()) hitSound.play(); // The car celebrates its victory.
             return true;
         }
         return false;
