@@ -16,13 +16,14 @@ public class WorldEventManager extends Actor
      * Act - do whatever the WorldEvent wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    private int eventAct, nightAct;
+    private static int eventAct;
+    private static int nightAct;
     private static final int NUM_EVENTS = 3;
     private static final int WAIT_BETWEEN_EVENTS=600;
     private static final int WAIT_BETWEEN_NIGHTTIME=2400;
     public WorldEventManager(){
         eventAct = 0;
-        nightAct = 0;
+        nightAct = 1200; // So, nightAct should begin at 1200 so there would only be 1200 acts of day on the first cycle instead of 2400.
     }
     public void act(){
         if (++nightAct >= WAIT_BETWEEN_NIGHTTIME) { // time to be night...
@@ -64,5 +65,20 @@ public class WorldEventManager extends Actor
     private void announce(String text) {
         World w = getWorld();
         w.addObject(new AnnounceText(text), w.getWidth()/2, 100);
+    }
+    /**
+     * Returns the current hour of the world.
+     */
+    public static int getWorldHour() {
+        int hourWithoutOffset = (int) Math.round(nightAct/100);  // truncate to two decimal places, so 0 to 24
+        
+        // I want it so night begins at 20:00, instead of 00:00. 24 - 4 = 20 so perfect as the offset.
+        int hourWithOffset = hourWithoutOffset - 4;
+        
+        if (hourWithOffset < 0) { // Negative time? nO WAY. not on my watch
+            int hoursToSubtract = Math.abs(hourWithOffset); // Temporarily store the NEGATIVE TIME to take into account!!!!!1111
+            hourWithOffset = 24 - hoursToSubtract ; // Apply the negative time to get the actual time.
+        }
+        return hourWithOffset;
     }
 }

@@ -135,7 +135,7 @@ public abstract class Pedestrian extends SuperActor
      * @return Whether the pedestrian is at the edge of the main zone.
      */
     public boolean atEdge() {
-        if (direction == -1 && getY() < 100){
+        if (direction == -1 && getY() < 140){
             return true;
         } else if (direction == 1 && getY() > getWorld().getHeight() - 30){
             return true;

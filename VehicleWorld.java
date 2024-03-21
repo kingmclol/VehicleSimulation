@@ -38,12 +38,12 @@ import java.util.ArrayList;
  * --There is a bug when the for sound files which results in an
  *   IndexOutOfBounds Exception. It should be caused by either metadata in the sound file or
  *   a corruption in the file itself. It should be fixed now, but seems to be a Greenfoot issue.
- * --There will be stutters/performance drops when Ambulances interact with Pedestrians, likely because the Pedestrian it is healing
- *   is also getting knocked down at the same time. Thus, many sounds may play in a short moment, which causes stuttering. The
- *   effect should be minimized now.
  * --Some Pedestrians would go ZOOOOM when they're sandwitched between two Vehicles with tall sprites (such as the Bus
  *   or the Ambulance). This is likely because of how Vehicles handle repelling Pedestrians... which I don't want to modify,
  *   as my changes would probably cause more issues without proper understanding on how it works.
+ * --Say that a Car is running over a Pedestrian, which is also being healed by a nearby Ambulance. What happens is that the Pedestrian
+ *   is knocked over, revived, knocked over... very quickly, which ends up with many sounds being played in a short time. It results
+ *   in a minor lag spike, and louder (as they're stacked) noise(s) playing.
  * <=================-CREDITS & ATTRIBUTION-==================>
  * Bombing Plane sprite from Adobe Stock
  * Background image from iopwiki.com
@@ -139,11 +139,25 @@ public class VehicleWorld extends World
         count = 0; // for UI refreshing
         if (SHOW_STATS) {
             // Create String array for SuperDisplayLabel, initialize, add to world
+            
+            // Since I also want to display the world's time, it will be in the format
+            // | TIME XX:XX
+            // But the issue is that SuperDisplayLabel needs to display String then int then String then int...
+            // And both arrays must match in length!
+            // And because this implementation is rushed at 9:16 PM, I thought of it like this:
+            // timeText = "| TIME " + hour + ":0" + 0
+            // Since it uses concatenation, it would end up with
+            // timeText = "| TIME XX:00"
+            // Just as indended! (but not for how the class was made lol)
+            // Although I did need to modify it to get rid of the string between the String and the int pairs...
+            // There's nothing more permanent than a temporary solution!
             String[] labels = new String[] {
-                "  ZOMS: ",
-                "  CIVS: ",
-                "  MEDS: ",
-                "  SDRS: "
+                "   ZOMS:  ",
+                "   CIVS:  ",
+                "   MEDS:  ",
+                "   SDRS:  ",
+                "  | TIME  ",
+                ":0"
             };
             statsBar = new SuperDisplayLabel();
             statsBar.setLabels(labels);
@@ -204,12 +218,27 @@ public class VehicleWorld extends World
         if (SHOW_STATS) {
             if (count++ >= 10) {
                 count = 0;
-                statsBar.update(pStats);
+                statsBar.update(getWorldStatsArray());
                 
                 // Show more detailed statistics of the simluation in the terminal.
                 //printStats(SHOW_AS_PERCENTAGE);
             }
         }
+    }
+    /**
+     * Combines pStats and the current world time. Rushed implementation, I know. Sorry.
+     */
+    private int[] getWorldStatsArray() {
+        int[] worldStats = new int[6];
+        for (int i = 0; i < 4; i++) {
+            worldStats[i] = pStats[i]; // copy pStats onto worldStats
+        }
+        worldStats[4] = WorldEventManager.getWorldHour(); // put in the world's current hour.
+        
+        // To get the actual display working, as this is the last zero in XX:00.
+        // See the explanation in the constructor for more information.
+        worldStats[5] = 0; 
+        return worldStats;
     }
     // /**
      // * Progresses the time of the simulation between Daytime and Nighttime.
@@ -232,6 +261,9 @@ public class VehicleWorld extends World
             // nightFilter.timeToRemove();
         // }
     // }
+    /**
+     * Sets the world's time to if it is day or not day.
+     */
     public void setTime(boolean daytime){
         this.daytime = daytime;
     }

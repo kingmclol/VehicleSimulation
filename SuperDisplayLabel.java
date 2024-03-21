@@ -137,11 +137,12 @@ public class SuperDisplayLabel extends Actor
         int loops = Math.min (labels.length, newValues.length);
         String text = "";
         for (int i = 0; i < loops; i++){
-            text += labels[i] + " " + newValues[i];
-            if (i < loops - 1){
-                text += " "; // extra space, but not for the very last loop
-            }
-            
+            text += labels[i] + newValues[i];
+            // I KNOW WHAT I'M DOING, MR. COHEN I SWEAR
+            //text += labels[i] + " " + newValues[i];
+            // if (i < loops - 1){
+                // //text += " "; // extra space, but not for the very last loop
+            // }
         }
         update (text, true);
     }
