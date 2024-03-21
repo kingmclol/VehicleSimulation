@@ -138,19 +138,21 @@ public class VehicleWorld extends World
         pStats = new int[4];
         count = 0; // for UI refreshing
         if (SHOW_STATS) {
-            // Create String array for SuperDisplayLabel, initialize, add to world
+            // Create String array for SuperDisplayLabel, initialize, add to world.
             
+            // Okay, so this is the reasoning for how I managed to display the time on the SuperDisplayLabel.
+            // ======================================================================
             // Since I also want to display the world's time, it will be in the format
             // | TIME XX:XX
             // But the issue is that SuperDisplayLabel needs to display String then int then String then int...
             // And both arrays must match in length!
-            // And because this implementation is rushed at 9:16 PM, I thought of it like this:
+            // So because this implementation is rushed at 9:16 PM in real life, I thought of it like this:
             // timeText = "| TIME " + hour + ":0" + 0
+            //             STRING     INT   STRING  INT
             // Since it uses concatenation, it would end up with
             // timeText = "| TIME XX:00"
-            // Just as indended! (but not for how the class was made lol)
-            // Although I did need to modify it to get rid of the string between the String and the int pairs...
-            // There's nothing more permanent than a temporary solution!
+            // Just as indended! Although I did need to modify the class to get remove the space between the String and int pairs...
+            // There's nothing more permanent than a temporary solution! :)
             String[] labels = new String[] {
                 "   ZOMS:  ",
                 "   CIVS:  ",
