@@ -17,7 +17,8 @@ public abstract class Vehicle extends SuperActor
     protected int followingDistance;
     protected int myLaneNumber;
     private CollisionBox carBox;
-    private static final boolean SHOW_COLLISION_BOXES = true; // Show or not show collision boxes.
+    private GreenfootSound honk;
+    private static final boolean SHOW_COLLISION_BOXES = false; // Show or not show collision boxes.
     protected abstract boolean checkHitPedestrian ();
 
     public Vehicle (VehicleSpawner origin) {
@@ -42,6 +43,9 @@ public abstract class Vehicle extends SuperActor
         maxSpeed *= origin.getSpeedModifier();
         speed = maxSpeed;
         
+        // Two different types of horn honks, choose one for this Vehicle.
+        honk = new GreenfootSound("Car Honk " + (Greenfoot.getRandomNumber(2)+1) + ".mp3");
+        honk.setVolume(50);
         isNew = true; // this boolean serves to make sure this Vehicle is only placed in 
                       // it's starting position once. Vehicles are removed and re-added
                       // to the world (instantly, not visibly) by the z-sort, and without this,
@@ -225,7 +229,7 @@ public abstract class Vehicle extends SuperActor
             if (Greenfoot.getRandomNumber(60) == 0) { // Irritated?
                 // Honk at the guy in front.
                 // Play either Car Honk 1 or Car Honk 2.
-                GreenfootSound honk = new GreenfootSound("Car Honk " + (Greenfoot.getRandomNumber(2)+1) + ".mp3");
+                
                 honk.play();
             }
             if (Greenfoot.getRandomNumber(30) == 0) { // Tired of moving slowly?

@@ -156,14 +156,14 @@ public abstract class SuperActor extends SuperSmoothMover
         double closestTargetDistance = 0;
         double distanceToActor;
         SuperActor target = null;
-        if (targets.size() > 0) {
-            target = targets.get(0);
+        if (targets.size() > 0) { //if there are potential targets
+            target = targets.get(0); // get first target
             closestTargetDistance = distanceFrom(target);
-            for (SuperActor a : targets) {
-                distanceToActor = distanceFrom(a);
-                if (distanceToActor < closestTargetDistance)
+            for (SuperActor a : targets) { // for each potential target
+                distanceToActor = distanceFrom(a); //get distance from this SuperActor
+                if (distanceToActor < closestTargetDistance) // if they're closer,
                 {
-                    target = a;
+                    target = a; // set them as the closest target.
                     closestTargetDistance = distanceToActor;
                 }
             }

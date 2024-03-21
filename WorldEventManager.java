@@ -25,13 +25,13 @@ public class WorldEventManager extends Actor
         nightAct = 0;
     }
     public void act(){
-        if (++nightAct >= WAIT_BETWEEN_NIGHTTIME) {
+        if (++nightAct >= WAIT_BETWEEN_NIGHTTIME) { // time to be night...
             nightAct = 0;
             getWorld().addObject(new Nighttime(), 0, 0);
         }
         
-        if (++eventAct >= WAIT_BETWEEN_EVENTS) {
-            if (Greenfoot.getRandomNumber(300) == 0) {
+        if (++eventAct >= WAIT_BETWEEN_EVENTS) { // can do events now
+            if (Greenfoot.getRandomNumber(300) == 0) { // another layer of random
                 startRandomEvent();
             }
         }

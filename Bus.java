@@ -13,7 +13,8 @@ public class Bus extends Vehicle
     private int passengers;
     private final int maxPassengers = 7;
     private HiddenBox topPickupBox, bottomPickupBox;
-    private final boolean SHOW_PICKUP_BOXES = true;
+    private final boolean SHOW_PICKUP_BOXES = false;
+    private static SuperSound stopSound = new SuperSound("Bus Stopping.mp3", 10, 40);
     public Bus(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         //Set up values for Bus
@@ -55,8 +56,9 @@ public class Bus extends Vehicle
         
         // If the civilian exists, is awake, and the Bus still can take on more passengers...
         if (c!= null && c.isAwake() && passengers < maxPassengers) {
-            addPassenger(c); // pick up the passenger.
             moving = false; // Stop the bus.
+            stopSound.play(); // tire screeching...
+            addPassenger(c); // pick up the passenger.
             sleepFor(30); // Prevent this actor from acting for one second (only one Civilian can get on at a time).
             createEvent(new DelayedEvent(() -> moving = true, 30)); // set moving to true after 30 acts.
             return true;

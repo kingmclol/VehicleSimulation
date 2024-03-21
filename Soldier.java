@@ -34,7 +34,7 @@ public class Soldier extends Human
     }
     public void act()
     {
-        if (getWorld() != null && isAwake()) {
+        if (getWorld() != null && isAwake()) { // If currently alive
             if (target != null && !target.exists()){ // target does not exist anymore
                     target = null; // no more target
                 }

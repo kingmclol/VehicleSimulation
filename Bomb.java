@@ -26,15 +26,15 @@ public class Bomb extends SuperActor
     }
     public void act()
     {
-        if (!aboutToExplode) {
+        if (!aboutToExplode) { // If still falling,
             moveTowards(new Vector(getX(), targetY), speed); // Converts the targetY to a position (vector) which I move to.
         }
         
         if (!aboutToExplode && getY() == targetY) {
-            createEvent(new DelayedEvent(() -> explode(), 60));
-            aboutToExplode = true;
+            createEvent(new DelayedEvent(() -> explode(), 60)); // explode after 60 acts
+            aboutToExplode = true; // currently in exploding phase
         }
-        setImage(bombImage.getCurrentImage());
+        setImage(bombImage.getCurrentImage()); // set image based on current image of the gif
     }
     private void explode(){
         if (getWorld()!=null) { // If I am still in the World... Not an necessary check anymore but eh

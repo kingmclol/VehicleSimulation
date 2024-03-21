@@ -25,7 +25,7 @@ public class BomberPlane extends SuperActor
     protected void addedToWorld(World w) {
         if (!initialAct) return;
         VehicleWorld v = (VehicleWorld) w;
-        numLanes = v.getNumLanes();
+        numLanes = v.getNumLanes(); // get the number of lanes in the world.
         initialAct = false;
     }
     public void act()
@@ -36,13 +36,13 @@ public class BomberPlane extends SuperActor
                 dropBomb();
             }
         }
-        if (isAtEdge()){
-            ((VehicleWorld)getWorld()).stopBombing();
+        if (isAtEdge()){ // At edge of world
+            ((VehicleWorld)getWorld()).stopBombing(); // Bombig is over
             getWorld().removeObject(this);
         }
     }
     private void dropBomb(){
-        // Get the Y value of the random target lane the bomb should land in.
+        // Get the Y value of a random target lane the bomb should land in.
         int laneY = ((VehicleWorld)getWorld()).getLaneY(Greenfoot.getRandomNumber(numLanes));
         getWorld().addObject(new Bomb(laneY), getX(), getY());
     }

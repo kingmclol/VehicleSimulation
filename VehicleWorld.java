@@ -65,6 +65,9 @@ import java.util.ArrayList;
  * Gore bite, flesh rip with mouth
  * One shot, electric, electricity, Lofi, Game Audio, Action, UI, HUD 3
  * 
+ * Tire Screech by GamingSoundEffects on youtube.com
+ * Car Engine Rev Sound Effect (HD) by SOUNDLAB on youtube.com
+ * 
  * SuperDisplayLabel class by Mr.Cohen
  */
 public class VehicleWorld extends World
@@ -76,7 +79,7 @@ public class VehicleWorld extends World
     public static Color GREY_STREET = new Color (88, 88, 88);
     public static Color YELLOW_LINE = new Color (255, 216, 0);
 
-    public static boolean SHOW_SPAWNERS = true;
+    public static boolean SHOW_SPAWNERS = false;
     
     // Set Y Positions for Pedestrians to spawn
     public static final int TOP_SPAWN = 190; // Pedestrians who spawn on top
@@ -94,7 +97,6 @@ public class VehicleWorld extends World
     
     // Variables related to events.
     private boolean daytime;
-    private DarkFilter nightFilter;
     private boolean alwaysSpawnVehicles;
     private boolean airRaid;
     
@@ -129,7 +131,6 @@ public class VehicleWorld extends World
         // Create a new world with 1024x800 pixels, UNBOUNDED
         super(1024, 800, 1, false); 
         addObject(new WorldEventManager(), 0 ,0);
-        nightFilter = new DarkFilter(this);
         daytime = true;
         alwaysSpawnVehicles = false;
         airRaid = false;
@@ -155,10 +156,10 @@ public class VehicleWorld extends World
         // will be displayed in random order. 
         
         // SuperDisplayLable has highest priority since it is UI
-        // Explosions have second highest priority, unaffected by the DarkFilter since 
+        // Explosions have second highest priority, unaffected by nighttime since 
         // They are technically light sources
         // AnnounceText has third priority, as they act as UI
-        // DarkFilter has fourth highest priority to avoid z-sort affecting them
+        // effects has fourth highest priority to avoid z-sort affecting them
         setPaintOrder(SuperDisplayLabel.class, ExplosionParticle.class, AnnounceText.class, Effect.class);
 
         // set up background -- If you change this, make 100% sure

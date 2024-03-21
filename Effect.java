@@ -18,6 +18,12 @@ public abstract class Effect extends Actor
     private boolean fadingIn;
     protected boolean initialAct;
     protected VehicleWorld world;
+    /**
+     * Creates a effect that lasts for a specified amount of acts, and has a target transparency
+     * throughout the effect's lifetime.
+     * @param eventDuration how long the effect lasts.
+     * @param fadeInTarget the target transparency to remain in
+     */
     public Effect(int eventDuration, int fadeInTarget) {
         this.eventDuration = eventDuration;
         this.fadeInTarget = fadeInTarget;
@@ -32,7 +38,7 @@ public abstract class Effect extends Actor
         initialAct = false;
     }
     public void act() {
-        if (fadingIn && getImage().getTransparency() < fadeInTarget) {
+        if (fadingIn && getImage().getTransparency() < fadeInTarget) { // If currently fading in, and not at target transparency,
             fadeIn(1);
         }
         else fadingIn = false; // Done fading in
@@ -46,13 +52,27 @@ public abstract class Effect extends Actor
             }
         }
     }
+    /**
+     * Increases the Effect's transparency by the given amount.
+     * @param step how much transparency to gain.
+     */
     protected void fadeIn(int step) {
-        getImage().setTransparency(Math.min(getImage().getTransparency()+step, 255));
+        getImage().setTransparency(Math.min(getImage().getTransparency()+step, 255)); // Increase transparency, max 255
     }
+    /**
+     * Decreases the Effect's transparency by the given amount.
+     * @param step how much transparency to lose.
+     */
     protected void fadeOut(int step) {
-        getImage().setTransparency(Math.max(getImage().getTransparency()-step, 0));
+        getImage().setTransparency(Math.max(getImage().getTransparency()-step, 0)); // Decrease transparency, min 0
     }
+    /**
+     * Code to run when the Effect becomes active.
+     */
     public abstract void startEffect();
+    /**
+     * Code to run when the Effect has ended.
+     */
     public abstract void stopEffect();
     
 }

@@ -58,7 +58,7 @@ public abstract class Particle extends Actor
      * Decays the transparancy of the Particle.
      */
     protected void decayTransparency() {
-        currentImage.setTransparency(Math.max(0,currentImage.getTransparency()-step));
+        currentImage.setTransparency(Math.max(0,currentImage.getTransparency()-step)); // make sure no negative transparency!
     }
     /**
      * Decays the particle's size by a given Factor. Using this *may* make the Particle decide to

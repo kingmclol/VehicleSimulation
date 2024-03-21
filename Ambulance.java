@@ -17,7 +17,7 @@ public class Ambulance extends Vehicle
     private HiddenBox topBox;
     private HiddenBox bottomBox;
     private HiddenBox frontBox;
-    private final boolean SHOW_HEAL_BOXES = true;
+    private final boolean SHOW_HEAL_BOXES = false;
     public Ambulance(VehicleSpawner origin){
         super (origin); // call the superclass' constructor first
         

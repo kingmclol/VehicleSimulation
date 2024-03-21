@@ -80,15 +80,24 @@ public class SuperSound
             index = 0; // Would be out of bounds, reset to 0
         }
     }
+    /**
+     * Returns the volume of the SuperSound.
+     */
     public int getVolume() {
         return volume;
     }
+    /**
+     * Returns if the SuperSound is currently playing.
+     */
     public boolean isPlaying() {
         for (GreenfootSound sound: sounds) {
             if (sound.isPlaying()) return true;
         }
         return false;
     }
+    /**
+     * Pauses all instances of the SuperSound.
+     */
     public void pause(){
         for (GreenfootSound sound : sounds) {
             sound.pause();

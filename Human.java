@@ -23,7 +23,7 @@ public abstract class Human extends Pedestrian
      */
     public Human(int direction) {
         super(direction);
-        immune = true;
+        immune = true; // begin immune to zombies
     }
     public void addedToWorld(World w) {
         if (!initialAct) return;
@@ -43,7 +43,7 @@ public abstract class Human extends Pedestrian
      * Knocks the Human down and makes them do a hurt noise.
      */
     public void knockDown() {
-        if (!awake) return;
+        if (!awake) return; // already knocked down
         super.knockDown();
         hurtSound.play();
     }
@@ -53,7 +53,7 @@ public abstract class Human extends Pedestrian
      * Nothing will happen during their immunity period.
      */
     public void knockDownAndInfect() {
-        if (immune) return;
+        if (immune) return; // immune to zombies currently, nothing happen
         super.knockDown();
         eatSound.play();
         // Turn into a zombie after 120 acts.

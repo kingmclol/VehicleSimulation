@@ -17,7 +17,7 @@ public class Medic extends Human
 {
     private Human target;
     private ArrayList<Human> humans;
-    private static SuperSound healSound = new SuperSound("Heal.mp3", 10, 60);
+    private static SuperSound healSound = new SuperSound("Heal.mp3", 10, 40);
     private boolean healing; // if the Medic is currently trying to heal
     private static final int VISION_DAY = 350;
     private static final int VISION_NIGHT = 150;
@@ -35,7 +35,7 @@ public class Medic extends Human
      */
     public void act() 
     {
-        if (getWorld() != null && isAwake()) {
+        if (getWorld() != null && isAwake()) { // If I still am alive and stuff...
             if (target != null && !target.exists()){ // target does not exist anymore
                 target = null; // no more target
             }
@@ -105,7 +105,7 @@ public class Medic extends Human
     {
         if (distanceFrom(target) < 18) // Close enough. Heal them!
         {
-            if (!healing) {
+            if (!healing) { // If not busy with healing already
                 healHuman(target);
                 healing = true;
             }
@@ -123,13 +123,7 @@ public class Medic extends Human
     private void healHuman(Human c) {
         speed = 0; // the medic cannot move while healing.
         
-        // Creates a delayed event that would happen 30 acts later which heals the target, and lets the medic move again.
-        // createEvent(new DelayedEvent(() -> {
-                                        // if (isAwake()) {
-                                            // c.healMe(); // heal the dead citizen
-                                            // target=null; // no more target, need to find a new one
-                                            // speed = maxSpeed; // can move again
-                                        // }}, 30));
+        // Finish healing after 30 acts
         createEvent(new DelayedEvent(()->finishHealing(c), 30));
     }
     /**
